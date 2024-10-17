@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/screens/upload_file_screen.dart';
 
 class AddUnitPopup extends StatelessWidget {
   @override
@@ -20,13 +21,18 @@ class AddUnitPopup extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            ListTile(
-              leading: Icon(Icons.insert_drive_file),
-              title: Text('Local files'),
-              subtitle: Text('Upload pdf, docx,...'),
+            GestureDetector(
               onTap: () {
-                // Handle action here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UploadFileScreen()),
+                );
               },
+              child: ListTile(
+                leading: Icon(Icons.insert_drive_file),
+                title: Text('Local files'),
+                subtitle: Text('Upload pdf, docx,...'),
+              ),
             ),
             ListTile(
               leading: Icon(Icons.web),
@@ -92,4 +98,3 @@ class AddUnitPopup extends StatelessWidget {
     );
   }
 }
-
