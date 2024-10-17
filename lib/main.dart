@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/prompt_detail_popup_widget.dart';
-
-
+import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
+import 'package:jarvis_ai/screens/chatbot_screen.dart';
+import 'package:jarvis_ai/screens/knowledgebase_detail_screen.dart';
+import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -23,7 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const TestPromptDetailPopup(),
+      home: KnowledgeDetailScreen(),
     );
+     
   }
 }
+
