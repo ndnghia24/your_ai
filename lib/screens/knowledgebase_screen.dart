@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/screens/knowledgebase_detail_screen.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/knowledgebase_item.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/new_knowledgebase_popup.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/paginationwidget.dart';
@@ -46,13 +47,22 @@ class KnowledgeBaseScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
-                KnowledgeBaseItem(
-                  title: 'Chat bot',
-                  description:
-                      'You are my chat bot to test create chat bot feature. When I ask you any question, you answer start with "Hello Nhân Dzai..."',
-                  units: 1,
-                  size: '132.00 Bytes',
-                  editTime: '9/10/2024 08:46:41',
+                GestureDetector(
+                  onTap: () {
+                    // Handle Knowledge base item
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => KnowledgeDetailScreen()),
+                    );
+                  },
+                  child: KnowledgeBaseItem(
+                    title: 'Chat bot',
+                    description:
+                        'You are my chat bot to test create chat bot feature. When I ask you any question, you answer start with "Hello Nhân Dzai..."',
+                    units: 1,
+                    size: '132.00 Bytes',
+                    editTime: '9/10/2024 08:46:41',
+                  ),
                 ),
                 KnowledgeBaseItem(
                   title: 'KB 01',

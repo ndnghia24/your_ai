@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
 import 'package:jarvis_ai/widgets/chatbot/new_chatbot_popup.dart';
 
 class ChatBotScreen extends StatelessWidget {
 
   void showNewChatBotDialog(BuildContext context) {
-
     // Hiển thị popup khi nhấn nút "New"
     showDialog(
       context: context,
@@ -100,7 +100,13 @@ class ChatBotScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: () {},
+                onTap: () {
+                  // Navigate to ChatBotPreviewScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatBotPreviewScreen()),
+                  );
+                },
               ),
             ),
             Spacer(),
