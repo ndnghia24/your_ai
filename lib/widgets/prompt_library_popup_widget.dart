@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'new_prompt_popup_widget.dart';
+import 'prompt_detail_popup_widget.dart';
+import 'use_prompt_widget.dart';
+
 class TestPromptLibrary extends StatelessWidget {
   const TestPromptLibrary({super.key});
 
@@ -67,11 +71,19 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
             children: [
               const Text(
                 'Prompt Library',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold), // Increased font size
               ),
               IconButton(
-                icon: const Icon(Icons.add_circle, color: Colors.blue),
-                onPressed: () {},
+                icon: const Icon(Icons.add_circle,
+                    color: Colors.blue, size: 30), // Increased icon size
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const NewPromptPopupWidget(),
+                  );
+                },
               ),
             ],
           ),
@@ -88,13 +100,17 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
               Tab(
                 child: Container(
                   alignment: Alignment.center,
-                  child: const Text('My Prompt'),
+                  width: double.infinity,
+                  child: const Text('My Prompt',
+                      style: TextStyle(fontSize: 18)), // Increased font size
                 ),
               ),
               Tab(
                 child: Container(
                   alignment: Alignment.center,
-                  child: const Text('Public Prompt'),
+                  width: double.infinity,
+                  child: const Text('Public Prompt',
+                      style: TextStyle(fontSize: 18)), // Increased font size
                 ),
               ),
             ],
@@ -103,7 +119,8 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
           TextField(
             decoration: InputDecoration(
               hintText: 'Search',
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon:
+                  const Icon(Icons.search, size: 28), // Increased icon size
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -117,18 +134,18 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
                 _buildMyPromptList(),
                 Column(
                   children: [
-                  Wrap(
-                    spacing: 8.0,
-                    children: [
-                    _buildTag('All'),
-                    _buildTag('Marketing'),
-                    _buildTag('Chatbot'),
-                    _buildTag('Writing'),
-                    ],
-                  ),
-                  Expanded(
-                    child: _buildPublicPromptList(),
-                  ),
+                    Wrap(
+                      spacing: 8.0,
+                      children: [
+                        _buildTag('All'),
+                        _buildTag('Marketing'),
+                        _buildTag('Chatbot'),
+                        _buildTag('Writing'),
+                      ],
+                    ),
+                    Expanded(
+                      child: _buildPublicPromptList(),
+                    ),
                   ],
                 ),
               ],
@@ -144,16 +161,17 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
       children: List.generate(
         3,
         (index) => ListTile(
-          title: const Text('Brainstorm'),
+          title: const Text('Brainstorm',
+              style: TextStyle(fontSize: 18)), // Increased font size
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Icons.edit, size: 28), // Increased icon size
                 onPressed: () {},
               ),
               IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete, size: 28), // Increased icon size
                 onPressed: () {},
               ),
             ],
@@ -168,20 +186,44 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
       children: List.generate(
         3,
         (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: const Text('Winston, the best therapist with 1...'),
+                title: const Text('Winston, the best therapist with 1...',
+                    style: TextStyle(fontSize: 18)), // Increased font size
                 subtitle: const Text(
                   'As the best therapist ever, Winston could ask open-ended questions and offer advice...',
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16), // Increased font size
                 ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.star_border),
-                  onPressed: () {},
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.info_outline,
+                          size: 28), // Increased icon size
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const PrompDetailPopupWidget(),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.star_border,
+                          size: 28), // Increased icon size
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const UsePromptWidget(),
+                  );
+                },
               ),
             ],
           ),
@@ -192,7 +234,8 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
 
   Widget _buildTag(String tag) {
     return Chip(
-      label: Text(tag),
+      label: Text(tag,
+          style: const TextStyle(fontSize: 16)), // Increased font size
       backgroundColor: Colors.grey[200],
     );
   }

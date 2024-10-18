@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/screens/chat_screen.dart';
 
 class TestUsePromptPopUp extends StatelessWidget {
   const TestUsePromptPopUp({super.key});
@@ -101,7 +102,9 @@ class UsePromptWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ChatScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
