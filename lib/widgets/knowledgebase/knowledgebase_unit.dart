@@ -8,7 +8,7 @@ class KnowledgeUnitItem extends StatelessWidget {
   final String latestUpdate;
   final bool isEnabled;
 
-  KnowledgeUnitItem({
+  const KnowledgeUnitItem({super.key, 
     required this.fileName,
     required this.source,
     required this.size,

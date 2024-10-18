@@ -3,6 +3,8 @@ import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
 import 'package:jarvis_ai/widgets/chatbot/new_chatbot_popup.dart';
 
 class ChatBotScreen extends StatelessWidget {
+  const ChatBotScreen({super.key});
+
 
   void showNewChatBotDialog(BuildContext context) {
     // Hiển thị popup khi nhấn nút "New"
@@ -117,8 +119,8 @@ class ChatBotScreen extends StatelessWidget {
                   // Action to create new bot
                   showNewChatBotDialog(context);
                 },
-                child: Icon(Icons.add),
                 backgroundColor: Colors.blue,
+                child: Icon(Icons.add),
               ),
             ),
           ],

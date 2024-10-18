@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
-import 'package:jarvis_ai/screens/chatbot_screen.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
-import 'package:jarvis_ai/screens/knowledgebase_detail_screen.dart';
-import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
 
 void main() {
   runApp(const MyApp());

@@ -7,7 +7,7 @@ class KnowledgeBaseItem extends StatelessWidget {
   final String size;
   final String editTime;
 
-  KnowledgeBaseItem({
+  const KnowledgeBaseItem({super.key, 
     required this.title,
     required this.description,
     required this.units,

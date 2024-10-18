@@ -257,7 +257,7 @@ class ModelDropdown extends StatelessWidget {
   final String selectedModel;
   final Function(String) onModelChanged;
 
-  ModelDropdown({required this.selectedModel, required this.onModelChanged});
+  ModelDropdown({super.key, required this.selectedModel, required this.onModelChanged});
 
   // List of available models
   final List<String> models = [

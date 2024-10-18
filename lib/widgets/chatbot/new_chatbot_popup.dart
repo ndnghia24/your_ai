@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CreateAssistantDialog extends StatelessWidget {
+  const CreateAssistantDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -79,10 +81,10 @@ class CreateAssistantDialog extends StatelessWidget {
                     // Cancel and close dialog
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
                   ),
+                  child: Text('Cancel'),
                 ),
                 SizedBox(width: 16),
                 ElevatedButton(

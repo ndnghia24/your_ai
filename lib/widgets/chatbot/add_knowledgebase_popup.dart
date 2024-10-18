@@ -3,7 +3,7 @@ import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
 import 'package:jarvis_ai/widgets/chatbot/knowledgebase_item.dart';
 
 class KnowledgeBasePopup extends StatelessWidget {
-  const KnowledgeBasePopup({Key? key}) : super(key: key);
+  const KnowledgeBasePopup({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CreateKnowledgeBaseDialog extends StatelessWidget {
+  const CreateKnowledgeBaseDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/upload_file_screen.dart';
 
 class AddUnitPopup extends StatelessWidget {
+  const AddUnitPopup({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

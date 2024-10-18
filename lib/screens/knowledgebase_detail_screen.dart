@@ -3,6 +3,8 @@ import 'package:jarvis_ai/widgets/knowledgebase/add_unit_popup.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/knowledgebase_unit.dart';
 
 class KnowledgeDetailScreen extends StatelessWidget {
+  const KnowledgeDetailScreen({super.key});
+
   void showAddUnitDialog(BuildContext context) {
     // Show popup when click on "Add unit" button
     showDialog(

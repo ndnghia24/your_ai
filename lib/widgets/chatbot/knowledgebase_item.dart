@@ -28,7 +28,7 @@
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                    Text('${units} unit', overflow: TextOverflow.ellipsis),
+                    Text('$units unit', overflow: TextOverflow.ellipsis),
                     Text(size, overflow: TextOverflow.ellipsis),  
                     Text(date),
             ],

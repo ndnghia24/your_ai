@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PaginationWidget extends StatelessWidget {
+  const PaginationWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

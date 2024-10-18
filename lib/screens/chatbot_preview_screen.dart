@@ -3,6 +3,8 @@ import 'package:jarvis_ai/widgets/chatbot/add_knowledgebase_popup.dart';
 
 
 class ChatBotPreviewScreen extends StatelessWidget {
+  const ChatBotPreviewScreen({super.key});
+
 
   void showKnowledgeBaseDialog(BuildContext context) {
 

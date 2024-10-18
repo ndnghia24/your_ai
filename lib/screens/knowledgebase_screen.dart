@@ -5,6 +5,8 @@ import 'package:jarvis_ai/widgets/knowledgebase/new_knowledgebase_popup.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/paginationwidget.dart';
 
 class KnowledgeBaseScreen extends StatelessWidget {
+  const KnowledgeBaseScreen({super.key});
+
 
   void showNewKnowledgeDialog(BuildContext context) {
     // Show popup when click on "New" button
