@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/widgets/use_prompt_widget.dart';
 
 
 class TestPromptDetailPopup extends StatelessWidget {
@@ -98,7 +99,13 @@ class PrompDetailPopupWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                    onPressed: () {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => const UsePromptWidget(),
+                    );
+                    },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(

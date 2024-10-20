@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/chat_screen.dart';
 
-class CustomChatInput extends StatefulWidget {
-  const CustomChatInput({super.key});
+import '../prompt_library_popup_widget.dart';
+
+class ChatInputWidget extends StatefulWidget {
+  const ChatInputWidget({super.key});
 
   @override
-  _CustomChatInputState createState() => _CustomChatInputState();
+  _ChatInputWidgetState createState() => _ChatInputWidgetState();
 }
 
-class _CustomChatInputState extends State<CustomChatInput> {
+class _ChatInputWidgetState extends State<ChatInputWidget> {
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -23,17 +25,68 @@ class _CustomChatInputState extends State<CustomChatInput> {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          IconButton(
-            icon: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Theme.of(context).primaryColor),
-              ),
-              child: Icon(Icons.add, color: Theme.of(context).primaryColor),
-            ),
-            onPressed: () {
-              // Add your logic to create a new chat here
+          PopupMenuButton<int>(
+            icon: Icon(Icons.add_circle_outline, color: Colors.blue, size: 40),
+            onSelected: (value) {
+              // Handle selected value
+              switch (value) {
+                case 0:
+                  break;
+                case 1:
+                  break;
+                case 2:
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(16)),
+                    ),
+                    builder: (context) => FractionallySizedBox(
+                      heightFactor: 0.8, // Chiều cao bằng nửa màn hình
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: const PromptLibraryPopupWidget(),
+                      ),
+                    ),
+                  );
+                  break;
+              }
             },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(Icons.camera_alt, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text("Camera"),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: [
+                    Icon(Icons.photo, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text("Gallery"),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: [
+                    Icon(Icons.auto_awesome, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text("Prompt Library"),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(width: 4), // Reduced width to make input text longer
           Expanded(
@@ -41,10 +94,10 @@ class _CustomChatInputState extends State<CustomChatInput> {
               focusNode: _focusNode,
               maxLines: null, // Allow the text field to expand vertically
               decoration: InputDecoration(
-              hintText: 'Ask me anything...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
+                hintText: 'Ask me anything...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
             ),
           ),

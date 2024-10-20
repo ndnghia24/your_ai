@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/chatbot_screen.dart';
 import 'package:jarvis_ai/screens/history_screen.dart';
+import 'package:jarvis_ai/screens/home_screen.dart';
 import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
 
-class PopupMenuWidget extends StatelessWidget {
-  const PopupMenuWidget({super.key});
+class AppDrawerWidget extends StatelessWidget {
+  const AppDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,24 +13,27 @@ class PopupMenuWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
+            Container(
               color: Colors.blue,
-            ),
-            child: Row(
+              padding: EdgeInsets.only(top: 40, bottom: 24, left: 16, right: 16), // Adjusted padding for top and bottom
+              child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/google_logo.png'), // Add your logo asset
-                  radius: 24,
+                backgroundImage: AssetImage('assets/yourai_logo.png'), // Add your logo asset
+                radius: 24,
                 ),
                 SizedBox(width: 8),
                 Text(
-                  'Your AI',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                'YourAI',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ],
+              ),
             ),
-          ),
+            _buildMenuOption(Icons.add_comment, 'New Chat', () {
+            
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            }),
           _buildChatItem(
             label: 'Assistance Inquiry',
             time: '09:00',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/popup_menu_widget.dart';
+import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
+import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: _buildAppBar(context),
       drawer: FractionallySizedBox(
         widthFactor: 0.75, // Chiều rộng của Drawer là 3/4 chiều rộng màn hình
-        child: PopupMenuWidget(),
+        child: AppDrawerWidget(),
       ),
       body: Column(
         children: [
@@ -41,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          _buildInputField(),
+          ChatInputWidget(),
         ],
       ),
     );

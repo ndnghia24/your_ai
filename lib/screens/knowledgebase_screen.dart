@@ -3,7 +3,7 @@ import 'package:jarvis_ai/screens/knowledgebase_detail_screen.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/knowledgebase_item.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/new_knowledgebase_popup.dart';
 import 'package:jarvis_ai/widgets/knowledgebase/paginationwidget.dart';
-import 'package:jarvis_ai/widgets/popup_menu_widget.dart';
+import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 
 class KnowledgeBaseScreen extends StatelessWidget {
   const KnowledgeBaseScreen({super.key});
@@ -33,7 +33,7 @@ class KnowledgeBaseScreen extends StatelessWidget {
           )
         ],
       ),
-      drawer: PopupMenuWidget(),
+      drawer: AppDrawerWidget(),
       body: Column(
         children: [
           Padding(

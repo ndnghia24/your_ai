@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
 import 'package:jarvis_ai/widgets/chatbot/new_chatbot_popup.dart';
-import 'package:jarvis_ai/widgets/popup_menu_widget.dart';
+import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});
@@ -32,7 +32,7 @@ class ChatBotScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: PopupMenuWidget(),
+      drawer: AppDrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -3,8 +3,9 @@ import 'package:jarvis_ai/screens/chat_screen.dart';
 import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
-import '../widgets/popup_menu_widget.dart';
+import '../widgets/app_drawer_widget.dart';
 import '../widgets/prompt_library_popup_widget.dart';
+import '../widgets/use_prompt_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         appBar: CustomAppBar(),
         drawer: FractionallySizedBox(
           widthFactor: 0.75, // Chiều rộng của Drawer là 3/4 chiều rộng màn hình
-          child: PopupMenuWidget(),
+          child: AppDrawerWidget(),
         ),
         body: GestureDetector(
           onTap: () {
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             children: [
               const HomeBody(),
-              const CustomChatInput(),
+              const ChatInputWidget(),
             ],
           ),
         ));
@@ -122,7 +123,7 @@ class HomeBody extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              "I'm Jarvis, your personal assistant.",
+              "I'm YourAI, your personal assistant.",
               style: TextStyle(fontSize: 20), // Increased font size
             ),
             const SizedBox(height: 16),
@@ -165,10 +166,10 @@ class HomeBody extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            _buildFeatureButton('Grammar corrector'),
-            _buildFeatureButton('Essay Improver'),
-            _buildFeatureButton('Instagram post Generator'),
-            _buildFeatureButton('Pro tips generator'),
+            _buildFeatureButton(context, 'Grammar corrector'),
+            _buildFeatureButton(context, 'Essay Improver'),
+            _buildFeatureButton(context, 'Instagram post Generator'),
+            _buildFeatureButton(context, 'Pro tips generator'),
           ],
         ),
       ),
@@ -176,11 +177,16 @@ class HomeBody extends StatelessWidget {
   }
 }
 
-Widget _buildFeatureButton(String text) {
+Widget _buildFeatureButton(BuildContext context, String text) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: InkWell(
-      onTap: () {},
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => const UsePromptWidget(),
+        );
+      },
       borderRadius: BorderRadius.circular(10),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
@@ -202,7 +208,3 @@ Widget _buildFeatureButton(String text) {
     ),
   );
 }
-
-
-
-

@@ -25,8 +25,21 @@ class TestUsePromptPopUp extends StatelessWidget {
   }
 }
 
-class UsePromptWidget extends StatelessWidget {
+class UsePromptWidget extends StatefulWidget {
   const UsePromptWidget({super.key});
+
+  @override
+  _UsePromptWidgetState createState() => _UsePromptWidgetState();
+}
+
+class _UsePromptWidgetState extends State<UsePromptWidget> {
+  bool _isPromptVisible = false;
+
+  void _togglePromptVisibility() {
+    setState(() {
+      _isPromptVisible = !_isPromptVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +82,18 @@ class UsePromptWidget extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextButton(
-                onPressed: () {},
-                child: const Text('View Prompt', style: TextStyle(color: Colors.blue)),
+                onPressed: _togglePromptVisibility,
+                child: Text(
+                  _isPromptVisible ? 'Hide Prompt' : 'View Prompt',
+                  style: const TextStyle(color: Colors.blue),
+                ),
               ),
+              if (_isPromptVisible) ...[
+                const SizedBox(height: 8),
+                const Text(
+                  'This is the content of the prompt. It will be displayed when the "View Prompt" button is pressed.',
+                ),
+              ],
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
