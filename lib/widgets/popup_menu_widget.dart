@@ -24,7 +24,7 @@ class PopupMenuWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  'Jarvis',
+                  'Your AI',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ],
@@ -54,11 +54,11 @@ class PopupMenuWidget extends StatelessWidget {
           }),
           _buildMenuOption(Icons.smart_toy, 'Chat bots', () {
             //Navigate to Chat bots screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBotScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatBotScreen()));
           }),
           _buildMenuOption(Icons.book, 'Knowledge base', () {
             //Navigate to Knowledge base screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()));
           }),
         ],
       ),

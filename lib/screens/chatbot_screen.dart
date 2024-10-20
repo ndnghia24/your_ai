@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
 import 'package:jarvis_ai/widgets/chatbot/new_chatbot_popup.dart';
+import 'package:jarvis_ai/widgets/popup_menu_widget.dart';
 
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});
@@ -31,40 +32,7 @@ class ChatBotScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Jarvis',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Personal'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.folder),
-              title: Text('Project'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: PopupMenuWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

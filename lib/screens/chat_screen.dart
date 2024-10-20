@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/widgets/popup_menu_widget.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
+import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  String selectedModel = 'GPT-3.5 Turbo'; // Default selected model
+
+  // Callback function to update the selected model
+  void updateSelectedModel(String newModel) {
+    setState(() {
+      selectedModel = newModel;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +46,7 @@ class ChatScreen extends StatelessWidget {
       ),
     );
   }
+
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -41,22 +56,16 @@ class ChatScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.menu, color: Colors.black),
               onPressed: () {
-                Scaffold.of(context).openDrawer();
+          Scaffold.of(context).openDrawer();
               },
             ),
             SizedBox(width: 8),
-            CircleAvatar(
-              backgroundColor: Colors.green,
-              radius: 12,
-              child: Icon(Icons.bolt, color: Colors.white, size: 16),
+            Expanded(
+              child: ModelSelector(
+          selectedModel: selectedModel,
+          onModelChanged: updateSelectedModel,
+              ),
             ),
-            SizedBox(width: 8),
-            Text(
-              'GPT-3.5 Turbo',
-              style: TextStyle(color: Colors.black),
-            ),
-            Icon(Icons.arrow_drop_down, color: Colors.black),
-            Spacer(),
             Icon(Icons.water_drop, color: Colors.blue),
             Text(
               '30',
@@ -66,11 +75,11 @@ class ChatScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add, color: Colors.black),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ),
-                );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
               },
             ),
           ],
