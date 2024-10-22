@@ -40,14 +40,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Welcome to Jarvis',
+                Center(
+                  child: Text(
+                  'Welcome to YourAI',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  'Login or Sign up to access your account',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                Center(
+                  child: Text(
+                    'Login or Sign up to access your account',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
                 ),
               ],
             ),
@@ -83,8 +87,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         child: Column(
           children: <Widget>[
             _buildGoogleButton('Login with Google'),
+             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
+             const SizedBox(height: 20),
             _buildEmailField(),
+             const SizedBox(height: 20),
             _buildPasswordField(),
             const Align(
               alignment: Alignment.centerRight,
@@ -110,9 +117,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         child: Column(
           children: <Widget>[
             _buildGoogleButton('Sign Up with Google'),
+             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
+             const SizedBox(height: 20),
             _buildEmailField(),
+             const SizedBox(height: 20),
             _buildPasswordField(),
+             const SizedBox(height: 20),
             _buildConfirmPasswordField(),
             const SizedBox(height: 20),
             _buildSubmitButton('Sign Up'),

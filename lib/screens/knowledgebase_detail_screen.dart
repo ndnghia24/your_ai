@@ -35,13 +35,13 @@ class KnowledgeDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Icon(Icons.storage, size: 40, color: Colors.orange),
+                Icon(Icons.storage, size: 40, color: Theme.of(context).primaryColor),
                 SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Chat bot', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text('2 Units - 658.00 Bytes', style: TextStyle(color: Colors.red)),
+                    Text('Chat bot', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text('2 Units - 658.00 Bytes', style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ],
@@ -59,6 +59,9 @@ class KnowledgeDetailScreen extends StatelessWidget {
                   },
                   icon: Icon(Icons.add),
                   label: Text('Add unit'),
+                  style: ElevatedButton.styleFrom(
+                    iconColor: Theme.of(context).primaryColor,
+                  ),
                 ),
               ],
             ),
@@ -72,7 +75,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
                   size: '132.00 Bytes',
                   createTime: '9/10/2024',
                   latestUpdate: '9/10/2024',
-                  isEnabled: true,
+                  isEnabled: true
                 ),
                 KnowledgeUnitItem(
                   fileName: 'Week01.txt',
@@ -80,7 +83,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
                   size: '526.00 Bytes',
                   createTime: '17/10/2024',
                   latestUpdate: '17/10/2024',
-                  isEnabled: true,
+                  isEnabled: true
                 ),
               ],
             ),
