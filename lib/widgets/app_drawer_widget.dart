@@ -3,6 +3,7 @@ import 'package:jarvis_ai/screens/chatbot_screen.dart';
 import 'package:jarvis_ai/screens/history_screen.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
 import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
+import 'package:jarvis_ai/widgets/authentication_widget.dart';
 
 class AppDrawerWidget extends StatelessWidget {
   const AppDrawerWidget({super.key});
@@ -64,6 +65,9 @@ class AppDrawerWidget extends StatelessWidget {
             //Navigate to Knowledge base screen
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()));
           }),
+          Spacer(), // Đẩy footer xuống cuối cùng
+          Divider(),
+          AuthenticationWidget(),
         ],
       ),
     );

@@ -204,7 +204,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   Widget _buildSubmitButton(String text) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
