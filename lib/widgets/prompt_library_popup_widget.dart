@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/widgets/shared/input_widget.dart';
 
+import '../helper/CustomColors.dart';
+import '../helper/CustomTextStyles.dart';
 import 'new_prompt_popup_widget.dart';
 import 'prompt_detail_popup_widget.dart';
 import 'use_prompt_widget.dart';
@@ -23,7 +26,7 @@ class TestPromptLibrary extends StatelessWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
               ),
               builder: (context) => const FractionallySizedBox(
-                heightFactor: 0.5, // Chiều cao bằng nửa màn hình
+                heightFactor: 0.75, // Chiều cao bằng nửa màn hình
                 child: PromptLibraryPopupWidget(),
               ),
             );
@@ -69,10 +72,10 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Prompt Library',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: CustomTextStyles.headlineMedium.fontSize,
                     fontWeight: FontWeight.bold), // Increased font size
               ),
               IconButton(
@@ -87,45 +90,60 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
               ),
             ],
           ),
-          TabBar(
-            controller: _tabController,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.blue,
-            indicatorColor: Colors.blue,
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.blue,
-            ),
-            tabs: [
-              Tab(
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
                 child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  child: const Text('My Prompt',
-                      style: TextStyle(fontSize: 18)), // Increased font size
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: CustomColors.cardColor,
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.blue,
+                    indicatorColor: Colors.blue,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: Colors.transparent,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.blue,
+                    ),
+                    tabs: [
+                      Tab(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          child: Text('My Prompt',
+                              style: TextStyle(
+                                  fontSize: CustomTextStyles.displaySmall
+                                      .fontSize)), // Increased font size
+                        ),
+                      ),
+                      Tab(
+                        child: Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            child: Text('Public Prompt',
+                                style: TextStyle(
+                                    fontSize: CustomTextStyles.displaySmall
+                                        .fontSize)) //, Increased font size
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Tab(
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  child: const Text('Public Prompt',
-                      style: TextStyle(fontSize: 18)), // Increased font size
-                ),
+              Expanded(
+                flex: 1,
+                child: Container(),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search',
-              prefixIcon:
-                  const Icon(Icons.search, size: 28), // Increased icon size
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
+          InputWidget(hintText: "Search", leftIconWidget: Icon(Icons.search)),
           const SizedBox(height: 16),
           Expanded(
             child: TabBarView(
@@ -161,8 +179,10 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
       children: List.generate(
         3,
         (index) => ListTile(
-          title: const Text('Brainstorm',
-              style: TextStyle(fontSize: 18)), // Increased font size
+          title: Text('Brainstorm',
+              style: TextStyle(
+                  fontSize: CustomTextStyles
+                      .headlineSmall.fontSize)), // Increased font size
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

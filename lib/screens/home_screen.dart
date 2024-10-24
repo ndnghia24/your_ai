@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/chat_screen.dart';
 import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
+import '../helper/CustomColors.dart';
+import '../helper/CustomTextStyles.dart';
 import '../widgets/app_drawer_widget.dart';
 import '../widgets/prompt_library_popup_widget.dart';
 import '../widgets/use_prompt_widget.dart';
@@ -18,15 +21,18 @@ class HomeScreen extends StatelessWidget {
           widthFactor: 0.75, // Chiều rộng của Drawer là 3/4 chiều rộng màn hình
           child: AppDrawerWidget(),
         ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Column(
-            children: [
-              const HomeBody(),
-              const ChatInputWidget(),
-            ],
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Column(
+              children: [
+                const HomeBody(),
+                const ChatInputWidget(),
+              ],
+            ),
           ),
         ));
   }
@@ -58,7 +64,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       elevation: 1,
       leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.black),
+        icon: Icon(Icons.menu_sharp,
+            color: CustomColors.textDarkGrey,
+            size: CustomTextStyles.headlineLarge.fontSize),
         onPressed: () {
           FocusScope.of(context).unfocus();
           Scaffold.of(context).openDrawer();
@@ -71,22 +79,44 @@ class _CustomAppBarState extends State<CustomAppBar> {
       actions: [
         Row(
           children: [
-            const Icon(Icons.water_drop_outlined, color: Colors.blue),
-            const Padding(
-              padding: EdgeInsets.only(right: 8.0),
-              child: Text(
+            TextButton.icon(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                backgroundColor: CustomColors.cardColor,
+                overlayColor: Colors.transparent,
+              ),
+              icon: Icon(Icons.water_drop_outlined,
+                  color: CustomColors.textHyperlink),
+              label: Text(
                 '30',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: CustomColors.textLightGrey,
+                  fontSize: CustomTextStyles.captionLarge.fontSize,
+                ),
               ),
             ),
             TextButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.rocket_launch, color: Colors.blue),
-              label: const Text(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              icon: Icon(Icons.rocket_launch,
+                  color: CustomColors.textHyperlink,
+                  size: CustomTextStyles.captionMedium.fontSize),
+              iconAlignment: IconAlignment.end,
+              label: Text(
                 'Upgrade',
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(
+                  color: CustomColors.textHyperlink,
+                  fontWeight: FontWeight.normal,
+                  fontSize: CustomTextStyles.captionLarge.fontSize,
+                ),
               ),
             ),
+            SizedBox(width: 8),
           ],
         ),
       ],
@@ -105,35 +135,38 @@ class HomeBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.waving_hand_rounded,
-                  size: 30,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Hi, good afternoon!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22, // Increased font size
-                  ),
-                ),
-              ],
-            ),
+            Text('👋',
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: CustomTextStyles.titleSmall.fontSize,
+                )),
+            SizedBox(height: 8),
+            Text('Hi, good afternoon!',
+                style: TextStyle(
+                  color: CustomColors.textDarkGrey,
+                  fontWeight: FontWeight.normal,
+                  fontSize: CustomTextStyles.titleSmall.fontSize,
+                )),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               "I'm YourAI, your personal assistant.",
-              style: TextStyle(fontSize: 20), // Increased font size
+              style: TextStyle(
+                color: CustomColors.textDarkGrey,
+                fontWeight: FontWeight.bold,
+                fontSize: CustomTextStyles.headlineMedium.fontSize,
+              ),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "Don't know what to say?",
                   style: TextStyle(
-                      color: Colors.grey, fontSize: 18), // Increased font size
+                      color: CustomColors.textLightGrey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: CustomTextStyles.headlineMedium.fontSize),
                 ),
                 InkWell(
                   onTap: () {
@@ -145,7 +178,7 @@ class HomeBody extends StatelessWidget {
                             BorderRadius.vertical(top: Radius.circular(16)),
                       ),
                       builder: (context) => FractionallySizedBox(
-                        heightFactor: 0.8, // Chiều cao bằng nửa màn hình
+                        heightFactor: 0.5,
                         child: Padding(
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -155,11 +188,11 @@ class HomeBody extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     "Use a prompt!",
                     style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 18,
+                      color: CustomColors.textHyperlink,
+                      fontSize: CustomTextStyles.bodyLarge.fontSize,
                     ),
                   ),
                 ),
@@ -189,17 +222,21 @@ Widget _buildFeatureButton(BuildContext context, String text) {
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
+          color: CustomColors.cardColor,
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               text,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(
+                color: CustomColors.textDarkGrey,
+                fontWeight: FontWeight.bold,
+                fontSize: CustomTextStyles.headlineMedium.fontSize,
+              ),
             ),
             const Icon(Icons.chevron_right),
           ],

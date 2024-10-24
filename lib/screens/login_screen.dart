@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helper/CustomColors.dart';
+import '../helper/CustomTextStyles.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,7 +10,8 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -31,44 +34,62 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       appBar: AppBar(
         title: const Text(''),
         elevation: 0,
-        backgroundColor: Colors.white,
       ),
       body: Column(
         children: <Widget>[
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Welcome to Jarvis',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  'Welcome to YourAI',
+                  style: TextStyle(
+                      fontSize: CustomTextStyles.headlineLarge.fontSize,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
                 Text(
                   'Login or Sign up to access your account',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: CustomTextStyles.headlineSmall.fontSize,
+                      color: Colors.grey),
                 ),
+                SizedBox(height: 32),
               ],
             ),
           ),
           TabBar(
             controller: _tabController,
-            labelColor: Colors.blue,
+            labelColor: Colors.black,
             unselectedLabelColor: Colors.black,
-            indicatorColor: Colors.blue,
+            indicatorColor: CustomColors.primaryColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Colors.transparent,
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+              color: CustomColors.primaryColor,
+            ),
             tabs: const [
               Tab(text: 'Login'),
               Tab(text: 'Sign Up'),
             ],
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildLoginForm(),
-                _buildSignUpForm(),
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                //fill with color
+                color: CustomColors.primaryColor,
+              ),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildLoginForm(),
+                  _buildSignUpForm(),
+                ],
+              ),
             ),
           ),
         ],
@@ -82,10 +103,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            const SizedBox(height: 20),
             _buildGoogleButton('Login with Google'),
             _buildDivider('or continue with email'),
             _buildEmailField(),
+            const SizedBox(height: 20),
             _buildPasswordField(),
+            const SizedBox(height: 20),
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -109,10 +133,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            const SizedBox(height: 20),
             _buildGoogleButton('Sign Up with Google'),
             _buildDivider('or continue with email'),
             _buildEmailField(),
+            const SizedBox(height: 20),
             _buildPasswordField(),
+            const SizedBox(height: 20),
             _buildConfirmPasswordField(),
             const SizedBox(height: 20),
             _buildSubmitButton('Sign Up'),
@@ -127,9 +154,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Widget _buildGoogleButton(String text) {
     return ElevatedButton.icon(
       onPressed: () {},
-      icon: Image.asset('assets/google_logo.png', height: 24), // Add your Google logo asset
-      label: Text(text),
+      icon: Image.asset('assets/google_logo.png',
+          height: 24), // Add your Google logo asset
+      label: Text(
+        text,
+        style: TextStyle(fontSize: CustomTextStyles.displaySmall.fontSize),
+      ),
       style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 20),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         minimumSize: const Size(double.infinity, 50),
@@ -146,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       children: <Widget>[
         const Expanded(child: Divider()),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
           child: Text(text),
         ),
         const Expanded(child: Divider()),
@@ -171,7 +203,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         labelText: 'Password',
         prefixIcon: const Icon(Icons.lock),
         suffixIcon: IconButton(
-          icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+          icon:
+              Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
             setState(() {
               _obscurePassword = !_obscurePassword;
@@ -190,7 +223,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         labelText: 'Confirm Password',
         prefixIcon: const Icon(Icons.lock),
         suffixIcon: IconButton(
-          icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
+          icon: Icon(_obscureConfirmPassword
+              ? Icons.visibility
+              : Icons.visibility_off),
           onPressed: () {
             setState(() {
               _obscureConfirmPassword = !_obscureConfirmPassword;

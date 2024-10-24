@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/widgets/shared/input_widget.dart';
 
-
+import '../helper/CustomTextStyles.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -9,9 +10,12 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Chat History',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: CustomTextStyles.headlineLarge.fontSize,
+          ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -26,15 +30,8 @@ class HistoryScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
+            child: InputWidget(
+                hintText: "Search", leftIconWidget: Icon(Icons.search)),
           ),
           Expanded(
             child: ListView(
@@ -67,23 +64,37 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-Widget _buildChatItem({required String title, required String message, required String time}) {
-  return ListTile(
-    title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-    subtitle: Text(message),
-    trailing: Row(
-      mainAxisSize: MainAxisSize.min,
+  Widget _buildChatItem(
+      {required String title, required String message, required String time}) {
+    return Column(
       children: [
-        Text(time, style: const TextStyle(color: Colors.grey)),
-        IconButton(
-          icon: const Icon(Icons.more_horiz, color: Colors.grey),
-          onPressed: () {},
+        ListTile(
+          title: Text(title,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: CustomTextStyles.headlineMedium.fontSize)),
+          subtitle: Text(message,
+              style: TextStyle(fontSize: CustomTextStyles.bodyLarge.fontSize)),
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(time,
+                  style:
+                      TextStyle(fontSize: CustomTextStyles.bodyLarge.fontSize)),
+              Expanded(
+                child: Text("···",
+                    style:
+                        TextStyle(fontSize: 34, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+          onTap: () {
+            // Handle chat item tap
+          },
         ),
+        const Divider(indent: 16, endIndent: 16),
       ],
-    ),
-    onTap: () {
-      // Handle chat item tap
-    },
-  );
-}
+    );
+  }
 }

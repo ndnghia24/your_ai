@@ -94,3 +94,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+fonts:
+  - family: Inter
+    fonts:
+      - asset: assets/fonts/InterVariable.ttf
+      - asset: assets/fonts/InterVariable.ttf
+        weight: 700
+      - asset: assets/fonts/InterVariable-Italic.ttf
+        style: italic

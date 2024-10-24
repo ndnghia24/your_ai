@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
 
 void main() {
@@ -11,19 +12,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
+    debugPaintSizeEnabled = false;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(
-          headlineSmall: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          headlineSmall:
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           headlineMedium: TextStyle(color: Colors.grey),
         ),
         useMaterial3: true,
       ),
       home: HomeScreen(),
     );
-     
   }
 }
-

@@ -4,6 +4,9 @@ import 'package:jarvis_ai/screens/home_screen.dart';
 import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
+import '../helper/CustomColors.dart';
+import '../helper/CustomTextStyles.dart';
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -12,7 +15,10 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  String selectedModel = 'GPT-3.5 Turbo'; // Default selected model
+  String selectedModel = 'GPT-3.5 Turbo';
+
+  // List of messages
+  final List<Map<String, bool>> messages = [];
 
   // Callback function to update the selected model
   void updateSelectedModel(String newModel) {
@@ -20,12 +26,21 @@ class _ChatScreenState extends State<ChatScreen> {
       selectedModel = newModel;
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    messages.clear();
+
+    messages.add({'Hi, what’s your name?': false});
+    messages.add({
+      'I\'m an AI language model created by OpenAI, and I don\'t have a personal name. You can just call me "Assistant." How can I assist you today?':
+          true
+    });
+
     return Scaffold(
       appBar: _buildAppBar(context),
       drawer: FractionallySizedBox(
-        widthFactor: 0.75, // Chiều rộng của Drawer là 3/4 chiều rộng màn hình
+        widthFactor: 0.75,
         child: AppDrawerWidget(),
       ),
       body: Column(
@@ -34,15 +49,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _buildUserMessage('Hi, what’s your name?'),
-                const SizedBox(height: 16),
-                _buildBotMessage(
-                  'I\'m an AI language model created by OpenAI, and I don\'t have a personal name. You can just call me "Assistant." How can I assist you today?',
-                ),
+                for (final message in messages)
+                  _buildMessage(message.keys.first, message.values.first),
               ],
             ),
           ),
-          ChatInputWidget(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+            child: ChatInputWidget(),
+          ),
         ],
       ),
     );
@@ -50,104 +65,113 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
-      title: Builder(
-        builder: (context) => Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.menu, color: Colors.black),
-              onPressed: () {
-          Scaffold.of(context).openDrawer();
-              },
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: ModelSelector(
-          selectedModel: selectedModel,
-          onModelChanged: updateSelectedModel,
-              ),
-            ),
-            Icon(Icons.water_drop, color: Colors.blue),
-            Text(
-              '30',
-              style: TextStyle(color: Colors.black),
-            ),
-            SizedBox(width: 8),
-            IconButton(
-              icon: Icon(Icons.add, color: Colors.black),
-              onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-              },
-            ),
-          ],
-        ),
-      ),
       backgroundColor: Colors.white,
-      elevation: 0,
-    );
-  }
-
-  Widget _buildUserMessage(String message) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          message,
-          style: const TextStyle(color: Colors.white),
-        ),
+      elevation: 1,
+      leading: IconButton(
+        icon: Icon(Icons.menu_sharp,
+            color: CustomColors.textDarkGrey,
+            size: CustomTextStyles.headlineLarge.fontSize),
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          Scaffold.of(context).openDrawer();
+        },
       ),
-    );
-  }
-
-  Widget _buildBotMessage(String message) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(message),
+      title: ModelSelector(
+        selectedModel: selectedModel,
+        onModelChanged: updateSelectedModel,
       ),
-    );
-  }
-
-  Widget _buildInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Ask me anything...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
+      actions: [
+        Row(
+          children: [
+            TextButton.icon(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                backgroundColor: CustomColors.cardColor,
+                overlayColor: Colors.transparent,
+              ),
+              icon: Icon(Icons.water_drop_outlined,
+                  color: CustomColors.textHyperlink),
+              label: Text(
+                '30',
+                style: TextStyle(
+                  color: CustomColors.textLightGrey,
+                  fontSize: CustomTextStyles.captionLarge.fontSize,
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: Colors.blue,
-            child: IconButton(
-              icon: const Icon(Icons.send, color: Colors.white),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.black),
               onPressed: () {
-                // Handle send action
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
               },
             ),
-          ),
-        ],
+            SizedBox(width: 8),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessage(String message, bool isFromAI) {
+    return Align(
+      alignment: isFromAI ? Alignment.centerLeft : Alignment.centerRight,
+      child: Container(
+        margin: EdgeInsets.fromLTRB(
+            (!isFromAI ? 16 : 0), 0, (isFromAI ? 16 : 0), 10),
+        padding: const EdgeInsets.all(12),
+        decoration: isFromAI
+            ? BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(90),
+              )
+            : BoxDecoration(
+                color: CustomColors.cardColor,
+                borderRadius: BorderRadius.circular(90),
+              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            isFromAI
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircleAvatar(
+                          radius: 10,
+                          backgroundColor: CustomColors.cardColor,
+                          child: Icon(
+                            Icons.person,
+                            color: CustomColors.textDarkGrey,
+                            size: CustomTextStyles.captionLarge.fontSize,
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Text(
+                          'GPT-3.5 Turbo',
+                          style: TextStyle(
+                            color: CustomColors.textDarkGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: CustomTextStyles.captionLarge.fontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(),
+            Text(
+              message,
+              style: TextStyle(
+                color: CustomColors.textDarkGrey,
+                fontSize: CustomTextStyles.captionLarge.fontSize,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

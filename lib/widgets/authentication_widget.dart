@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/helper/CustomTextStyles.dart';
 import 'package:jarvis_ai/screens/login_screen.dart';
 
 class AuthenticationWidget extends StatefulWidget {
@@ -21,12 +22,15 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
     setState(() {
       isLoggedIn = true;
     });
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoggedIn ? LoggedInFooter(onLogOut: logOut) : SignInFooter(onSignIn: signIn);
+    return isLoggedIn
+        ? LoggedInFooter(onLogOut: logOut)
+        : SignInFooter(onSignIn: signIn);
   }
 }
 
@@ -84,14 +88,14 @@ class LoggedInFooter extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16),
-            SizedBox(
+          SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // Background color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+                backgroundColor: Colors.blue, // Background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               onPressed: onLogOut, // Gọi hàm logOut khi nhấn
               child: Text('Log out', style: TextStyle(color: Colors.white)),
@@ -117,7 +121,8 @@ class SignInFooter extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.black, backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
               side: BorderSide(color: Colors.blue),
@@ -125,7 +130,11 @@ class SignInFooter extends StatelessWidget {
           ),
           onPressed: onSignIn, // Gọi hàm signIn khi nhấn
           icon: Icon(Icons.account_circle, color: Colors.blue),
-          label: Text('Sign in / Sign up'),
+          label: Text('Sign in / Sign up',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: CustomTextStyles.captionMedium.fontSize)),
         ),
       ),
     );

@@ -1,11 +1,14 @@
 // Custom Dropdown Widget for model selection
 import 'package:flutter/material.dart';
+import 'package:jarvis_ai/helper/CustomColors.dart';
+import 'package:jarvis_ai/helper/CustomTextStyles.dart';
 
 class ModelSelector extends StatelessWidget {
   final String selectedModel;
   final Function(String) onModelChanged;
 
-  ModelSelector({super.key, required this.selectedModel, required this.onModelChanged});
+  ModelSelector(
+      {super.key, required this.selectedModel, required this.onModelChanged});
 
   // List of available models
   final List<String> models = [
@@ -43,7 +46,11 @@ class ModelSelector extends StatelessWidget {
               Expanded(
                 child: Text(
                   model,
-                  overflow: TextOverflow.ellipsis, // Prevent overflow
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: CustomTextStyles.captionLarge.fontSize,
+                    color: CustomColors.textDarkGrey,
+                  ),
                 ),
               ),
             ],
