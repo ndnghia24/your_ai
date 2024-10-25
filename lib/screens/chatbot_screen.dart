@@ -6,7 +6,6 @@ import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});
 
-
   void showNewChatBotDialog(BuildContext context) {
     // Hiển thị popup khi nhấn nút "New"
     showDialog(
@@ -21,16 +20,7 @@ class ChatBotScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personal'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Text('T'),
-            ),
-          ),
-        ],
+        title: Text('Bots'),
       ),
       drawer: AppDrawerWidget(),
       body: Padding(
@@ -38,11 +28,15 @@ class ChatBotScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Bots',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -52,8 +46,8 @@ class ChatBotScreen extends StatelessWidget {
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  child: Icon(Icons.chat),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Icon(Icons.chat, color: Colors.white),
                 ),
                 title: Text('Test chat bot'),
                 subtitle: Text('This is a chat bot.'),
@@ -61,11 +55,11 @@ class ChatBotScreen extends StatelessWidget {
                   spacing: 12,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.star_border),
+                      icon: Icon(Icons.star_border, color: Theme.of(context).primaryColor),
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete_outline),
+                      icon: Icon(Icons.delete_outline, color: Theme.of(context).primaryColor),
                       onPressed: () {},
                     ),
                   ],
@@ -87,7 +81,7 @@ class ChatBotScreen extends StatelessWidget {
                   // Action to create new bot
                   showNewChatBotDialog(context);
                 },
-                backgroundColor: Colors.blue,
+                backgroundColor: Theme.of(context).primaryColor,
                 child: Icon(Icons.add),
               ),
             ),

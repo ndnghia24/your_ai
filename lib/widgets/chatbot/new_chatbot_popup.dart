@@ -82,7 +82,7 @@ class CreateAssistantDialog extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.white,
                   ),
                   child: Text('Cancel'),
                 ),
@@ -92,6 +92,9 @@ class CreateAssistantDialog extends StatelessWidget {
                     // OK action, do something with form data
                     Navigator.of(context).pop();
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
                   child: Text('OK'),
                 ),
               ],

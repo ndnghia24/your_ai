@@ -8,7 +8,6 @@ import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 class KnowledgeBaseScreen extends StatelessWidget {
   const KnowledgeBaseScreen({super.key});
 
-
   void showNewKnowledgeDialog(BuildContext context) {
     // Show popup when click on "New" button
     showDialog(
@@ -18,72 +17,80 @@ class KnowledgeBaseScreen extends StatelessWidget {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Knowledge'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              // Handle Create Knowledge
-              showNewKnowledgeDialog(context);
-            },
-          )
-        ],
       ),
       drawer: AppDrawerWidget(),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                    ),
+                  ),
                 ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Handle Knowledge base item
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => KnowledgeDetailScreen()),
+                        );
+                      },
+                      child: KnowledgeBaseItem(
+                        title: 'Chat bot',
+                        description:
+                            'You are my chat bot to test create chat bot feature. When I ask you any question, you answer start with "Hello Nhân Dzai..."',
+                        units: 1,
+                        size: '132.00 Bytes',
+                        editTime: '9/10/2024 08:46:41',
+                      ),
+                    ),
+                    KnowledgeBaseItem(
+                      title: 'KB 01',
+                      description: '',
+                      units: 1,
+                      size: '526.00 Bytes',
+                      editTime: '17/10/2024 14:44:46',
+                    ),
+                  ],
+                ),
+              ),
+              PaginationWidget(),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              margin: EdgeInsets.all(16),
+              child: FloatingActionButton(
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  // Handle Create Knowledge
+                  showNewKnowledgeDialog(context);
+                },
+                child: Icon(Icons.add),
               ),
             ),
           ),
-          Expanded(
-            child: ListView(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Handle Knowledge base item
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => KnowledgeDetailScreen()),
-                    );
-                  },
-                  child: KnowledgeBaseItem(
-                    title: 'Chat bot',
-                    description:
-                        'You are my chat bot to test create chat bot feature. When I ask you any question, you answer start with "Hello Nhân Dzai..."',
-                    units: 1,
-                    size: '132.00 Bytes',
-                    editTime: '9/10/2024 08:46:41',
-                  ),
-                ),
-                KnowledgeBaseItem(
-                  title: 'KB 01',
-                  description: '',
-                  units: 1,
-                  size: '526.00 Bytes',
-                  editTime: '17/10/2024 14:44:46',
-                ),
-              ],
-            ),
-          ),
-          PaginationWidget(),
         ],
       ),
     );
   }
 }
-
-
-

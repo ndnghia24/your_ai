@@ -19,7 +19,6 @@ class CreateKnowledgeBaseDialog extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Knowledge name',
-                labelStyle: TextStyle(color: Colors.red),
                 hintText: 'Enter knowledge name',
                 counterText: "0 / 50",
                 border: OutlineInputBorder(

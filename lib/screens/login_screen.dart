@@ -42,18 +42,18 @@ class _LoginScreenState extends State<LoginScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                Center(
+                  child: Text(
                   'Welcome to YourAI',
-                  style: TextStyle(
-                      fontSize: CustomTextStyles.headlineLarge.fontSize,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  'Login or Sign up to access your account',
-                  style: TextStyle(
-                      fontSize: CustomTextStyles.headlineSmall.fontSize,
-                      color: Colors.grey),
+                Center(
+                  child: Text(
+                    'Login or Sign up to access your account',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
                 ),
                 SizedBox(height: 32),
               ],
@@ -105,9 +105,11 @@ class _LoginScreenState extends State<LoginScreen>
           children: <Widget>[
             const SizedBox(height: 20),
             _buildGoogleButton('Login with Google'),
+             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
+             const SizedBox(height: 20),
             _buildEmailField(),
-            const SizedBox(height: 20),
+             const SizedBox(height: 20),
             _buildPasswordField(),
             const SizedBox(height: 20),
             const Align(
@@ -135,11 +137,13 @@ class _LoginScreenState extends State<LoginScreen>
           children: <Widget>[
             const SizedBox(height: 20),
             _buildGoogleButton('Sign Up with Google'),
+             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
+             const SizedBox(height: 20),
             _buildEmailField(),
-            const SizedBox(height: 20),
+             const SizedBox(height: 20),
             _buildPasswordField(),
-            const SizedBox(height: 20),
+             const SizedBox(height: 20),
             _buildConfirmPasswordField(),
             const SizedBox(height: 20),
             _buildSubmitButton('Sign Up'),
