@@ -49,7 +49,7 @@ class CreateAssistantDialog extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Profile picture (Coming soon)',
+              'Profile picture',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),

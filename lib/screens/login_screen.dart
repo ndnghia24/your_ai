@@ -105,9 +105,7 @@ class _LoginScreenState extends State<LoginScreen>
           children: <Widget>[
             const SizedBox(height: 20),
             _buildGoogleButton('Login with Google'),
-             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
-             const SizedBox(height: 20),
             _buildEmailField(),
              const SizedBox(height: 20),
             _buildPasswordField(),
@@ -137,9 +135,7 @@ class _LoginScreenState extends State<LoginScreen>
           children: <Widget>[
             const SizedBox(height: 20),
             _buildGoogleButton('Sign Up with Google'),
-             const SizedBox(height: 20),
             _buildDivider('or continue with email'),
-             const SizedBox(height: 20),
             _buildEmailField(),
              const SizedBox(height: 20),
             _buildPasswordField(),

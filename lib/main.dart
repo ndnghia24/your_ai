@@ -25,6 +25,37 @@ class MyApp extends StatelessWidget {
           headlineMedium: TextStyle(color: Colors.grey),
         ),
         useMaterial3: true,
+        inputDecorationTheme: InputDecorationTheme(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        labelStyle: TextStyle(color: Colors.blue),
+        hintStyle: TextStyle(color: Colors.grey),
+      ),
+      buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.primary,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.black, backgroundColor: Colors.blue, // Text color
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.black, // Text color
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.black, // Text color
+          ),
+        ),
       ),
       home: HomeScreen(),
     );

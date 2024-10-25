@@ -28,17 +28,28 @@
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                    Text('$units unit', overflow: TextOverflow.ellipsis),
-                    Text(size, overflow: TextOverflow.ellipsis),  
-                    Text(date),
+              Text('$units unit', overflow: TextOverflow.ellipsis),
+              Text(size, overflow: TextOverflow.ellipsis),
+              Text(date),
             ],
           ),
-          trailing: IconButton(
-            onPressed: () {
-              // Handle add/remove action
-            },
-            icon: Icon(isRemovable ? Icons.remove : Icons.add),
-            color: isRemovable ? Colors.red : Colors.blue,
+          trailing: Stack(
+            alignment: Alignment.center,
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundColor: isRemovable ? Colors.red : Colors.blue,
+              ),
+              IconButton(
+                onPressed: () {
+                  // Handle add/remove action
+                },
+                icon: Icon(isRemovable ? Icons.remove : Icons.add),
+                color: Colors.white,
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+              ),
+            ],
           ),
         ),
       );
