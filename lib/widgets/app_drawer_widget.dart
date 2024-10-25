@@ -66,15 +66,15 @@ class AppDrawerWidget extends StatelessWidget {
           }),
           _buildMenuOption(Icons.smart_toy, 'Chat bots', () {
             //Navigate to Chat bots screen
-            Navigator.pushReplacement(context,
+            Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ChatBotScreen()));
           }),
           _buildMenuOption(Icons.book, 'Knowledge base', () {
             //Navigate to Knowledge base screen
-            Navigator.pushReplacement(context,
+            Navigator.push(context,
                 MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()));
           }),
-          Spacer(), // Đẩy footer xuống cuối cùng
+          Spacer(),
           Divider(),
           AuthenticationWidget(),
         ],

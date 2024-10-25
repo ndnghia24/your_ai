@@ -20,9 +20,23 @@ class ChatBotScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bots'),
+        title: Text('Personal'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundColor: Colors.blue,
+              child: Text('T'),
+            ),
+          ),
+        ],
       ),
-      drawer: AppDrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -68,7 +82,8 @@ class ChatBotScreen extends StatelessWidget {
                   // Navigate to ChatBotPreviewScreen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatBotPreviewScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => ChatBotPreviewScreen()),
                   );
                 },
               ),

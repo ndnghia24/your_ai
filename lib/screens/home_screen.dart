@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
           child: GestureDetector(
             onTap: () {
-              FocusScope.of(context).unfocus();
+              //FocusScope.of(context).unfocus();
             },
             child: Column(
               children: [
@@ -68,8 +68,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
             color: CustomColors.textDarkGrey,
             size: CustomTextStyles.headlineLarge.fontSize),
         onPressed: () {
-          FocusScope.of(context).unfocus();
           Scaffold.of(context).openDrawer();
+          //FocusScope.of(context).unfocus();
         },
       ),
       title: ModelSelector(
