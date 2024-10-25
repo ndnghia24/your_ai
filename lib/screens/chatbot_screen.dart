@@ -6,7 +6,6 @@ import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});
 
-
   void showNewChatBotDialog(BuildContext context) {
     // Hiển thị popup khi nhấn nút "New"
     showDialog(
@@ -22,6 +21,12 @@ class ChatBotScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Personal'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -32,7 +37,6 @@ class ChatBotScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -74,7 +78,8 @@ class ChatBotScreen extends StatelessWidget {
                   // Navigate to ChatBotPreviewScreen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatBotPreviewScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => ChatBotPreviewScreen()),
                   );
                 },
               ),

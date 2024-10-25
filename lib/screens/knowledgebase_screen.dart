@@ -8,7 +8,6 @@ import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
 class KnowledgeBaseScreen extends StatelessWidget {
   const KnowledgeBaseScreen({super.key});
 
-
   void showNewKnowledgeDialog(BuildContext context) {
     // Show popup when click on "New" button
     showDialog(
@@ -18,11 +17,18 @@ class KnowledgeBaseScreen extends StatelessWidget {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Knowledge'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -33,7 +39,6 @@ class KnowledgeBaseScreen extends StatelessWidget {
           )
         ],
       ),
-      drawer: AppDrawerWidget(),
       body: Column(
         children: [
           Padding(
@@ -56,7 +61,8 @@ class KnowledgeBaseScreen extends StatelessWidget {
                     // Handle Knowledge base item
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => KnowledgeDetailScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => KnowledgeDetailScreen()),
                     );
                   },
                   child: KnowledgeBaseItem(
@@ -84,6 +90,3 @@ class KnowledgeBaseScreen extends StatelessWidget {
     );
   }
 }
-
-
-
