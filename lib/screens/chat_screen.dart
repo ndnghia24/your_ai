@@ -67,14 +67,18 @@ class _ChatScreenState extends State<ChatScreen> {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 1,
-      leading: IconButton(
-        icon: Icon(Icons.menu_sharp,
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: Icon(
+            Icons.menu_sharp,
             color: CustomColors.textDarkGrey,
-            size: CustomTextStyles.headlineLarge.fontSize),
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          Scaffold.of(context).openDrawer();
-        },
+            size: CustomTextStyles.headlineLarge.fontSize,
+          ),
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Scaffold.of(context).openDrawer(); // Opens the drawer
+          },
+        ),
       ),
       title: ModelSelector(
         selectedModel: selectedModel,
