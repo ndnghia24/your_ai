@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(),
         drawer: FractionallySizedBox(
-          widthFactor: 0.75, // Chiều rộng của Drawer là 3/4 chiều rộng màn hình
+          widthFactor: 0.75,
           child: AppDrawerWidget(),
         ),
         body: Padding(
@@ -157,9 +157,8 @@ class HomeBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   "Don't know what to say?",
@@ -168,31 +167,35 @@ class HomeBody extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: CustomTextStyles.headlineMedium.fontSize),
                 ),
-                InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (context) => FractionallySizedBox(
-                        heightFactor: 0.5,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          child: const PromptLibraryPopupWidget(),
+                const SizedBox(height: 8),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
                         ),
+                        builder: (context) => FractionallySizedBox(
+                          heightFactor: 0.5,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: const PromptLibraryPopupWidget(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Use a prompt!",
+                      style: TextStyle(
+                        color: CustomColors.textHyperlink,
+                        fontSize: CustomTextStyles.bodyLarge.fontSize,
                       ),
-                    );
-                  },
-                  child: Text(
-                    "Use a prompt!",
-                    style: TextStyle(
-                      color: CustomColors.textHyperlink,
-                      fontSize: CustomTextStyles.bodyLarge.fontSize,
                     ),
                   ),
                 ),
