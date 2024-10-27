@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/helper/CustomColors.dart';
 import 'package:jarvis_ai/helper/CustomTextStyles.dart';
-import 'package:jarvis_ai/screens/chat_screen.dart';
+import 'package:jarvis_ai/screens/chat_screens/chat_session_screen.dart';
 
-import '../prompt_library_popup_widget.dart';
+import '../popup_prompt_library.dart';
 
 class ChatInputWidget extends StatefulWidget {
   const ChatInputWidget({super.key});
@@ -24,12 +23,14 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: CustomColors.cardColor,
+        color: screenColorScheme.surfaceContainer,
       ),
       child: Row(
         children: [
@@ -53,7 +54,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                           BorderRadius.vertical(top: Radius.circular(16)),
                     ),
                     builder: (context) => FractionallySizedBox(
-                      heightFactor: 0.8, // Chiều cao bằng nửa màn hình
+                      heightFactor: 0.8,
                       child: Padding(
                         padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -98,7 +99,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
               ),
             ],
           ),
-          const SizedBox(width: 4), // Reduced width to make input text longer
+          const SizedBox(width: 4),
           Expanded(
             child: SizedBox(
               height: CustomTextStyles.headlineSmall.fontSize! * 2,
@@ -108,7 +109,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                 style: TextStyle(
                   fontSize: CustomTextStyles.headlineSmall.fontSize,
                   fontWeight: FontWeight.normal,
-                  color: CustomColors.textLightGrey,
+                  color: screenColorScheme.onSecondary,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Ask me anything...',
@@ -123,7 +124,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
           const SizedBox(width: 4),
           IconButton(
             icon: Icon(Icons.send,
-                color: CustomColors.textHyperlink,
+                color: screenColorScheme.secondary,
                 size: CustomTextStyles.displayLarge.fontSize),
             onPressed: () {
               _focusNode.unfocus();

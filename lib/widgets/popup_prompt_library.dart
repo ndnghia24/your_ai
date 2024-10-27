@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/widgets/shared/input_widget.dart';
 
-import '../helper/CustomColors.dart';
 import '../helper/CustomTextStyles.dart';
-import 'new_prompt_popup_widget.dart';
-import 'prompt_detail_popup_widget.dart';
-import 'use_prompt_widget.dart';
+import 'popup_new_prompt.dart';
+import 'popup_prompt_detail.dart';
+import 'widget_use_prompt.dart';
 
 class TestPromptLibrary extends StatelessWidget {
   const TestPromptLibrary({super.key});
@@ -64,6 +63,8 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -98,7 +99,7 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    color: CustomColors.cardColor,
+                    color: screenColorScheme.surfaceContainer,
                   ),
                   child: TabBar(
                     controller: _tabController,
@@ -180,9 +181,8 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
         3,
         (index) => ListTile(
           title: Text('Brainstorm',
-              style: TextStyle(
-                  fontSize: CustomTextStyles
-                      .headlineSmall.fontSize)), // Increased font size
+              style:
+                  TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

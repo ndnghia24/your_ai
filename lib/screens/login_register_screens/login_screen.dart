@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../helper/CustomColors.dart';
-import '../helper/CustomTextStyles.dart';
+import '../../helper/CustomTextStyles.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,14 +62,14 @@ class _LoginScreenState extends State<LoginScreen>
             controller: _tabController,
             labelColor: Colors.black,
             unselectedLabelColor: Colors.black,
-            indicatorColor: CustomColors.primaryColor,
+            indicatorColor: Theme.of(context).colorScheme.primary,
             indicatorSize: TabBarIndicatorSize.tab,
             dividerColor: Colors.transparent,
             indicator: BoxDecoration(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(16),
               ),
-              color: CustomColors.primaryColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
             tabs: const [
               Tab(text: 'Login'),
@@ -81,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Container(
               decoration: BoxDecoration(
                 //fill with color
-                color: CustomColors.primaryColor,
+                color: Theme.of(context).colorScheme.primary,
               ),
               child: TabBarView(
                 controller: _tabController,

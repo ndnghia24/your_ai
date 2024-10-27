@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/chat_screen.dart';
+import 'package:jarvis_ai/screens/chat_screens/chat_session_screen.dart';
 
 class TestUsePromptPopUp extends StatelessWidget {
   const TestUsePromptPopUp({super.key});
@@ -65,7 +65,8 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
                   const Expanded(
                     child: Text(
                       'Winston, the best therapist with 1000 years of experience',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   IconButton(
@@ -75,7 +76,8 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
                 ],
               ),
               const SizedBox(height: 8),
-              const Text('Other · Jarvis Team', style: TextStyle(color: Colors.grey)),
+              const Text('Other · Jarvis Team',
+                  style: TextStyle(color: Colors.grey)),
               const SizedBox(height: 8),
               const Text(
                 'As the best therapist ever, Winston could ask open-ended questions and offer advice, helping you identify what might be bothering you.',
@@ -98,7 +100,8 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Output Language', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Output Language',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   DropdownButton<String>(
                     value: 'Auto',
                     items: <String>['Auto', 'English', 'Spanish', 'French']
@@ -125,7 +128,10 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ChatScreen()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ChatScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/knowledgebase_detail_screen.dart';
-import 'package:jarvis_ai/widgets/knowledgebase/knowledgebase_item.dart';
-import 'package:jarvis_ai/widgets/knowledgebase/new_knowledgebase_popup.dart';
-import 'package:jarvis_ai/widgets/knowledgebase/paginationwidget.dart';
-import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
+import 'package:jarvis_ai/screens/knowledge_base_screens/knowledgebase_detail_screen.dart';
+import 'package:jarvis_ai/widgets/knowledgebase/item_knowledgebase.dart';
+import 'package:jarvis_ai/widgets/knowledgebase/popup_new_knowledgebase.dart';
+import 'package:jarvis_ai/widgets/knowledgebase/widget_pagination.dart';
+import 'package:jarvis_ai/widgets/widget_app_drawer.dart';
 
 class KnowledgeBaseScreen extends StatelessWidget {
   const KnowledgeBaseScreen({super.key});

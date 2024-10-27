@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/knowledgebase/add_unit_popup.dart';
-import 'package:jarvis_ai/widgets/knowledgebase/knowledgebase_unit.dart';
+import 'package:jarvis_ai/widgets/knowledgebase/popup_add_unit.dart';
+import 'package:jarvis_ai/widgets/knowledgebase/unit_knowledgebase.dart';
 
 class KnowledgeDetailScreen extends StatelessWidget {
   const KnowledgeDetailScreen({super.key});
@@ -40,8 +40,11 @@ class KnowledgeDetailScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Chat bot', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text('2 Units - 658.00 Bytes', style: TextStyle(color: Colors.red)),
+                    Text('Chat bot',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text('2 Units - 658.00 Bytes',
+                        style: TextStyle(color: Colors.red)),
                   ],
                 ),
               ],

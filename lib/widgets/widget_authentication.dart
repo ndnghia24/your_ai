@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/helper/CustomTextStyles.dart';
-import 'package:jarvis_ai/screens/login_screen.dart';
+import 'package:jarvis_ai/screens/login_register_screens/login_screen.dart';
 
 class AuthenticationWidget extends StatefulWidget {
   @override

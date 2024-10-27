@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/helper/CustomTextStyles.dart';
-import 'package:jarvis_ai/screens/chatbot_screen.dart';
-import 'package:jarvis_ai/screens/history_screen.dart';
+import 'package:jarvis_ai/screens/chat_bot_screens/chatbot_screen.dart';
+import 'package:jarvis_ai/screens/chat_screens/chat_history_screen.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
-import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
-import 'package:jarvis_ai/widgets/authentication_widget.dart';
-
-import '../helper/CustomColors.dart';
+import 'package:jarvis_ai/screens/knowledge_base_screens/knowledgebase_screen.dart';
+import 'package:jarvis_ai/widgets/widget_authentication.dart';
 
 class AppDrawerWidget extends StatelessWidget {
   const AppDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,8 +23,7 @@ class AppDrawerWidget extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage(
-                      'assets/yourai_logo.png'), // Add your logo asset
+                  backgroundImage: AssetImage('assets/yourai_logo.png'),
                   radius: 24,
                 ),
                 SizedBox(width: 8),
@@ -38,38 +37,44 @@ class AppDrawerWidget extends StatelessWidget {
               ],
             ),
           ),
-          _buildMenuOption(Icons.add_comment, 'New Chat', () {
+          _buildMenuOption(screenColorScheme, Icons.add_comment, 'New Chat',
+              () {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));
           }),
           _buildChatItem(
+            screenColorScheme: screenColorScheme,
             label: 'Assistance Inquiry',
             time: '09:00',
             isCurrent: true,
           ),
           _buildChatItem(
+            screenColorScheme: screenColorScheme,
             label: 'Redimensionnez vo...',
             time: '08:20',
           ),
           _buildChatItem(
+            screenColorScheme: screenColorScheme,
             label: 'Assistance Inquiry',
             time: '17 Sep',
           ),
           _buildChatItem(
+            screenColorScheme: screenColorScheme,
             label: 'Assistance Inquiry',
             time: '23 Aug',
           ),
-          _buildMenuOption(Icons.chat_bubble, 'All chats', () {
+          _buildMenuOption(screenColorScheme, Icons.chat_bubble, 'All chats',
+              () {
             //Navigate to History screen
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => HistoryScreen()));
           }),
-          _buildMenuOption(Icons.smart_toy, 'Chat bots', () {
+          _buildMenuOption(screenColorScheme, Icons.smart_toy, 'Chat bots', () {
             //Navigate to Chat bots screen
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ChatBotScreen()));
           }),
-          _buildMenuOption(Icons.book, 'Knowledge base', () {
+          _buildMenuOption(screenColorScheme, Icons.book, 'Knowledge base', () {
             //Navigate to Knowledge base screen
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()));
@@ -83,7 +88,10 @@ class AppDrawerWidget extends StatelessWidget {
   }
 
   Widget _buildChatItem(
-      {required String label, required String time, bool isCurrent = false}) {
+      {required ColorScheme screenColorScheme,
+      required String label,
+      required String time,
+      bool isCurrent = false}) {
     return Column(
       children: [
         Padding(
@@ -118,6 +126,7 @@ class AppDrawerWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize:
                                     CustomTextStyles.captionMedium.fontSize,
+                                color: screenColorScheme.onSecondary,
                                 fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -143,15 +152,19 @@ class AppDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(IconData icon, String label, VoidCallback onTap) {
+  Widget _buildMenuOption(ColorScheme screenColorScheme, IconData icon,
+      String label, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon),
+      leading: Icon(
+        icon,
+        color: screenColorScheme.secondary,
+      ),
       title: Text(label,
           style: TextStyle(
               fontSize: CustomTextStyles.captionLarge.fontSize,
               fontWeight: FontWeight.bold,
-              color: CustomColors.textDarkGrey)),
-      trailing: const Icon(Icons.arrow_forward),
+              color: screenColorScheme.onSecondary)),
+      trailing: const Icon(Icons.arrow_forward, color: Colors.grey),
       onTap: onTap,
     );
   }

@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/helper/CustomColors.dart';
 import 'package:jarvis_ai/helper/CustomTextStyles.dart';
-import 'package:jarvis_ai/screens/chat_screen.dart';
+import 'package:jarvis_ai/screens/chat_screens/chat_session_screen.dart';
 
-import '../prompt_library_popup_widget.dart';
+import '../popup_prompt_library.dart';
 
 class InputWidget extends StatefulWidget {
   final String hintText;
@@ -32,12 +31,14 @@ class _InputWidgetState extends State<InputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: CustomColors.cardColor,
+        color: screenColorScheme.surfaceContainer,
       ),
       child: Row(
         children: [
@@ -58,7 +59,7 @@ class _InputWidgetState extends State<InputWidget> {
                 style: TextStyle(
                   fontSize: CustomTextStyles.headlineSmall.fontSize,
                   fontWeight: FontWeight.normal,
-                  color: CustomColors.textLightGrey,
+                  color: screenColorScheme.onSecondary,
                 ),
                 decoration: InputDecoration(
                   hintText: widget.hintText,

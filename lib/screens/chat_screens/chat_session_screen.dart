@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
+import 'package:jarvis_ai/widgets/widget_app_drawer.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
 import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
-import '../helper/CustomColors.dart';
-import '../helper/CustomTextStyles.dart';
+import '../../helper/CustomTextStyles.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -71,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context) => IconButton(
           icon: Icon(
             Icons.menu_sharp,
-            color: CustomColors.textDarkGrey,
+            color: Theme.of(context).colorScheme.onSecondary,
             size: CustomTextStyles.headlineLarge.fontSize,
           ),
           onPressed: () {
@@ -90,15 +89,15 @@ class _ChatScreenState extends State<ChatScreen> {
             TextButton.icon(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: CustomColors.cardColor,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 overlayColor: Colors.transparent,
               ),
               icon: Icon(Icons.water_drop_outlined,
-                  color: CustomColors.textHyperlink),
+                  color: Theme.of(context).colorScheme.secondary),
               label: Text(
                 '30',
                 style: TextStyle(
-                  color: CustomColors.textLightGrey,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: CustomTextStyles.captionLarge.fontSize,
                 ),
               ),
@@ -133,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 borderRadius: BorderRadius.circular(90),
               )
             : BoxDecoration(
-                color: CustomColors.cardColor,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(90),
               ),
         child: Column(
@@ -147,10 +146,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         CircleAvatar(
                           radius: 10,
-                          backgroundColor: CustomColors.cardColor,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
                           child: Icon(
                             Icons.person,
-                            color: CustomColors.textDarkGrey,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             size: CustomTextStyles.captionLarge.fontSize,
                           ),
                         ),
@@ -158,7 +158,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Text(
                           'GPT-3.5 Turbo',
                           style: TextStyle(
-                            color: CustomColors.textDarkGrey,
+                            color: Theme.of(context).colorScheme.onSecondary,
                             fontWeight: FontWeight.bold,
                             fontSize: CustomTextStyles.captionLarge.fontSize,
                           ),
@@ -170,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Text(
               message,
               style: TextStyle(
-                color: CustomColors.textDarkGrey,
+                color: Theme.of(context).colorScheme.onSecondary,
                 fontSize: CustomTextStyles.captionLarge.fontSize,
               ),
             ),

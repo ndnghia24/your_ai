@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/use_prompt_widget.dart';
-
+import 'package:jarvis_ai/widgets/widget_use_prompt.dart';
 
 class TestPromptDetailPopup extends StatelessWidget {
   const TestPromptDetailPopup({super.key});
@@ -48,7 +47,8 @@ class PrompDetailPopupWidget extends StatelessWidget {
                   const Expanded(
                     child: Text(
                       'Winston, the best therapist with 1000 years of experience',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   IconButton(
@@ -64,13 +64,15 @@ class PrompDetailPopupWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              const Text('Other · Jarvis Team', style: TextStyle(color: Colors.grey)),
+              const Text('Other · Jarvis Team',
+                  style: TextStyle(color: Colors.grey)),
               const SizedBox(height: 8),
               const Text(
                 'As the best therapist ever, Winston could ask open-ended questions and offer advice, helping you identify what might be bothering you.',
               ),
               const SizedBox(height: 16),
-              const Text('Prompt', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Prompt',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -99,13 +101,13 @@ class PrompDetailPopupWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                    onPressed: () {
+                  onPressed: () {
                     Navigator.pop(context);
                     showDialog(
                       context: context,
                       builder: (context) => const UsePromptWidget(),
                     );
-                    },
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(

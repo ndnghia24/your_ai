@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/widgets/shared/input_widget.dart';
 
-import '../helper/CustomTextStyles.dart';
+import '../../helper/CustomTextStyles.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});

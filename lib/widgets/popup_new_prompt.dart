@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/widgets/shared/input_widget.dart';
 
-import '../helper/CustomColors.dart';
-
 class TestNewPrompt extends StatelessWidget {
   const TestNewPrompt({super.key});
 
@@ -39,6 +37,8 @@ class _NewPromptPopupWidgetState extends State<NewPromptPopupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -75,6 +75,7 @@ class _NewPromptPopupWidgetState extends State<NewPromptPopupWidget> {
                         Radio<bool>(
                           value: true,
                           groupValue: isPrivatePrompt,
+                          activeColor: Colors.blue,
                           onChanged: (bool? value) {
                             setState(() {
                               isPrivatePrompt = value!;
@@ -91,6 +92,7 @@ class _NewPromptPopupWidgetState extends State<NewPromptPopupWidget> {
                         Radio<bool>(
                           value: false,
                           groupValue: isPrivatePrompt,
+                          activeColor: Colors.blue,
                           onChanged: (bool? value) {
                             setState(() {
                               isPrivatePrompt = value!;
@@ -115,13 +117,13 @@ class _NewPromptPopupWidgetState extends State<NewPromptPopupWidget> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: CustomColors.cardColor,
+                          color: screenColorScheme.surfaceContainer,
                         ),
                         child: DropdownButtonFormField<String>(
                           decoration: const InputDecoration(
@@ -174,7 +176,7 @@ class _NewPromptPopupWidgetState extends State<NewPromptPopupWidget> {
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: CustomColors.cardColor,
+                          color: screenColorScheme.surfaceContainer,
                         ),
                         child: DropdownButtonFormField<String>(
                           decoration: const InputDecoration(

@@ -1,20 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/chat_screen.dart';
+import 'package:jarvis_ai/screens/chat_screens/chat_session_screen.dart';
 import 'package:jarvis_ai/widgets/shared/chat_input_widget.dart';
 import 'package:jarvis_ai/widgets/shared/model_selector_widget.dart';
 
-import '../helper/CustomColors.dart';
 import '../helper/CustomTextStyles.dart';
-import '../widgets/app_drawer_widget.dart';
-import '../widgets/prompt_library_popup_widget.dart';
-import '../widgets/use_prompt_widget.dart';
+import '../widgets/widget_app_drawer.dart';
+import '../widgets/popup_prompt_library.dart';
+import '../widgets/widget_use_prompt.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  late ColorScheme screenColorScheme;
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    screenColorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
         appBar: CustomAppBar(),
         drawer: FractionallySizedBox(
@@ -49,7 +52,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  String selectedModel = 'GPT-3.5 Turbo'; // Default selected model
+  String selectedModel = 'GPT-3.5 Turbo';
 
   // Callback function to update the selected model
   void updateSelectedModel(String newModel) {
@@ -60,16 +63,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 1,
       leading: IconButton(
         icon: Icon(Icons.menu_sharp,
-            color: CustomColors.textDarkGrey,
+            color: screenColorScheme.onSecondary,
             size: CustomTextStyles.headlineLarge.fontSize),
         onPressed: () {
           Scaffold.of(context).openDrawer();
-          //FocusScope.of(context).unfocus();
         },
       ),
       title: ModelSelector(
@@ -82,15 +86,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
             TextButton.icon(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: CustomColors.cardColor,
+                backgroundColor: screenColorScheme.surface,
                 overlayColor: Colors.transparent,
               ),
               icon: Icon(Icons.water_drop_outlined,
-                  color: CustomColors.textHyperlink),
+                  color: screenColorScheme.secondary),
               label: Text(
                 '30',
                 style: TextStyle(
-                  color: CustomColors.textLightGrey,
+                  color: screenColorScheme.onSecondary,
                   fontSize: CustomTextStyles.captionLarge.fontSize,
                 ),
               ),
@@ -104,13 +108,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ),
               ),
               icon: Icon(Icons.rocket_launch,
-                  color: CustomColors.textHyperlink,
+                  color: screenColorScheme.secondary,
                   size: CustomTextStyles.captionMedium.fontSize),
               iconAlignment: IconAlignment.end,
               label: Text(
                 'Upgrade',
                 style: TextStyle(
-                  color: CustomColors.textHyperlink,
+                  color: screenColorScheme.secondary,
                   fontWeight: FontWeight.normal,
                   fontSize: CustomTextStyles.captionLarge.fontSize,
                 ),
@@ -129,6 +133,8 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenColorScheme = Theme.of(context).colorScheme;
+
     return Expanded(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -137,13 +143,14 @@ class HomeBody extends StatelessWidget {
           children: [
             Text('👋',
                 style: TextStyle(
+                  color: screenColorScheme.onSecondary,
                   fontWeight: FontWeight.normal,
                   fontSize: CustomTextStyles.titleSmall.fontSize,
                 )),
             SizedBox(height: 8),
             Text('Hi, good afternoon!',
                 style: TextStyle(
-                  color: CustomColors.textDarkGrey,
+                  color: screenColorScheme.onSecondary,
                   fontWeight: FontWeight.normal,
                   fontSize: CustomTextStyles.titleSmall.fontSize,
                 )),
@@ -151,7 +158,7 @@ class HomeBody extends StatelessWidget {
             Text(
               "I'm YourAI, your personal assistant.",
               style: TextStyle(
-                color: CustomColors.textDarkGrey,
+                color: screenColorScheme.onSecondary,
                 fontWeight: FontWeight.bold,
                 fontSize: CustomTextStyles.headlineMedium.fontSize,
               ),
@@ -163,7 +170,7 @@ class HomeBody extends StatelessWidget {
                 Text(
                   "Don't know what to say?",
                   style: TextStyle(
-                      color: CustomColors.textLightGrey,
+                      color: screenColorScheme.onSecondary,
                       fontWeight: FontWeight.bold,
                       fontSize: CustomTextStyles.headlineMedium.fontSize),
                 ),
@@ -193,7 +200,7 @@ class HomeBody extends StatelessWidget {
                     child: Text(
                       "Use a prompt!",
                       style: TextStyle(
-                        color: CustomColors.textHyperlink,
+                        color: screenColorScheme.secondary,
                         fontSize: CustomTextStyles.bodyLarge.fontSize,
                       ),
                     ),
@@ -202,10 +209,13 @@ class HomeBody extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            _buildFeatureButton(context, 'Grammar corrector'),
-            _buildFeatureButton(context, 'Essay Improver'),
-            _buildFeatureButton(context, 'Instagram post Generator'),
-            _buildFeatureButton(context, 'Pro tips generator'),
+            _buildFeatureButton(
+                context, screenColorScheme, 'Grammar corrector'),
+            _buildFeatureButton(context, screenColorScheme, 'Essay Improver'),
+            _buildFeatureButton(
+                context, screenColorScheme, 'Instagram post Generator'),
+            _buildFeatureButton(
+                context, screenColorScheme, 'Pro tips generator'),
           ],
         ),
       ),
@@ -213,7 +223,8 @@ class HomeBody extends StatelessWidget {
   }
 }
 
-Widget _buildFeatureButton(BuildContext context, String text) {
+Widget _buildFeatureButton(
+    BuildContext context, screenColorScheme, String text) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: InkWell(
@@ -227,7 +238,7 @@ Widget _buildFeatureButton(BuildContext context, String text) {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
-          color: CustomColors.cardColor,
+          color: screenColorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -236,7 +247,7 @@ Widget _buildFeatureButton(BuildContext context, String text) {
             Text(
               text,
               style: TextStyle(
-                color: CustomColors.textDarkGrey,
+                color: screenColorScheme.onSecondary,
                 fontWeight: FontWeight.bold,
                 fontSize: CustomTextStyles.headlineMedium.fontSize,
               ),

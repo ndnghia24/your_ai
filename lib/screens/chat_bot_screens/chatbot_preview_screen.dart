@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/widgets/chatbot/add_knowledgebase_popup.dart';
-
+import 'package:jarvis_ai/widgets/chatbot/popup_add_knowledgebase.dart';
 
 class ChatBotPreviewScreen extends StatelessWidget {
   const ChatBotPreviewScreen({super.key});
 
-
   void showKnowledgeBaseDialog(BuildContext context) {
-
     // Hiển thị popup khi nhấn nút "New"
     showDialog(
       context: context,
@@ -16,7 +13,6 @@ class ChatBotPreviewScreen extends StatelessWidget {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +44,10 @@ class ChatBotPreviewScreen extends StatelessWidget {
               children: [
                 Text(
                   'Develop',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Màu text đen
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black), // Màu text đen
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -68,18 +67,18 @@ class ChatBotPreviewScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 8),
-                        TextField(
+                      TextField(
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[300], // Nền ô nhập liệu
                           hintText: 'Enter your prompt...',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
                           ),
                         ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -87,7 +86,7 @@ class ChatBotPreviewScreen extends StatelessWidget {
             ),
           ),
           Divider(),
-          
+
           // Preview section
           Expanded(
             child: Padding(
@@ -97,7 +96,10 @@ class ChatBotPreviewScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Preview',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Text màu đen
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black), // Text màu đen
                   ),
                   SizedBox(height: 8),
                   Expanded(
@@ -124,7 +126,8 @@ class ChatBotPreviewScreen extends StatelessWidget {
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[300], // Màu nền tin nhắn xám nhạt
+                                    color: Colors
+                                        .grey[300], // Màu nền tin nhắn xám nhạt
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -144,7 +147,8 @@ class ChatBotPreviewScreen extends StatelessWidget {
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue[100], // Màu nền tin nhắn từ Assistant
+                                    color: Colors.blue[
+                                        100], // Màu nền tin nhắn từ Assistant
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -163,7 +167,7 @@ class ChatBotPreviewScreen extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Input section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),

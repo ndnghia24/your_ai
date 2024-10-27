@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/chatbot_preview_screen.dart';
-import 'package:jarvis_ai/widgets/chatbot/new_chatbot_popup.dart';
-import 'package:jarvis_ai/widgets/app_drawer_widget.dart';
+import 'package:jarvis_ai/screens/chat_bot_screens/chatbot_preview_screen.dart';
+import 'package:jarvis_ai/widgets/chatbot/popup_new_chatbot.dart';
+import 'package:jarvis_ai/widgets/widget_app_drawer.dart';
 
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});

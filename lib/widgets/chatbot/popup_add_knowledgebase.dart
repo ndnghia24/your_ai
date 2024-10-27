@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis_ai/screens/knowledgebase_screen.dart';
-import 'package:jarvis_ai/widgets/chatbot/knowledgebase_item.dart';
+import 'package:jarvis_ai/screens/knowledge_base_screens/knowledgebase_screen.dart';
+import 'package:jarvis_ai/widgets/chatbot/item_knowledgebase.dart';
 
 class KnowledgeBasePopup extends StatelessWidget {
   const KnowledgeBasePopup({super.key});
@@ -40,9 +40,10 @@ class KnowledgeBasePopup extends StatelessWidget {
               onPressed: () {
                 // Handle create knowledge action
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()),
-                  );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => KnowledgeBaseScreen()),
+                );
               },
               icon: Icon(Icons.add),
               label: Text('Create Knowledge'),
