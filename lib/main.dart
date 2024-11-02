@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:jarvis_ai/screens/home_screen.dart';
+import 'package:your_ai/features/app/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
