@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/chat_ai/widgets/widget_app_drawer.dart';
+import 'package:your_ai/features/app/widgets/widget_app_drawer.dart';
 import 'package:your_ai/features/app/home_screen.dart';
 import 'package:your_ai/features/app/widgets/chat_input_widget.dart';
 import 'package:your_ai/features/app/widgets/model_selector_widget.dart';

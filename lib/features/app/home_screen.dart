@@ -5,7 +5,7 @@ import 'package:your_ai/features/app/widgets/chat_input_widget.dart';
 import 'package:your_ai/features/app/widgets/model_selector_widget.dart';
 
 import '../../utils/CustomTextStyles.dart';
-import '../chat_ai/widgets/widget_app_drawer.dart';
+import 'widgets/new_app_drawer.dart';
 import '../chat_prompt/widgets/popup_prompt_library.dart';
 import '../chat_prompt/widgets/widget_use_prompt.dart';
 
@@ -95,7 +95,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 '30',
                 style: TextStyle(
                   color: screenColorScheme.onSecondary,
-                  fontSize: CustomTextStyles.captionLarge.fontSize,
+                  fontSize: CustomTextStyles.captionSmall.fontSize,
                 ),
               ),
             ),
@@ -109,14 +109,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               icon: Icon(Icons.rocket_launch,
                   color: screenColorScheme.secondary,
-                  size: CustomTextStyles.captionMedium.fontSize),
+                  size: CustomTextStyles.captionSmall.fontSize),
               iconAlignment: IconAlignment.end,
               label: Text(
                 'Upgrade',
                 style: TextStyle(
                   color: screenColorScheme.secondary,
                   fontWeight: FontWeight.normal,
-                  fontSize: CustomTextStyles.captionLarge.fontSize,
+                  fontSize: CustomTextStyles.captionSmall.fontSize,
                 ),
               ),
             ),
@@ -244,12 +244,14 @@ Widget _buildFeatureButton(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: screenColorScheme.onSecondary,
-                fontWeight: FontWeight.bold,
-                fontSize: CustomTextStyles.headlineMedium.fontSize,
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: screenColorScheme.onSecondary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: CustomTextStyles.headlineMedium.fontSize,
+                ),
               ),
             ),
             const Icon(Icons.chevron_right),

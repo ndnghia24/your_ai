@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:your_ai/features/app/home_screen.dart';
+import 'package:your_ai/features/auth/login/presentation/login_or_register_screen.dart';
+import 'package:your_ai/features/auth/login/presentation/login_screen_stateless.dart';
+import 'package:your_ai/theme/app_theme.dart';
+
+import 'features/auth/login/presentation/register_screen_stateless.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,20 +15,26 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+    );
+
     debugPaintSizeEnabled = false;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: lightThemeData(context),
-      darkTheme: darkThemeData(context),
+      title: 'Your AI',
+      theme: ThemeConfig.lightMode,
+      darkTheme: ThemeConfig.darkMode,
       home: HomeScreen(),
     );
   }
 }
 
+/*
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
     scaffoldBackgroundColor: lightThemeColors(context).primary,
@@ -121,3 +133,4 @@ textTheme(BuildContext context) {
     ),
   );
 }
+*/

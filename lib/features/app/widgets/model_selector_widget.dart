@@ -31,23 +31,24 @@ class ModelSelector extends StatelessWidget {
           value: model,
           child: Row(
             children: [
-              Icon(
-                model.contains('GPT')
-                    ? Icons.language
-                    : Icons.memory, // Icons based on model type
-                color: model.contains('GPT')
-                    ? Colors.green
-                    : model.contains('Claude')
-                        ? Colors.orange
-                        : Colors.blue,
+              Expanded(
+                child: Icon(
+                  model.contains('GPT')
+                      ? Icons.language
+                      : Icons.memory, // Icons based on model type
+                  color: model.contains('GPT')
+                      ? Colors.green
+                      : model.contains('Claude')
+                          ? Colors.orange
+                          : Colors.blue,
+                ),
               ),
-              SizedBox(width: 8),
               Expanded(
                 child: Text(
                   model,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: CustomTextStyles.captionLarge.fontSize,
+                    fontSize: CustomTextStyles.captionSmall.fontSize,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
                 ),

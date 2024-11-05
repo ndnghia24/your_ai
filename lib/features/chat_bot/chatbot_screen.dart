@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:your_ai/features/chat_bot/widgets/chatbot_preview_screen.dart';
 import 'package:your_ai/features/chat_bot/widgets/popup_new_chatbot.dart';
-import 'package:your_ai/features/chat_ai/widgets/widget_app_drawer.dart';
+import 'package:your_ai/features/app/widgets/widget_app_drawer.dart';
 
 class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});

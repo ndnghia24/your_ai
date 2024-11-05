@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:your_ai/features/app/components/my_big_textbutton.dart';
+import 'package:your_ai/features/auth/login/presentation/login_or_register_screen.dart';
 import 'package:your_ai/utils/CustomTextStyles.dart';
-import 'package:your_ai/features/auth/login/presentation/login_screen.dart';
 
 class AuthenticationWidget extends StatefulWidget {
   @override
@@ -8,35 +9,34 @@ class AuthenticationWidget extends StatefulWidget {
 }
 
 class _AuthenticationWidgetState extends State<AuthenticationWidget> {
-  bool isLoggedIn = false; // Biến theo dõi trạng thái đăng nhập
+  bool isLoggedIn = false;
 
-  // Hàm chuyển trạng thái đăng xuất
   void logOut() {
     setState(() {
       isLoggedIn = false;
     });
   }
 
-  // Hàm chuyển trạng thái đăng nhập
   void signIn() {
     setState(() {
       isLoggedIn = true;
     });
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+        .push(MaterialPageRoute(builder: (context) => LoginOrRegisterScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoggedIn
-        ? LoggedInFooter(onLogOut: logOut)
-        : SignInFooter(onSignIn: signIn);
+    if (isLoggedIn) {
+      return LoggedInFooter(onLogOut: logOut);
+    } else {
+      return SignInFooter(onSignIn: signIn);
+    }
   }
 }
 
-// Widget cho trạng thái đã đăng nhập
 class LoggedInFooter extends StatelessWidget {
-  final VoidCallback onLogOut;
+  final Function()? onLogOut;
 
   LoggedInFooter({required this.onLogOut});
 
@@ -107,36 +107,13 @@ class LoggedInFooter extends StatelessWidget {
   }
 }
 
-// Widget cho trạng thái chưa đăng nhập
 class SignInFooter extends StatelessWidget {
-  final VoidCallback onSignIn;
+  final Function()? onSignIn;
 
   SignInFooter({required this.onSignIn});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.black,
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: Colors.blue),
-            ),
-          ),
-          onPressed: onSignIn, // Gọi hàm signIn khi nhấn
-          icon: Icon(Icons.account_circle, color: Colors.blue),
-          label: Text('Sign in / Sign up',
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                  fontSize: CustomTextStyles.captionMedium.fontSize)),
-        ),
-      ),
-    );
+    return MyBigTextButton(text: 'Sign in / Sign up', onTap: onSignIn);
   }
 }
