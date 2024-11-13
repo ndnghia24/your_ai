@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:your_ai/features/app/home_screen.dart';
-import 'package:your_ai/features/auth/login/presentation/login_or_register_screen.dart';
-import 'package:your_ai/features/auth/login/presentation/login_screen_stateless.dart';
-import 'package:your_ai/theme/app_theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:your_ai/core/theme/app_theme.dart';
+import 'package:your_ai/routes/route.dart';
+import 'package:your_ai/testMain.dart';
 
-import 'features/auth/login/presentation/register_screen_stateless.dart';
+import 'configs/service_locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
+  // Setup service locator
+  setupServiceLocator();
+
   runApp(const MyApp());
 }
 
@@ -24,12 +31,16 @@ class MyApp extends StatelessWidget {
     );
 
     debugPaintSizeEnabled = false;
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Your AI',
       theme: ThemeConfig.lightMode,
       darkTheme: ThemeConfig.darkMode,
-      home: HomeScreen(),
+      //initialRoute: Routes.auth, // getX setup
+      //getPages: AppPages.routes, // getX setup
+
+      //home: TestAuthScreen(),
+      home: AllTestScreen(),
     );
   }
 }

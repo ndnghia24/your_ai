@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:your_ai/utils/CustomTextStyles.dart';
+import 'package:your_ai/core/utils/CustomTextStyles.dart';
 
 class InputWidget extends StatefulWidget {
   final String hintText;

@@ -1,24 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:your_ai/utils/CustomTextStyles.dart';
-import 'package:your_ai/features/chat_ai/chat_session_screen.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_prompt_library.dart';
+import '../../chat_ai/presentation/ui/chat_session_screen.dart';
 
-import '../../chat_prompt/widgets/popup_prompt_library.dart';
-
-class ChatInputWidget extends StatefulWidget {
+class ChatInputWidget extends StatelessWidget {
   const ChatInputWidget({super.key});
 
-  @override
-  _ChatInputWidgetState createState() => _ChatInputWidgetState();
-}
+  void _onSendPressed(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ChatScreen()));
+  }
 
-class _ChatInputWidgetState extends State<ChatInputWidget> {
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
+  void _onPopupMenuSelected(BuildContext context, int value) {
+    switch (value) {
+      case 0:
+        // Handle camera selection
+        break;
+      case 1:
+        // Handle gallery selection
+        break;
+      case 2:
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          builder: (context) => FractionallySizedBox(
+            heightFactor: 0.8,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: const PromptLibraryPopupWidget(),
+            ),
+          ),
+        );
+        break;
+    }
   }
 
   @override
@@ -26,8 +45,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
     var screenColorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: screenColorScheme.surfaceContainer,
@@ -35,42 +53,13 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
       child: Row(
         children: [
           PopupMenuButton<int>(
-            icon: Icon(CupertinoIcons.add_circled,
-                color: Colors.blue,
-                size: CustomTextStyles.displayLarge.fontSize),
-            onSelected: (value) {
-              // Handle selected value
-              switch (value) {
-                case 0:
-                  break;
-                case 1:
-                  break;
-                case 2:
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    builder: (context) => FractionallySizedBox(
-                      heightFactor: 0.8,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: const PromptLibraryPopupWidget(),
-                      ),
-                    ),
-                  );
-                  break;
-              }
-            },
+            icon: Image.asset('assets/images/ic_more.png', height: 25),
+            onSelected: (value) => _onPopupMenuSelected(context, value),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 0,
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.camera_alt, color: Colors.black),
                     SizedBox(width: 8),
                     Text("Camera"),
@@ -80,7 +69,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
               PopupMenuItem(
                 value: 1,
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.photo, color: Colors.black),
                     SizedBox(width: 8),
                     Text("Gallery"),
@@ -90,7 +79,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
               PopupMenuItem(
                 value: 2,
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.auto_awesome, color: Colors.black),
                     SizedBox(width: 8),
                     Text("Prompt Library"),
@@ -99,39 +88,31 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
               ),
             ],
           ),
-          const SizedBox(width: 4),
           Expanded(
-            child: SizedBox(
-              height: CustomTextStyles.headlineSmall.fontSize! * 2,
-              child: TextField(
-                focusNode: _focusNode,
-                maxLines: null,
-                style: TextStyle(
-                  fontSize: CustomTextStyles.headlineSmall.fontSize,
-                  fontWeight: FontWeight.normal,
-                  color: screenColorScheme.onSecondary,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Ask me anything...',
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
+            child: TextField(
+              maxLines: null,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade900,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Ask me anything...',
+                hintStyle: TextStyle(color: Colors.grey.shade600),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
           ),
           const SizedBox(width: 4),
-          IconButton(
-            icon: Icon(Icons.send,
-                color: screenColorScheme.secondary,
-                size: CustomTextStyles.displayLarge.fontSize),
-            onPressed: () {
-              _focusNode.unfocus();
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ChatScreen()));
-            },
+
+          /// Send Action
+          GestureDetector(
+            onTap: () => _onSendPressed(context),
+            child: Image.asset('assets/images/ic_send.png', height: 20),
           ),
+          const SizedBox(width: 8),
         ],
       ),
     );

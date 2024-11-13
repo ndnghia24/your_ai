@@ -3,7 +3,7 @@ import 'package:your_ai/features/knowledge_base/widgets/knowledgebase_detail_scr
 import 'package:your_ai/features/knowledge_base/widgets/item_knowledgebase.dart';
 import 'package:your_ai/features/knowledge_base/widgets/popup_new_knowledgebase.dart';
 import 'package:your_ai/features/knowledge_base/widgets/widget_pagination.dart';
-import 'package:your_ai/features/app/widgets/widget_app_drawer.dart';
+import 'package:your_ai/features/app/widgets/new_app_drawer.dart';
 
 class KnowledgeBaseScreen extends StatelessWidget {
   const KnowledgeBaseScreen({super.key});
