@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 
 import '../../chat_ai/presentation/ui/widgets/widget_authentication.dart';
 import '../../chat_bot/presentation/chatbot_screen.dart';
@@ -51,7 +54,17 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                       ? _buildAllChatsList()
                       : _buildDefaultContent(),
                 ),
-                showAllChats ? Container() : AuthenticationWidget(),
+                showAllChats
+                    ? Container()
+                    : MultiBlocProvider(
+                        providers: [
+                          BlocProvider<AuthBloc>(
+                            create: (context) => getIt<AuthBloc>(),
+                          ),
+                        ],
+                        child:
+                            AuthenticationWidget(), // Use AuthenticationWidget here
+                      ),
               ],
             ),
           ),

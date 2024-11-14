@@ -8,15 +8,19 @@ class ChatPromptRepository {
   Future<List<Prompt>> getAllPrompts({
     required Map<String, dynamic> params,
   }) async {
-    final res = await _chatPromptRemoteDataSource.getAllPrompts(
+    final dataSourceRes = await _chatPromptRemoteDataSource.getAllPrompts(
       params: params,
     );
 
-    if (res['data'] == null || res['isSuccess'] == false) {
+    if (!dataSourceRes.isSuccess) {
       return [];
     }
 
-    return List<Prompt>.from(res['data'].map((x) => Prompt.fromMap(x)));
+    final List<Prompt> promptList = [];
+    for (var item in dataSourceRes.data['items']) {
+      promptList.add(Prompt.fromMap(item));
+    }
+    return promptList;
   }
 
   Future<List<Prompt>> getFavouritePrompts() async {
@@ -26,11 +30,11 @@ class ChatPromptRepository {
       },
     );
 
-    if (res['data'] == null || res['isSuccess'] == false) {
+    if (!res.isSuccess || res.data == null) {
       return [];
     }
 
-    return List<Prompt>.from(res['data'].map((x) => Prompt.fromMap(x)));
+    return List<Prompt>.from(res.data.map((x) => Prompt.fromMap(x)));
   }
 
   // Create a new prompt
@@ -43,14 +47,14 @@ class ChatPromptRepository {
       content: promptData['content'],
       category: promptData['category'] ?? 'other',
       language: promptData['language'] ?? 'English',
-      isPublic: promptData['isPublic'] ?? false,
+      isPublic: promptData['isPublic'],
     );
 
-    if (res['data'] == null || res['isSuccess'] == false) {
-      throw Exception('Error creating prompt: ${res['message']}');
+    if (!res.isSuccess || res.data == null) {
+      throw Exception('Error creating prompt: ${res.message}');
     }
 
-    return Prompt.fromMap(res['data']);
+    return Prompt.fromMap(res.data);
   }
 
   Future<Prompt> updatePrompt({
@@ -67,19 +71,19 @@ class ChatPromptRepository {
       isPublic: promptData['isPublic'],
     );
 
-    if (res['data'] == null || res['isSuccess'] == false) {
-      throw Exception('Error updating prompt: ${res['message']}');
+    if (!res.isSuccess || res.data == null) {
+      throw Exception('Error updating prompt: ${res.message}');
     }
 
-    return Prompt.fromMap(res['data']);
+    return Prompt.fromMap(res.data);
   }
 
   Future<void> deletePrompt({required String promptId}) async {
     final res =
         await _chatPromptRemoteDataSource.deletePrompt(promptId: promptId);
 
-    if (res['isSuccess'] == false) {
-      throw Exception('Error deleting prompt: ${res['message']}');
+    if (!res.isSuccess) {
+      throw Exception('Error deleting prompt: ${res.message}');
     }
   }
 
@@ -87,8 +91,8 @@ class ChatPromptRepository {
     final res = await _chatPromptRemoteDataSource.addPromptToFavorite(
         promptId: promptId);
 
-    if (res['isSuccess'] == false) {
-      throw Exception('Error adding prompt to favorites: ${res['message']}');
+    if (!res.isSuccess) {
+      throw Exception('Error adding prompt to favorites: ${res.message}');
     }
   }
 
@@ -96,9 +100,8 @@ class ChatPromptRepository {
     final res = await _chatPromptRemoteDataSource.removePromptFromFavorite(
         promptId: promptId);
 
-    if (res['isSuccess'] == false) {
-      throw Exception(
-          'Error removing prompt from favorites: ${res['message']}');
+    if (!res.isSuccess) {
+      throw Exception('Error removing prompt from favorites: ${res.message}');
     }
   }
 }

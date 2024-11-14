@@ -1,4 +1,4 @@
-import 'package:your_ai/features/app/models/user_model.dart';
+import 'package:your_ai/features/app/domain/entities/user_model.dart';
 
 class AuthModel {
   final String tokenType;

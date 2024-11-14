@@ -10,6 +10,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.authUseCaseFactory) : super(AuthInitial()) {
     on<LoginEvent>(_onLogin);
     on<SignUpEvent>(_onSignUp);
+    on<LogoutEvent>(_onLogout);
+  }
+
+  FutureOr<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final usecaseResult = await authUseCaseFactory.logoutUseCase.execute();
+
+      if (usecaseResult['isSuccess']) {
+        emit(AuthSuccess("Logout successful"));
+      } else {
+        emit(AuthError("Logout failed"));
+      }
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
   }
 
   Future<Map<String, dynamic>> getUserInfo() async {

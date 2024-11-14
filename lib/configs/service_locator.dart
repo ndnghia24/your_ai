@@ -4,6 +4,7 @@ import 'package:your_ai/features/auth/data/data_sources/services/auth_services.d
 import 'package:your_ai/features/auth/data/data_sources/auth_remote_datasource.dart';
 import 'package:your_ai/features/auth/data/repositories/auth_repository.dart';
 import 'package:your_ai/features/auth/domain/auth_usecases_factory.dart';
+import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
 
 ///
 import 'package:your_ai/features/chat_ai/data/data_sources/chat_ai_remote_datasource.dart';
@@ -22,7 +23,7 @@ final locator = GetIt.instance;
 void setupServiceLocator() {
   locator.registerLazySingleton<DioClient>(() => DioClient());
 
-  // Auth feature dependencies
+  /// Auth feature dependencies
   locator.registerLazySingleton<AuthService>(() => AuthService());
   locator.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSource(locator<AuthService>()));
@@ -30,8 +31,11 @@ void setupServiceLocator() {
       () => AuthRepository(locator<AuthRemoteDataSource>()));
   locator.registerLazySingleton<AuthUseCaseFactory>(
       () => AuthUseCaseFactory(locator<AuthRepository>()));
+  // Auth Bloc
+  locator.registerLazySingleton<AuthBloc>(
+      () => AuthBloc(locator<AuthUseCaseFactory>()));
 
-  // Chat AI feature dependencies
+  /// Chat AI feature dependencies
   locator.registerLazySingleton<ChatAIService>(() => ChatAIService());
   locator.registerLazySingleton<ChatAIRemoteDataSource>(
       () => ChatAIRemoteDataSource(locator<ChatAIService>()));
@@ -40,7 +44,7 @@ void setupServiceLocator() {
   locator.registerLazySingleton<ChatAIUseCaseFactory>(
       () => ChatAIUseCaseFactory(locator<ChatAIRepository>()));
 
-  // Chat Prompt feature dependencies
+  /// Chat Prompt feature dependencies
   locator.registerLazySingleton<ChatPromptService>(() => ChatPromptService());
   locator.registerLazySingleton<ChatPromptRemoteDataSource>(
       () => ChatPromptRemoteDataSource(locator<ChatPromptService>()));

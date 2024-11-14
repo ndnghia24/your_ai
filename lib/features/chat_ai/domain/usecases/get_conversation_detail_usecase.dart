@@ -1,11 +1,13 @@
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/chat_ai/data/repositories/chat_ai_repository.dart';
+import 'package:your_ai/features/chat_ai/domain/entities/conversation.dart';
 
 class GetConversationDetailUseCase {
   final ChatAIRepository chatAIRepository;
 
   GetConversationDetailUseCase(this.chatAIRepository);
 
-  Future<Map<String, dynamic>> execute({
+  Future<UsecaseResultTemplate<Conversation>> execute({
     required String conversationId,
     required Map<String, dynamic> params,
   }) async {
@@ -14,15 +16,19 @@ class GetConversationDetailUseCase {
         conversationId: conversationId,
         params: params,
       );
-      return {
-        'isSuccess': true,
-        'result': result,
-      };
+
+      return UsecaseResultTemplate<Conversation>(
+        isSuccess: true,
+        result: result,
+        message: 'Conversation details fetched successfully',
+      );
     } catch (e) {
-      return {
-        'isSuccess': false,
-        'result': e.toString(),
-      };
+      return UsecaseResultTemplate<Conversation>(
+        isSuccess: false,
+        result: Conversation(id: '-1', messages: []),
+        message:
+            'Error occurred while fetching conversation details: ${e.toString()}',
+      );
     }
   }
 }

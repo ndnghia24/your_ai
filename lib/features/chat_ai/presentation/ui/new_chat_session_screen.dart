@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:your_ai/features/app/presentation/components/my_appbar.dart';
+import 'package:your_ai/features/app/widgets/chat_input_widget.dart';
+import 'package:your_ai/features/app/widgets/new_app_drawer.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/new_chat_widget.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/old_chat_widget.dart';
-
-import '../../../app/components/my_appbar.dart';
-import '../../../app/widgets/chat_input_widget.dart';
-import '../../../app/widgets/new_app_drawer.dart';
 
 class ChatSessionScreen extends StatelessWidget {
   const ChatSessionScreen({super.key});

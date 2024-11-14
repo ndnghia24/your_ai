@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'enum_prompt.dart';
 
 class Prompt {
   final String id;
@@ -28,15 +29,15 @@ class Prompt {
   // Factory constructor to create an instance from a JSON map
   factory Prompt.fromMap(Map<String, dynamic> json) {
     return Prompt(
-      id: json['_id'],
-      title: json['title'],
-      content: json['content'],
-      description: json['description'],
-      language: json['language'],
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      content: json['content'] ?? '',
+      description: json['description'] ?? '',
+      language: json['language'] ?? '',
       category: json['category'],
-      isPublic: json['isPublic'],
-      userName: json['userName'],
-      isFavorite: json['isFavorite'],
+      isPublic: json['isPublic'] ?? true,
+      userName: json['userName'] ?? '',
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
 
@@ -49,5 +50,22 @@ class Prompt {
       'category': category,
       'isPublic': isPublic,
     };
+  }
+
+  toMapString() {
+    // Just return title and content
+    return 'title: $title, content: $content';
+  }
+
+  static initial() {
+    return Prompt(
+        id: '-1',
+        title: '-1',
+        content: '-1',
+        description: '-1',
+        category: '-1',
+        isPublic: false,
+        userName: '-1',
+        isFavorite: false);
   }
 }

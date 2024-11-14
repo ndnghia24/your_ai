@@ -1,3 +1,4 @@
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
 
 class DeletePrivatePromptUsecase {
@@ -5,23 +6,25 @@ class DeletePrivatePromptUsecase {
 
   DeletePrivatePromptUsecase(this.chatPromptRepository);
 
-  Future<Map<String, dynamic>> execute({
+  Future<UsecaseResultTemplate<String>> execute({
     required String promptId,
   }) async {
     try {
-      final res = await chatPromptRepository.deletePrompt(
+      await chatPromptRepository.deletePrompt(
         promptId: promptId,
       );
 
-      return {
-        'isSuccess': true,
-        'result': 'Prompt deleted successfully',
-      };
+      return UsecaseResultTemplate<String>(
+        isSuccess: true,
+        result: 'Prompt deleted successfully',
+        message: 'The private prompt has been deleted.',
+      );
     } catch (e) {
-      return {
-        'isSuccess': false,
-        'result': 'Error deleting prompt: $e',
-      };
+      return UsecaseResultTemplate<String>(
+        isSuccess: false,
+        result: 'Error deleting prompt: $e',
+        message: 'Error occurred while trying to delete the private prompt.',
+      );
     }
   }
 }

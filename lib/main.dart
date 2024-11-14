@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:your_ai/core/theme/app_theme.dart';
-import 'package:your_ai/routes/route.dart';
 import 'package:your_ai/testMain.dart';
 
 import 'configs/service_locator.dart';
+import 'core/routes/route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,11 +36,36 @@ class MyApp extends StatelessWidget {
       title: 'Your AI',
       theme: ThemeConfig.lightMode,
       darkTheme: ThemeConfig.darkMode,
-      //initialRoute: Routes.auth, // getX setup
-      //getPages: AppPages.routes, // getX setup
+      initialRoute: Routes.home,
+      getPages: AppPages.routes,
 
-      //home: TestAuthScreen(),
-      home: AllTestScreen(),
+      //home: AllTestScreen(),
+
+      builder: (context, child) {
+        return Scaffold(
+          body: child,
+          floatingActionButton: Builder(
+            builder: (context) {
+              return Stack(
+                children: [
+                  Positioned(
+                    bottom: 200.0,
+                    right: 18.0,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.test);
+                      },
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child:
+                          Icon(Icons.bug_report_rounded), // Customize FAB icon
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

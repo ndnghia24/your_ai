@@ -1,3 +1,4 @@
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
 
 class AddFavouritePromptUsecase {
@@ -5,23 +6,25 @@ class AddFavouritePromptUsecase {
 
   AddFavouritePromptUsecase(this.chatPromptRepository);
 
-  Future<Map<String, dynamic>> execute({
+  Future<UsecaseResultTemplate<String>> execute({
     required String promptId,
   }) async {
     try {
-      final res = await chatPromptRepository.addPromptToFavorite(
+      await chatPromptRepository.addPromptToFavorite(
         promptId: promptId,
       );
 
-      return {
-        'isSuccess': true,
-        'result': 'Prompt added to favourite',
-      };
+      return UsecaseResultTemplate<String>(
+        isSuccess: true,
+        result: 'Prompt added to favourite successfully.',
+        message: 'Prompt added to favourite successfully.',
+      );
     } catch (e) {
-      return {
-        'isSuccess': false,
-        'result': 'Error adding prompt to favourite: $e',
-      };
+      return UsecaseResultTemplate<String>(
+        isSuccess: false,
+        result: 'Error adding prompt to favourite: ${e.toString()}',
+        message: 'Error adding prompt to favourite: ${e.toString()}',
+      );
     }
   }
 }

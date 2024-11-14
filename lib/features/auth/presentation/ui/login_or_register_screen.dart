@@ -32,7 +32,7 @@ class _LoginOrRegisterScreenState extends State<LoginOrRegisterScreen> {
         body: MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(getIt<AuthUseCaseFactory>()),
+          create: (context) => getIt<AuthBloc>(),
         ),
       ],
       child: showLoginScreen

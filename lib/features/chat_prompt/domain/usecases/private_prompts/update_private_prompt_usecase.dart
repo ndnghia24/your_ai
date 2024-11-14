@@ -1,21 +1,23 @@
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
+import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 
 class UpdatePrivatePromptUsecase {
   final ChatPromptRepository chatPromptRepository;
 
   UpdatePrivatePromptUsecase(this.chatPromptRepository);
 
-  Future<Map<String, dynamic>> execute({
+  Future<UsecaseResultTemplate<Prompt>> execute({
     required String promptId,
-    required String title,
+    String? title,
     required String description,
-    required String content,
+    String? content,
     required String category,
     required String language,
     required bool isPublic,
   }) async {
     try {
-      final res = await chatPromptRepository.updatePrompt(
+      final updatedPrompt = await chatPromptRepository.updatePrompt(
         promptId: promptId,
         promptData: {
           'title': title,
@@ -27,15 +29,17 @@ class UpdatePrivatePromptUsecase {
         },
       );
 
-      return {
-        'isSuccess': true,
-        'result': 'Prompt updated successfully',
-      };
+      return UsecaseResultTemplate<Prompt>(
+        isSuccess: true,
+        result: updatedPrompt,
+        message: 'Prompt updated successfully.',
+      );
     } catch (e) {
-      return {
-        'isSuccess': false,
-        'result': 'Error updating prompt: $e',
-      };
+      return UsecaseResultTemplate<Prompt>(
+        isSuccess: false,
+        result: Prompt.initial(),
+        message: 'Error updating prompt: ${e.toString()}',
+      );
     }
   }
 }

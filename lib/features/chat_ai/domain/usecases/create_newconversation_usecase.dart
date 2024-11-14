@@ -1,3 +1,4 @@
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/chat_ai/data/repositories/chat_ai_repository.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation.dart';
 
@@ -6,7 +7,7 @@ class CreateNewConversationUseCase {
 
   CreateNewConversationUseCase(this.chatAIRepository);
 
-  Future<Map<String, dynamic>> execute({
+  Future<UsecaseResultTemplate<Conversation>> execute({
     required String content,
     required String assistantId,
     required String assistantModel,
@@ -21,15 +22,18 @@ class CreateNewConversationUseCase {
         },
       );
 
-      return {
-        'isSuccess': true,
-        'result': newConversation,
-      };
+      return UsecaseResultTemplate<Conversation>(
+        isSuccess: true,
+        result: newConversation,
+        message: 'New conversation created successfully',
+      );
     } catch (e) {
-      return {
-        'isSuccess': false,
-        'result': Conversation(id: '-1', messages: []),
-      };
+      return UsecaseResultTemplate<Conversation>(
+        isSuccess: false,
+        result: Conversation(id: '-1', messages: []),
+        message:
+            'Error occurred while creating new conversation: ${e.toString()}',
+      );
     }
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:your_ai/features/auth/data/data_sources/services/auth_services.dart';
 import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
-
-import '../../../../auth/presentation/ui/login_or_register_screen.dart';
+import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 
 class AuthenticationWidget extends StatefulWidget {
   @override
@@ -30,7 +28,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   @override
   Widget build(BuildContext context) {
     if (isLoggedIn) {
-      return LoggedInFooter(context: context, onLogOut: logOut);
+      return LoggedInFooter(onLogOut: logOut);
     } else {
       return SignInFooter(onSignIn: signIn);
     }
@@ -39,13 +37,18 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
 
 class LoggedInFooter extends StatelessWidget {
   final Function()? onLogOut;
-  final BuildContext context;
 
-  LoggedInFooter({required this.onLogOut, required this.context});
+  LoggedInFooter({required this.onLogOut});
 
-  Future<Map<String, dynamic>> fetchUserData() async {
+  Future<Map<String, dynamic>> fetchUserData(BuildContext context) async {
     final response = await context.read<AuthBloc>().getUserInfo();
-    return response;
+    final username = response['data']['username'];
+    final email = response['data']['email'];
+
+    return {
+      'username': username,
+      'email': email,
+    };
   }
 
   @override
@@ -61,7 +64,7 @@ class LoggedInFooter extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 child: FutureBuilder<Map<String, dynamic>>(
-                  future: fetchUserData(),
+                  future: fetchUserData(context), // Pass context here
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -116,12 +119,12 @@ class LoggedInFooter extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey.shade700, // Background color
+                backgroundColor: Colors.grey.shade700,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: onLogOut, // Gọi hàm logOut khi nhấn
+              onPressed: onLogOut,
               child: Text('Log out', style: TextStyle(color: Colors.white)),
             ),
           ),

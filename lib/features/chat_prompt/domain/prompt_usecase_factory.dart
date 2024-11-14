@@ -1,6 +1,5 @@
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
 import 'package:your_ai/features/chat_prompt/domain/usecases/favourite_prompts/add_public_prompt_to_favourite_usecase.dart';
-import 'package:your_ai/features/chat_prompt/domain/usecases/favourite_prompts/get_favourite_public_prompts_usecase.dart';
 import 'package:your_ai/features/chat_prompt/domain/usecases/favourite_prompts/remove_public_prompt_from_favourite_usecase.dart';
 import 'package:your_ai/features/chat_prompt/domain/usecases/private_prompts/create_private_prompt_usecase.dart';
 import 'package:your_ai/features/chat_prompt/domain/usecases/private_prompts/delete_private_prompt_usecase.dart';
@@ -31,8 +30,6 @@ class ChatPromptUseCaseFactory {
       GetPublicPromptsUsecase(chatPromptRepository);
 
   // Favourite Public Prompt
-  GetFavouritePromptUsecase get getFavouritePromptUsecase =>
-      GetFavouritePromptUsecase(chatPromptRepository);
   AddFavouritePromptUsecase get addFavouritePromptUsecase =>
       AddFavouritePromptUsecase(chatPromptRepository);
   RemoveFavouritePromptUsecase get removeFavouritePromptUsecase =>

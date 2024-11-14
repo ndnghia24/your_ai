@@ -1,3 +1,4 @@
+import 'package:your_ai/core/templates/data_sources_result_template.dart';
 import 'package:your_ai/features/chat_ai/data/data_sources/chat_ai_remote_datasource.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart';
@@ -11,7 +12,7 @@ class ChatAIRepository {
     required String content,
     required Map<String, dynamic> assistant,
   }) async {
-    final res =
+    final DataSourcesResultTemplate datasourceRes =
         await _chatAIRemoteDataSource.continueConversationWithNextMessage(
       content: content,
       assistant: assistant,
@@ -20,7 +21,7 @@ class ChatAIRepository {
       },
     );
 
-    final id = res['data']['conversationId'];
+    final id = datasourceRes.data['conversationId'];
 
     final firstMessage = Message.fromMap({
       'content': content,
@@ -29,7 +30,7 @@ class ChatAIRepository {
     });
 
     final resMessage = Message.fromMap({
-      'content': res['data']['message'],
+      'content': datasourceRes.data['message'],
       'isFromUser': false,
       'assistant': assistant,
     });
@@ -45,7 +46,7 @@ class ChatAIRepository {
     required Map<String, dynamic> assistant,
     required Map<String, dynamic> conversation,
   }) async {
-    final res =
+    final DataSourcesResultTemplate datasourceRes =
         await _chatAIRemoteDataSource.continueConversationWithNextMessage(
       content: content,
       assistant: assistant,
@@ -53,10 +54,10 @@ class ChatAIRepository {
     );
 
     final messages = conversation['messages'] as List<Map<String, dynamic>>;
-    final id = res['data']['conversationId'];
+    final id = datasourceRes.data['conversationId'];
 
     final resMessage = Message.fromMap({
-      'content': res['data']['message'],
+      'content': datasourceRes.data['message'],
       'isFromUser': false,
       'assistant': assistant,
     });
@@ -71,27 +72,30 @@ class ChatAIRepository {
     required String assistantId,
     required String assistantModel,
   }) async {
-    final res = await _chatAIRemoteDataSource.getConversations(
+    final DataSourcesResultTemplate datasourceRes =
+        await _chatAIRemoteDataSource.getConversations(
       assistantId: assistantId,
       assistantModel: assistantModel,
     );
 
-    if (res['data'] == null || res['isSuccess'] == false) {
+    if (!datasourceRes.isSuccess) {
       return ConversationList(conversationsList: [], currentConversationId: '');
     }
-    return ConversationList.fromMap(res['data']);
+    return ConversationList.fromMap(datasourceRes.data);
   }
 
   Future<Conversation> getConversationMessages({
     required String conversationId,
     required Map<String, dynamic> params,
   }) async {
-    final res = await _chatAIRemoteDataSource.getConversationMessages(
+    final DataSourcesResultTemplate datasourceRes =
+        await _chatAIRemoteDataSource.getConversationMessages(
       conversationId: conversationId,
       params: params,
     );
 
-    final messages = (res['data']['items'] as List).expand<Message>((item) {
+    final messages =
+        (datasourceRes.data['messages'] as List<dynamic>).expand((item) {
       if (item is Map<String, dynamic> &&
           item.containsKey('query') &&
           item.containsKey('answer')) {
@@ -111,6 +115,7 @@ class ChatAIRepository {
       return [];
     }).toList();
 
-    return Conversation(id: conversationId, messages: messages);
+    return Conversation(
+        id: conversationId, messages: List<Message>.from(messages));
   }
 }

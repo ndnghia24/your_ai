@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/model_selector_widget.dart';
+import 'package:your_ai/features/app/widgets/model_selector_widget.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'features/auth/test.dart';
 import 'features/chat_ai/test.dart';
+import 'features/chat_prompt/test.dart';
 
 class AllTestScreen extends StatelessWidget {
   const AllTestScreen({super.key});
@@ -33,7 +34,15 @@ class AllTestScreen extends StatelessWidget {
             },
             child: Text('Test Chat AI Screen'),
           ),
-          // add more button to navigate to other screen
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TestChatPromptScreen()),
+              );
+            },
+            child: Text('Test Prompt Screen'),
+          ),
         ],
       )),
     );
