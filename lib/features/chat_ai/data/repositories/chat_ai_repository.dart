@@ -21,17 +21,19 @@ class ChatAIRepository {
       },
     );
 
+    print('datasourceRes: ${datasourceRes.data}');
+
     final id = datasourceRes.data['conversationId'];
 
     final firstMessage = Message.fromMap({
       'content': content,
-      'isFromUser': true,
+      'role': 'user',
       'assistant': assistant,
     });
 
     final resMessage = Message.fromMap({
       'content': datasourceRes.data['message'],
-      'isFromUser': false,
+      'role': 'model',
       'assistant': assistant,
     });
 
@@ -58,7 +60,7 @@ class ChatAIRepository {
 
     final resMessage = Message.fromMap({
       'content': datasourceRes.data['message'],
-      'isFromUser': false,
+      'role': 'model',
       'assistant': assistant,
     });
 
@@ -102,12 +104,12 @@ class ChatAIRepository {
         return [
           Message.fromMap({
             'content': item['query'],
-            'isFromUser': true,
+            'role': 'user',
             'assistant': params,
           }),
           Message.fromMap({
             'content': item['answer'],
-            'isFromUser': false,
+            'role': 'model',
             'assistant': params,
           }),
         ];
