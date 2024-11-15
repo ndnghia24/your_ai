@@ -10,13 +10,18 @@ class ChatAIRepository {
 
   late int availableQuery = 0;
   late int totalQuery = 0;
-  int get totalQueryValue => totalQuery;
+  int get getTotalQuery => totalQuery;
 
   Future<int> getRemainingQuery() async {
     final DataSourcesResultTemplate datasourceRes =
         await _chatAIRemoteDataSource.getRemainingQuery();
     availableQuery = datasourceRes.data['availableTokens'];
     totalQuery = datasourceRes.data['totalTokens'];
+
+    if (datasourceRes.data['unlimited']) {
+      availableQuery = -1;
+    }
+
     return availableQuery;
   }
 

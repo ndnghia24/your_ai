@@ -5,10 +5,13 @@ class GetRemainingQueryUsecase {
   final ChatAIRepository chatAIRepository;
   GetRemainingQueryUsecase(this.chatAIRepository);
 
-  Future<UsecaseResultTemplate<int>> execute() async {
-    return UsecaseResultTemplate<int>(
+  Future<UsecaseResultTemplate<Map<String, int>>> execute() async {
+    return UsecaseResultTemplate<Map<String, int>>(
       isSuccess: true,
-      result: await chatAIRepository.getRemainingQuery(),
+      result: {
+        'remainingQuery': await chatAIRepository.getRemainingQuery(),
+        'totalQuery': chatAIRepository.getTotalQuery,
+      },
       message: 'Remaining query fetched successfully',
     );
   }
