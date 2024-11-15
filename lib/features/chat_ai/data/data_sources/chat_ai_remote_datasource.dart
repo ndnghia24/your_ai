@@ -3,7 +3,34 @@ import 'package:your_ai/features/chat_ai/data/data_sources/services/chat_ai_serv
 
 class ChatAIRemoteDataSource {
   final ChatAIService _chatAIService;
-  const ChatAIRemoteDataSource(this._chatAIService);
+  ChatAIRemoteDataSource(this._chatAIService);
+
+  // get remaining query
+  Future<DataSourcesResultTemplate> getRemainingQuery() async {
+    try {
+      final response = await _chatAIService.getRemainingQuery();
+
+      if (response.statusCode == 200) {
+        return DataSourcesResultTemplate(
+          isSuccess: true,
+          data: response.data,
+          message: 'Remaining query fetched successfully',
+        );
+      } else {
+        return DataSourcesResultTemplate(
+          isSuccess: false,
+          data: response.data,
+          message: 'Error occurred during fetching remaining query',
+        );
+      }
+    } catch (e) {
+      return DataSourcesResultTemplate(
+        isSuccess: false,
+        data: e.toString(),
+        message: 'Error occurred: ${e.toString()}',
+      );
+    }
+  }
 
   Future<DataSourcesResultTemplate> continueConversationWithNextMessage({
     required String content,

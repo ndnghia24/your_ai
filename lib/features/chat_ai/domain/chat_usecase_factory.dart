@@ -3,6 +3,7 @@ import 'package:your_ai/features/chat_ai/domain/usecases/continue_conversation_u
 import 'package:your_ai/features/chat_ai/domain/usecases/create_newconversation_usecase.dart';
 import 'package:your_ai/features/chat_ai/domain/usecases/get_conversation_detail_usecase.dart';
 import 'package:your_ai/features/chat_ai/domain/usecases/get_conversations_usecase.dart';
+import 'package:your_ai/features/chat_ai/domain/usecases/get_remaining_query_usecase.dart';
 
 class ChatAIUseCaseFactory {
   final ChatAIRepository chatAIRepository;
@@ -17,4 +18,6 @@ class ChatAIUseCaseFactory {
       GetConversationsUseCase(chatAIRepository);
   GetConversationDetailUseCase get getConversationDetailUseCase =>
       GetConversationDetailUseCase(chatAIRepository);
+  GetRemainingQueryUsecase get getRemainingQueryUsecase =>
+      GetRemainingQueryUsecase(chatAIRepository);
 }
