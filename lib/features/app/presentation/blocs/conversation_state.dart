@@ -8,7 +8,15 @@ abstract class ConversationState extends Equatable {
 
 class ConversationInitial extends ConversationState {}
 
-class ConversationLoading extends ConversationState {}
+class ConversationLoading extends ConversationState {
+  final Conversation conversation;
+  final String message;
+
+  ConversationLoading({required this.conversation, this.message = '' });
+
+  @override
+  List<Object?> get props => [conversation, message];
+}
 
 class ConversationLoaded extends ConversationState {
   final Conversation conversation;

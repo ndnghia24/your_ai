@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation.dart';
+import 'package:your_ai/features/chat_ai/domain/entities/message.dart';
 import 'conversation_event.dart';
 import 'conversation_state.dart';
 
@@ -21,7 +22,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       return; // Avoid reloading the same conversation
     }
 
-    emit(ConversationLoading());
+    emit(ConversationLoading(conversation: currentConversation));
     try {
       final result = await chatAIUseCaseFactory.getConversationDetailUseCase.execute(
         conversationId: event.conversationId,
@@ -43,7 +44,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }
 
   Future<void> _onCreateNewConversation(CreateNewConversation event, Emitter<ConversationState> emit) async {
-    emit(ConversationLoading());
+    emit(ConversationLoading(conversation: currentConversation, message: event.content));
     try {
       final result = await chatAIUseCaseFactory.createNewConversationUseCase.execute(
         content: event.content,
@@ -55,13 +56,14 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         emit(ConversationLoaded(result.result));
       } else {
         emit(ConversationError(result.message));
-      }
+      };
     } catch (e) {
       emit(ConversationError(e.toString()));
     }
   }
 
   Future<void> _onContinueConversation(ContinueConversation event, Emitter<ConversationState> emit) async {
+    emit(ConversationLoading(conversation: currentConversation, message: event.content));
     try {
       final result = await chatAIUseCaseFactory.continueConversationUseCase.execute(
         content: event.content,

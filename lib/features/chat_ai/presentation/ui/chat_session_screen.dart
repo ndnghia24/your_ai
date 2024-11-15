@@ -52,10 +52,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-            child: ChatInputWidget(),
-          ),
         ],
       ),
     );

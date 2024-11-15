@@ -4,11 +4,16 @@ import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_promp
 import '../../chat_ai/presentation/ui/chat_session_screen.dart';
 
 class ChatInputWidget extends StatelessWidget {
-  const ChatInputWidget({super.key});
+  final Function(String) onSubmitted;
 
-  void _onSendPressed(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ChatScreen()));
+  const ChatInputWidget({super.key, required this.onSubmitted});
+
+  void _onSendPressed(BuildContext context, TextEditingController controller) {
+    final text = controller.text;
+    if (text.isNotEmpty) {
+      onSubmitted(text);
+      controller.clear();
+    }
   }
 
   void _onPopupMenuSelected(BuildContext context, int value) {
@@ -43,6 +48,7 @@ class ChatInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenColorScheme = Theme.of(context).colorScheme;
+    final TextEditingController controller = TextEditingController();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -90,6 +96,7 @@ class ChatInputWidget extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
+              controller: controller,
               maxLines: null,
               style: TextStyle(
                 fontSize: 14,
@@ -103,13 +110,19 @@ class ChatInputWidget extends StatelessWidget {
                   borderSide: BorderSide.none,
                 ),
               ),
+              onSubmitted: (text) {
+                if (text.isNotEmpty) {
+                  onSubmitted(text);
+                  controller.clear();
+                }
+              },
             ),
           ),
           const SizedBox(width: 4),
 
           /// Send Action
           GestureDetector(
-            onTap: () => _onSendPressed(context),
+            onTap: () => _onSendPressed(context, controller),
             child: Image.asset('assets/images/ic_send.png', height: 20),
           ),
           const SizedBox(width: 8),

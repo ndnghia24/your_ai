@@ -16,88 +16,88 @@ class ChatIntroWidget extends StatelessWidget {
       'Pro tips generator',
     ];
 
-    return Expanded(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('👋',
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('👋',
               style: TextStyle(
                 color: screenColorScheme.onSecondary,
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
               )),
-            SizedBox(height: 8),
-            Text('Hi, good afternoon!',
+          SizedBox(height: 8),
+          Text('Hi, good afternoon!',
               style: TextStyle(
                 color: screenColorScheme.onSecondary,
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
               )),
-            const SizedBox(height: 8),
-            Text(
-              "I'm YourAI, your personal assistant.",
-              style: TextStyle(
-                color: screenColorScheme.onSecondary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+          const SizedBox(height: 8),
+          Text(
+            "I'm YourAI, your personal assistant.",
+            style: TextStyle(
+              color: screenColorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
-            const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Don't know what to say?",
-                  style: TextStyle(
+          ),
+          const SizedBox(height: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Don't know what to say?",
+                style: TextStyle(
                     color: screenColorScheme.onSecondary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  child: InkWell(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
-                        ),
-                        builder: (context) => FractionallySizedBox(
-                          heightFactor: 0.5,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                            ),
-                            child: const PromptLibraryPopupWidget(),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Use a prompt!",
-                      style: TextStyle(
-                        color: screenColorScheme.secondary,
-                        fontSize: 16,
+              ),
+              const SizedBox(height: 8),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16)),
                       ),
+                      builder: (context) => FractionallySizedBox(
+                        heightFactor: 0.5,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: const PromptLibraryPopupWidget(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "Use a prompt!",
+                    style: TextStyle(
+                      color: screenColorScheme.secondary,
+                      fontSize: 16,
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            ...quickPrompts.map((feature) => _quickPrompt(context, screenColorScheme, feature)),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          ...quickPrompts.map(
+              (feature) => _quickPrompt(context, screenColorScheme, feature)),
+        ],
       ),
     );
   }
 
-  Widget _quickPrompt(BuildContext context, ColorScheme screenColorScheme, String text) {
+  Widget _quickPrompt(
+      BuildContext context, ColorScheme screenColorScheme, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
