@@ -161,6 +161,24 @@ class _TestChatAIScreenState extends State<TestChatAIScreen> {
                 },
                 child: const Text('Get Conversation Details'),
               ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  final usecaseResult = await chatAIUseCaseFactory
+                      .getRemainingQueryUsecase
+                      .execute();
+
+                  Fluttertoast.showToast(
+                    msg: 'Remaining Query: ${usecaseResult.result}',
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                },
+                child: const Text('Get Remaining Query'),
+              ),
             ],
           ),
         ),

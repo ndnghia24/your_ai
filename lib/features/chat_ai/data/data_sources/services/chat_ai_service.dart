@@ -35,6 +35,12 @@ class ChatAIService {
     );
   }
 */
+  Future<Response> getRemainingQuery() async {
+    return await _dio.get(
+      '$baseUrl/tokens/usage',
+      options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+    );
+  }
 
   Future<Response> sendMessage(Map<String, dynamic> body) async {
     return await _dio.post(

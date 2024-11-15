@@ -6,7 +6,19 @@ import 'package:your_ai/features/chat_ai/domain/entities/message.dart';
 
 class ChatAIRepository {
   final ChatAIRemoteDataSource _chatAIRemoteDataSource;
-  const ChatAIRepository(this._chatAIRemoteDataSource);
+  ChatAIRepository(this._chatAIRemoteDataSource);
+
+  late int availableQuery = 0;
+  late int totalQuery = 0;
+  int get totalQueryValue => totalQuery;
+
+  Future<int> getRemainingQuery() async {
+    final DataSourcesResultTemplate datasourceRes =
+        await _chatAIRemoteDataSource.getRemainingQuery();
+    availableQuery = datasourceRes.data['availableTokens'];
+    totalQuery = datasourceRes.data['totalTokens'];
+    return availableQuery;
+  }
 
   Future<Conversation> createNewConversationWithFirstMessage({
     required String content,
@@ -20,8 +32,6 @@ class ChatAIRepository {
         'messages': [],
       },
     );
-
-    print('datasourceRes: ${datasourceRes.data}');
 
     final id = datasourceRes.data['conversationId'];
 
