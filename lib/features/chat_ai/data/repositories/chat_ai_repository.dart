@@ -58,6 +58,12 @@ class ChatAIRepository {
     final messages = conversation['messages'] as List<Map<String, dynamic>>;
     final id = datasourceRes.data['conversationId'];
 
+    final sentMessage = Message.fromMap({
+      'content': content,
+      'role': 'user',
+      'assistant': assistant,
+    });
+
     final resMessage = Message.fromMap({
       'content': datasourceRes.data['message'],
       'role': 'model',
@@ -66,7 +72,7 @@ class ChatAIRepository {
 
     return Conversation.fromMap({
       'id': id,
-      'messages': [...messages, resMessage.toMap()],
+      'messages': [...messages, sentMessage.toMap(), resMessage.toMap()],
     });
   }
 
