@@ -218,6 +218,9 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                             leading: Icon(Icons.chat_bubble),
                             title: Text(conversation['title']),
                             onTap: () {
+                              if(isSelected) {
+                                return;
+                              }
                               BlocProvider.of<ConversationBloc>(context).add(
                                 LoadConversation(conversation['id']),
                               );

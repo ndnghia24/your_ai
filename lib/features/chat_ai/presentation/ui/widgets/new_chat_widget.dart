@@ -17,33 +17,50 @@ class NewChatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    final ScrollController scrollController = ScrollController();
 
-    return BlocConsumer<ConversationBloc, ConversationState>(
+    void _scrollToEnd() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+
+    return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
+        if (state is ConversationLoaded || state is ConversationLoading) {
+          _scrollToEnd();
+        }
         if (state is ConversationLoaded) {
           BlocProvider.of<TokenBloc>(context).add(LoadToken());
         }
       },
-      builder: (context, state) {
-        if (state is ConversationInitial) {
-          return const ChatIntroWidget();
-        } else if (state is ConversationLoading) {
-          return _buildConversationLoading(
-              context, state.conversation, state.message);
-        } else if (state is ConversationLoaded) {
-          return _buildConversationContent(context, state.conversation);
-        } else if (state is ConversationError) {
-          return Center(child: Text('Error: ${state.message}'));
-        }
-        return Container();
-      },
+      child: BlocBuilder<ConversationBloc, ConversationState>(
+        builder: (context, state) {
+          if (state is ConversationInitial) {
+            return const ChatIntroWidget();
+          } else if (state is ConversationLoading) {
+            return _buildConversationLoading(
+                context, state.conversation, state.message, scrollController);
+          } else if (state is ConversationLoaded) {
+            return _buildConversationContent(
+                context, state.conversation, scrollController);
+          } else if (state is ConversationError) {
+            return Center(child: Text('Error: ${state.message}'));
+          }
+          return Container();
+        },
+      ),
     );
   }
 
-  Widget _buildConversationContent(
-      BuildContext context, Conversation conversation) {
+  Widget _buildConversationContent(BuildContext context,
+      Conversation conversation, ScrollController scrollController) {
     return ListView.builder(
+      controller: scrollController,
       shrinkWrap: true,
       itemCount: conversation.messages.length,
       itemBuilder: (context, index) {
@@ -53,16 +70,19 @@ class NewChatWidget extends StatelessWidget {
     );
   }
 
-Widget _buildConversationLoading(
-      BuildContext context, Conversation conversation, String message) {
-    
+  Widget _buildConversationLoading(
+      BuildContext context,
+      Conversation conversation,
+      String message,
+      ScrollController scrollController) {
     return BlocBuilder<ModelBloc, ModelState>(
       builder: (context, modelState) {
         GenerativeAiModel selectedModel = GenerativeAiModel.gpt4oMini;
         if (modelState is ModelInitial) {
           selectedModel = modelState.selectedModel;
         }
-        GenerativeAiAssistant assistant = generativeAiAssistants[selectedModel]!;
+        GenerativeAiAssistant assistant =
+            generativeAiAssistants[selectedModel]!;
 
         final currentMessage = Message(
             content: message,
@@ -70,12 +90,16 @@ Widget _buildConversationLoading(
             assistantId: assistant.id,
             assistantModel: assistant.model);
         final loadingMessage = Message(
-            content: '...', isFromUser: false, assistantId: assistant.id, assistantModel: assistant.model);
+            content: '...',
+            isFromUser: false,
+            assistantId: assistant.id,
+            assistantModel: assistant.model);
         final updatedMessages = List<Message>.from(conversation.messages)
           ..add(currentMessage)
           ..add(loadingMessage);
 
         return ListView.builder(
+          controller: scrollController,
           shrinkWrap: true,
           itemCount: updatedMessages.length,
           itemBuilder: (context, index) {
