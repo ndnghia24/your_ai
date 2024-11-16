@@ -16,7 +16,7 @@ class GetConversationDetailUseCase {
         conversationId: conversationId,
         params: params,
       );
-
+      print(result.toMapString());
       return UsecaseResultTemplate<Conversation>(
         isSuccess: true,
         result: result,

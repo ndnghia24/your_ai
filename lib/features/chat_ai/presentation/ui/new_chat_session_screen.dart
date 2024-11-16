@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_event.dart';
 import 'package:your_ai/features/app/presentation/components/my_appbar.dart';
 import 'package:your_ai/features/app/widgets/chat_input_widget.dart';
 import 'package:your_ai/features/app/widgets/new_app_drawer.dart';
@@ -25,7 +31,14 @@ class ChatSessionScreen extends StatelessWidget {
         BlocProvider<ConversationBloc>(
           create: (context) => ConversationBloc(getIt<ChatAIUseCaseFactory>()),
         ),
-        // Add other providers here if needed
+        BlocProvider<TokenBloc>(
+          create: (context) =>
+              TokenBloc(getIt<ChatAIUseCaseFactory>())..add(LoadToken()),
+        ),
+        BlocProvider<ModelBloc>(
+          create: (context) =>
+              ModelBloc()..add(UpdateModel(GenerativeAiModel.gpt4oMini)),
+        ),
       ],
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -62,32 +75,50 @@ class ChatSessionScreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 10),
-                              child: BlocBuilder<ConversationBloc,
-                                  ConversationState>(
-                                builder: (context, state) {
-                                  return ChatInputWidget(
-                                    onSubmitted: (text) {
-                                      if (state is ConversationLoaded) {
-                                        BlocProvider.of<ConversationBloc>(
-                                                context)
-                                            .add(ContinueConversation(
-                                          content: text,
-                                          assistant: {
-                                            'id': 'gpt-4o-mini',
-                                            'model': 'dify',
-                                          },
-                                          conversation:
-                                              state.conversation.toMap(),
-                                        ));
-                                      } else if (state is ConversationInitial) {
-                                        BlocProvider.of<ConversationBloc>(
-                                                context)
-                                            .add(CreateNewConversation(
-                                          content: text,
-                                          assistantId: 'gpt-4o-mini',
-                                          assistantModel: 'dify',
-                                        ));
-                                      }
+                              child: BlocBuilder<ModelBloc, ModelState>(
+                                builder: (context, modelState) {
+                                  GenerativeAiModel selectedModel =
+                                      GenerativeAiModel.gpt4oMini;
+                                  if (modelState is ModelInitial) {
+                                    selectedModel = modelState.selectedModel;
+                                  }
+
+                                  final assistant =
+                                      generativeAiAssistants[selectedModel]!;
+
+                                  return BlocBuilder<ConversationBloc,
+                                      ConversationState>(
+                                    builder: (context, state) {
+                                      return ChatInputWidget(
+                                        onSubmitted: (text) {
+                                          if (state is ConversationLoaded) {
+                                            BlocProvider.of<ConversationBloc>(
+                                                    context)
+                                                .add(
+                                              ContinueConversation(
+                                                content: text,
+                                                assistant: {
+                                                  'id': assistant.id,
+                                                  'model': assistant.model,
+                                                },
+                                                conversation:
+                                                    state.conversation.toMap(),
+                                              ),
+                                            );
+                                          } else if (state
+                                              is ConversationInitial) {
+                                            BlocProvider.of<ConversationBloc>(
+                                                    context)
+                                                .add(
+                                              CreateNewConversation(
+                                                content: text,
+                                                assistantId: assistant.id,
+                                                assistantModel: assistant.model,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
                                     },
                                   );
                                 },

@@ -54,6 +54,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   shared_preferences: any
   fluttertoast: any
+  flutter_svg: any
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +84,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/svgs/
     - .env
 
   # To add assets to your application, add an assets section, like this:

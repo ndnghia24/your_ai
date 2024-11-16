@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_state.dart';
 import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 
@@ -97,22 +99,40 @@ class LoggedInFooter extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16),
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Token Usage 🔥'),
-                  Text('50/50'),
-                ],
-              ),
-              SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: 50 / 50,
-                backgroundColor: Colors.grey[300],
-                color: Colors.grey.shade700,
+              Text('Token Usage 🔥'),
+              BlocBuilder<TokenBloc, TokenState>(
+                builder: (context, state) {
+                  if (state is TokenLoaded) {
+                    return Text('${state.remainingQuery}/${state.totalQuery}');
+                  } else if (state is TokenLoading) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return Text('N/A');
+                  }
+                },
               ),
             ],
+          ),
+          SizedBox(height: 8),
+          BlocBuilder<TokenBloc, TokenState>(
+            builder: (context, state) {
+              if (state is TokenLoaded) {
+                return LinearProgressIndicator(
+                  value: state.remainingQuery / state.totalQuery,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.grey.shade700,
+                );
+              } else {
+                return LinearProgressIndicator(
+                  value: 0,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.grey.shade700,
+                );
+              }
+            },
           ),
           SizedBox(height: 16),
           SizedBox(

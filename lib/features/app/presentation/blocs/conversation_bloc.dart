@@ -31,6 +31,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
           'assistantModel': 'dify',
         },
       );
+      
       result.isSuccess
           ? emit(ConversationLoaded(result.result))
           : emit(ConversationError(result.message));

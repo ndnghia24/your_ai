@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:your_ai/features/app/domain/entities/model_model.dart';
+
 
 class ModelSelector extends StatelessWidget {
-  final String selectedModel;
-  final Function(String) onModelChanged;
+  final GenerativeAiModel selectedModel;
+  final Function(GenerativeAiModel) onModelChanged;
 
-  ModelSelector(
-      {super.key, required this.selectedModel, required this.onModelChanged});
-
-  final List<String> models = [
-    'GPT-3.5 Turbo',
-    'GPT-4 Turbo',
-    'Claude 3 Haiku',
-    'Claude 3 Sonnet',
-    'Claude 3 Opus',
-    'Gemini 1.0 Pro',
-    'Gemini 1.5 Pro',
-  ];
+  ModelSelector({
+    super.key,
+    required this.selectedModel,
+    required this.onModelChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +20,24 @@ class ModelSelector extends StatelessWidget {
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(50),
       ),
-      child: DropdownButton<String>(
+      child: DropdownButton<GenerativeAiModel>(
         icon: Image.asset('assets/images/ic_down.png', height: 16),
         value: selectedModel,
         isDense: true,
         menuMaxHeight: 300,
         underline: Container(),
         isExpanded: true,
-        items: models.map((String model) {
-          return DropdownMenuItem<String>(
+        items: generativeAiAssistants.keys.map((GenerativeAiModel model) {
+          final assistant = generativeAiAssistants[model]!;
+          return DropdownMenuItem<GenerativeAiModel>(
             value: model,
             child: Row(
               children: [
+                assistant.icon,
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    model,
+                    assistant.name,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.grey.shade800, fontSize: 12),
                   ),
@@ -48,7 +46,7 @@ class ModelSelector extends StatelessWidget {
             ),
           );
         }).toList(),
-        onChanged: (String? newValue) {
+        onChanged: (GenerativeAiModel? newValue) {
           if (newValue != null) {
             onModelChanged(newValue); // Call the callback function
           }

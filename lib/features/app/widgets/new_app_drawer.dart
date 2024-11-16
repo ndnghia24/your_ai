@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
 import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 import 'package:get_it/get_it.dart';
@@ -178,6 +179,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
             'BACK',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
+          tileColor: Colors.grey.shade300,
           onTap: () {
             setState(() {
               showAllChats = false;
@@ -196,20 +198,33 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (snapshot.hasData) {
                 final conversationList = snapshot.data!;
-                return ListView.builder(
-                  itemCount: conversationList.conversationsList.length,
-                  itemBuilder: (context, index) {
-                    final conversation =
-                        conversationList.conversationsList[index];
-                    return ListTile(
-                      leading: Icon(Icons.chat_bubble),
-                      title: Text(conversation['title']),
-                      onTap: () {
-                        print('Conversation ID: ${conversation['id']}');
-                        BlocProvider.of<ConversationBloc>(context).add(
-                          LoadConversation(conversation['id']),
+                return BlocBuilder<ConversationBloc, ConversationState>(
+                  builder: (context, state) {
+                    final currentConversationId = (state is ConversationLoaded)
+                        ? state.conversation.id
+                        : null;
+                    return ListView.builder(
+                      itemCount: conversationList.conversationsList.length,
+                      itemBuilder: (context, index) {
+                        final conversation =
+                            conversationList.conversationsList[index];
+                        final isSelected =
+                            conversation['id'] == currentConversationId;
+                        return Container(
+                          color: isSelected
+                              ? Colors.grey.shade400
+                              : Colors.transparent,
+                          child: ListTile(
+                            leading: Icon(Icons.chat_bubble),
+                            title: Text(conversation['title']),
+                            onTap: () {
+                              BlocProvider.of<ConversationBloc>(context).add(
+                                LoadConversation(conversation['id']),
+                              );
+                              Navigator.pop(context);
+                            },
+                          ),
                         );
-                        Navigator.pop(context);
                       },
                     );
                   },

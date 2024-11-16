@@ -1,4 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:your_ai/features/app/domain/entities/model_model.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/token_state.dart';
 import 'package:your_ai/features/app/widgets/model_selector_widget.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -12,14 +20,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  String selectedModel = 'GPT-3.5 Turbo';
-
-  void updateSelectedModel(String newModel) {
-    setState(() {
-      selectedModel = newModel;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var screenColorScheme = Theme.of(context).colorScheme;
@@ -36,31 +36,63 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: ModelSelector(
-              selectedModel: selectedModel,
-              onModelChanged: updateSelectedModel,
+            child: BlocBuilder<ModelBloc, ModelState>(
+              builder: (context, state) {
+                if (state is ModelInitial) {
+                  return ModelSelector(
+                    selectedModel: state.selectedModel,
+                    onModelChanged: (model) {
+                      context.read<ModelBloc>().add(UpdateModel(model));
+                    },
+                  );
+                } else {
+                  return ModelSelector(
+                    selectedModel: GenerativeAiModel.gpt4oMini,
+                    onModelChanged: (model) {
+                      context.read<ModelBloc>().add(UpdateModel(model));
+                    },
+                  );
+                }
+              },
             ),
           ),
           const SizedBox(width: 10),
-          TextButton.icon(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.grey.shade200,
-            ),
-            icon: Icon(Icons.water_drop_outlined,
-                color: screenColorScheme.secondary),
-            label: Text(
-              '30',
-              style: TextStyle(
-                color: screenColorScheme.onSecondary,
-                fontSize: 12,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Icon(
-            Icons.rocket_launch,
-            color: Colors.grey.shade50,
+          BlocBuilder<TokenBloc, TokenState>(
+            builder: (context, state) {
+              if (state is TokenLoaded) {
+                return TextButton.icon(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey.shade200,
+                  ),
+                  icon: Icon(CupertinoIcons.flame,
+                      color: screenColorScheme.secondary),
+                  label: Text(
+                    '${state.remainingQuery}',
+                    style: TextStyle(
+                      color: screenColorScheme.onSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                );
+              } else {
+                return TextButton.icon(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey.shade200,
+                  ),
+                  icon: Icon(CupertinoIcons.flame,
+                      color: screenColorScheme.secondary),
+                  label: Text(
+                    'N/A',
+                    style: TextStyle(
+                      color: screenColorScheme.onSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(width: 10),
         ],
