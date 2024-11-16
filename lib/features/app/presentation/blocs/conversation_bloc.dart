@@ -18,9 +18,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }
 
   Future<void> _onLoadConversation(LoadConversation event, Emitter<ConversationState> emit) async {
-    if (currentConversation.id == event.conversationId) {
-      return; // Avoid reloading the same conversation
-    }
+    if (currentConversation.id == event.conversationId) return;
 
     emit(ConversationLoading(conversation: currentConversation));
     try {
@@ -28,11 +26,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         conversationId: event.conversationId,
         params: {},
       );
-      if (result.isSuccess) {
-        emit(ConversationLoaded(result.result));
-      } else {
-        emit(ConversationError(result.message));
-      }
+      result.isSuccess
+          ? emit(ConversationLoaded(result.result))
+          : emit(ConversationError(result.message));
     } catch (e) {
       emit(ConversationError(e.toString()));
     }
@@ -55,10 +51,12 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         currentConversation = result.result;
         emit(ConversationLoaded(result.result));
       } else {
-        emit(ConversationError(result.message));
-      };
+        _addErrorMessage(event);
+        emit(ConversationLoaded(currentConversation));
+      }
     } catch (e) {
-      emit(ConversationError(e.toString()));
+      _addErrorMessage(event);
+      emit(ConversationLoaded(currentConversation));
     }
   }
 
@@ -74,10 +72,27 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         currentConversation = result.result;
         emit(ConversationLoaded(result.result));
       } else {
-        emit(ConversationError(result.message));
+        _addErrorMessage(event);
+        emit(ConversationLoaded(currentConversation));
       }
     } catch (e) {
-      emit(ConversationError(e.toString()));
+      _addErrorMessage(event);
+      emit(ConversationLoaded(currentConversation));
     }
+  }
+
+  void _addErrorMessage(dynamic event) {
+    currentConversation.messages.add(Message(
+      content: event.content,
+      isFromUser: true,
+      assistantId: event is CreateNewConversation ? event.assistantId : event.assistant['id'],
+      assistantModel: event is CreateNewConversation ? event.assistantModel : event.assistant['model'],
+    ));
+    currentConversation.messages.add(Message(
+      content: "Sorry, We are unable to process your request at the moment. Please login or check your internet connection and try again.",
+      isFromUser: false,
+      assistantId: event is CreateNewConversation ? event.assistantId : event.assistant['id'],
+      assistantModel: event is CreateNewConversation ? event.assistantModel : event.assistant['model'],
+    ));
   }
 }

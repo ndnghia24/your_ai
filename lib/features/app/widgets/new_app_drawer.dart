@@ -2,13 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
+import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart';
 
 import '../../chat_ai/presentation/ui/widgets/widget_authentication.dart';
 import '../../chat_bot/presentation/chatbot_screen.dart';
 import '../../knowledge_base/knowledgebase_screen.dart';
 import '../home_screen.dart';
+
+final getIt = GetIt.instance;
 
 class AppDrawerWidget extends StatefulWidget {
   const AppDrawerWidget({super.key});
@@ -19,6 +26,20 @@ class AppDrawerWidget extends StatefulWidget {
 
 class _AppDrawerWidgetState extends State<AppDrawerWidget> {
   bool showAllChats = false;
+
+  Future<ConversationList> _loadConversations() async {
+    final chatAIUseCaseFactory = getIt<ChatAIUseCaseFactory>();
+    final result = await chatAIUseCaseFactory.getConversationsUseCase.execute(
+      assistantId: 'gpt-4o-mini',
+      assistantModel: 'dify',
+    );
+
+    if (result.isSuccess) {
+      return result.result;
+    } else {
+      throw Exception(result.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,16 +185,38 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
           },
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Icon(Icons.chat_bubble),
-                title: Text('Chat ${index + 1}'),
-                onTap: () {
-                  // Handle chat selection
-                },
-              );
+          child: FutureBuilder<ConversationList>(
+            future: _loadConversations(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(color: Colors.grey.shade900),
+                );
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                final conversationList = snapshot.data!;
+                return ListView.builder(
+                  itemCount: conversationList.conversationsList.length,
+                  itemBuilder: (context, index) {
+                    final conversation =
+                        conversationList.conversationsList[index];
+                    return ListTile(
+                      leading: Icon(Icons.chat_bubble),
+                      title: Text(conversation['title']),
+                      onTap: () {
+                        print('Conversation ID: ${conversation['id']}');
+                        BlocProvider.of<ConversationBloc>(context).add(
+                          LoadConversation(conversation['id']),
+                        );
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                );
+              } else {
+                return Center(child: Text('No conversations found.'));
+              }
             },
           ),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:your_ai/core/utils/CustomTextStyles.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation.dart';
@@ -32,14 +31,13 @@ class NewChatWidget extends StatelessWidget {
 
   Widget _buildConversationContent(
       BuildContext context, Conversation conversation) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: conversation.messages.length,
-        itemBuilder: (context, index) {
-          final message = conversation.messages[index];
-          return _buildMessage(context, message.content, message.isFromUser);
-        },
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: conversation.messages.length,
+      itemBuilder: (context, index) {
+        final message = conversation.messages[index];
+        return _buildMessage(context, message.content, message.isFromUser);
+      },
     );
   }
 
@@ -56,14 +54,13 @@ class NewChatWidget extends StatelessWidget {
       ..add(currentMessage)
       ..add(loadingMessage);
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: updatedMessages.length,
-        itemBuilder: (context, index) {
-          final message = updatedMessages[index];
-          return _buildMessage(context, message.content, message.isFromUser);
-        },
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: updatedMessages.length,
+      itemBuilder: (context, index) {
+        final message = updatedMessages[index];
+        return _buildMessage(context, message.content, message.isFromUser);
+      },
     );
   }
 
@@ -72,49 +69,44 @@ class NewChatWidget extends StatelessWidget {
       alignment: isFromUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.fromLTRB(
-            (!isFromUser ? 16 : 0), 0, (isFromUser ? 16 : 0), 10),
+            (isFromUser ? 16 : 0), 0, (isFromUser ? 0 : 16), 10),
         padding: const EdgeInsets.all(12),
-        decoration: isFromUser
-            ? BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(90),
-              )
-            : BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(90),
-              ),
+        decoration: BoxDecoration(
+          color: isFromUser
+              ? Theme.of(context).colorScheme.surfaceContainer
+              : Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            !isFromUser
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircleAvatar(
-                          radius: 10,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                          child: Icon(
-                            Icons.person,
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            size: 16,
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Text(
-                          'GPT-3.5 Turbo',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+            if (!isFromUser)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      child: Icon(
+                        Icons.person,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        size: 16,
+                      ),
                     ),
-                  )
-                : SizedBox(),
+                    SizedBox(width: 8),
+                    Text(
+                      'GPT-3.5 Turbo',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             MarkdownBody(
               data: message,
               styleSheet: MarkdownStyleSheet(

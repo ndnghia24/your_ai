@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_prompt_library.dart';
-import '../../chat_ai/presentation/ui/chat_session_screen.dart';
 
 class ChatInputWidget extends StatelessWidget {
   final Function(String) onSubmitted;
@@ -97,7 +96,8 @@ class ChatInputWidget extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              maxLines: null,
+              maxLines: 4,
+              minLines: 1,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey.shade900,

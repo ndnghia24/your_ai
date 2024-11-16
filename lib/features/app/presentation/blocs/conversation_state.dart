@@ -29,8 +29,9 @@ class ConversationLoaded extends ConversationState {
 
 class ConversationError extends ConversationState {
   final String message;
+  final Conversation? conversation;
 
-  ConversationError(this.message);
+  ConversationError(this.message, {this.conversation});
 
   @override
   List<Object?> get props => [message];
