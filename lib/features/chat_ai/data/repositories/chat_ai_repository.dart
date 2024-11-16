@@ -118,7 +118,7 @@ class ChatAIRepository {
     );
 
     final messages =
-        (datasourceRes.data['messages'] as List<dynamic>).expand((item) {
+        (datasourceRes.data['items'] as List<dynamic>).expand((item) {
       if (item is Map<String, dynamic> &&
           item.containsKey('query') &&
           item.containsKey('answer')) {

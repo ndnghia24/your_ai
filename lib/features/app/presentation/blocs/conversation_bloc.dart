@@ -17,14 +17,19 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     on<ContinueConversation>(_onContinueConversation);
   }
 
-  Future<void> _onLoadConversation(LoadConversation event, Emitter<ConversationState> emit) async {
+  Future<void> _onLoadConversation(
+      LoadConversation event, Emitter<ConversationState> emit) async {
     if (currentConversation.id == event.conversationId) return;
 
     emit(ConversationLoading(conversation: currentConversation));
     try {
-      final result = await chatAIUseCaseFactory.getConversationDetailUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.getConversationDetailUseCase.execute(
         conversationId: event.conversationId,
-        params: {},
+        params: {
+          'assistantId': 'gpt-4o-mini',
+          'assistantModel': 'dify',
+        },
       );
       result.isSuccess
           ? emit(ConversationLoaded(result.result))
@@ -34,15 +39,19 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 
-  void _onUpdateConversation(UpdateConversation event, Emitter<ConversationState> emit) {
+  void _onUpdateConversation(
+      UpdateConversation event, Emitter<ConversationState> emit) {
     currentConversation = event.conversation;
     emit(ConversationLoaded(event.conversation));
   }
 
-  Future<void> _onCreateNewConversation(CreateNewConversation event, Emitter<ConversationState> emit) async {
-    emit(ConversationLoading(conversation: currentConversation, message: event.content));
+  Future<void> _onCreateNewConversation(
+      CreateNewConversation event, Emitter<ConversationState> emit) async {
+    emit(ConversationLoading(
+        conversation: currentConversation, message: event.content));
     try {
-      final result = await chatAIUseCaseFactory.createNewConversationUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.createNewConversationUseCase.execute(
         content: event.content,
         assistantId: event.assistantId,
         assistantModel: event.assistantModel,
@@ -60,10 +69,13 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 
-  Future<void> _onContinueConversation(ContinueConversation event, Emitter<ConversationState> emit) async {
-    emit(ConversationLoading(conversation: currentConversation, message: event.content));
+  Future<void> _onContinueConversation(
+      ContinueConversation event, Emitter<ConversationState> emit) async {
+    emit(ConversationLoading(
+        conversation: currentConversation, message: event.content));
     try {
-      final result = await chatAIUseCaseFactory.continueConversationUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.continueConversationUseCase.execute(
         content: event.content,
         assistant: event.assistant,
         conversation: event.conversation,
@@ -85,14 +97,23 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     currentConversation.messages.add(Message(
       content: event.content,
       isFromUser: true,
-      assistantId: event is CreateNewConversation ? event.assistantId : event.assistant['id'],
-      assistantModel: event is CreateNewConversation ? event.assistantModel : event.assistant['model'],
+      assistantId: event is CreateNewConversation
+          ? event.assistantId
+          : event.assistant['id'],
+      assistantModel: event is CreateNewConversation
+          ? event.assistantModel
+          : event.assistant['model'],
     ));
     currentConversation.messages.add(Message(
-      content: "Sorry, We are unable to process your request at the moment. Please login or check your internet connection and try again.",
+      content:
+          "Sorry, We are unable to process your request at the moment. Please login or check your internet connection and try again.",
       isFromUser: false,
-      assistantId: event is CreateNewConversation ? event.assistantId : event.assistant['id'],
-      assistantModel: event is CreateNewConversation ? event.assistantModel : event.assistant['model'],
+      assistantId: event is CreateNewConversation
+          ? event.assistantId
+          : event.assistant['id'],
+      assistantModel: event is CreateNewConversation
+          ? event.assistantModel
+          : event.assistant['model'],
     ));
   }
 }
