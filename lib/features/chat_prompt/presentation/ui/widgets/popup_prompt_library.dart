@@ -143,7 +143,7 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
               ),
             ],
           ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
           InputWidget(hintText: "Search", leftIconWidget: Icon(Icons.search)),
           const SizedBox(height: 16),
           Expanded(

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_prompt_library.dart';
+
+import '../../chat_prompt/presentation/ui/prompt_library_popup.dart';
+
 
 class ChatInputWidget extends StatelessWidget {
   final Function(String) onSubmitted;
