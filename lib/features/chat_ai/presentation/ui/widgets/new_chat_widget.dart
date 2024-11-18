@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
@@ -19,7 +22,7 @@ class NewChatWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
 
-    void _scrollToEnd() {
+    void scrollToEnd() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
@@ -31,8 +34,8 @@ class NewChatWidget extends StatelessWidget {
 
     return BlocListener<ConversationBloc, ConversationState>(
       listener: (context, state) {
-        if (state is ConversationLoaded || state is ConversationLoading) {
-          _scrollToEnd();
+        if (state is ConversationLoaded || (state is ConversationLoading && state.message != '')) {
+          scrollToEnd();
         }
         if (state is ConversationLoaded) {
           BlocProvider.of<TokenBloc>(context).add(LoadToken());
@@ -65,7 +68,8 @@ class NewChatWidget extends StatelessWidget {
       itemCount: conversation.messages.length,
       itemBuilder: (context, index) {
         final message = conversation.messages[index];
-        return _buildMessage(context, message);
+        final isLastMessage = index == conversation.messages.length - 1;
+        return _buildMessage(context, message, isLastMessage);
       },
     );
   }
@@ -75,7 +79,9 @@ class NewChatWidget extends StatelessWidget {
       Conversation conversation,
       String message,
       ScrollController scrollController) {
-    return BlocBuilder<ModelBloc, ModelState>(
+    
+    return message == "" ? Center(child: CircularProgressIndicator(color: Colors.grey.shade900)) 
+     :BlocBuilder<ModelBloc, ModelState>(
       builder: (context, modelState) {
         GenerativeAiModel selectedModel = GenerativeAiModel.gpt4oMini;
         if (modelState is ModelInitial) {
@@ -104,64 +110,123 @@ class NewChatWidget extends StatelessWidget {
           itemCount: updatedMessages.length,
           itemBuilder: (context, index) {
             final message = updatedMessages[index];
-            return _buildMessage(context, message);
+            final isLastMessage = index == updatedMessages.length - 1;
+            return _buildMessage(context, message, isLastMessage);
           },
         );
       },
     );
   }
 
-  Widget _buildMessage(BuildContext context, Message message) {
+  Widget _buildMessage(
+      BuildContext context, Message message, bool isLastMessage) {
     bool isFromUser = message.isFromUser;
     String content = message.content;
     GenerativeAiAssistant assistant = getAssistantById(message.assistantId) ??
         generativeAiAssistants[GenerativeAiModel.gpt4oMini]!;
-    return Align(
-      alignment: isFromUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.fromLTRB(
-            (isFromUser ? 16 : 0), 0, (isFromUser ? 0 : 16), 10),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isFromUser
-              ? Theme.of(context).colorScheme.surfaceContainer
-              : Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!isFromUser)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    assistant.icon,
-                    SizedBox(width: 8),
-                    Text(
-                      assistant.name,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            MarkdownBody(
-              data: content,
-              styleSheet: MarkdownStyleSheet(
-                p: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                  fontSize: 16,
-                ),
-              ),
+    return Column(
+      crossAxisAlignment:
+          isFromUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: isFromUser ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            margin: EdgeInsets.fromLTRB(
+                (isFromUser ? 16 : 0), 0, (isFromUser ? 0 : 16), 0),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isFromUser
+                  ? Theme.of(context).colorScheme.surfaceContainer
+                  : Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(12),
             ),
-          ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!isFromUser)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        assistant.icon,
+                        SizedBox(width: 8),
+                        Text(
+                          assistant.name,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                MarkdownBody(
+                  data: content,
+                  styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+        if (!isFromUser && isLastMessage && message.content != '...')
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Row(
+              mainAxisAlignment:
+                  isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+              children: [
+                CupertinoButton(
+                  child: Icon(
+                    CupertinoIcons.square_on_square,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    size: 20, // Reduced icon size
+                  ),
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: content));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Message copied to clipboard')),
+                    );
+                  },
+                ),
+                CupertinoButton(
+                  child: Icon(
+                    CupertinoIcons.refresh,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    size: 20, // Reduced icon size
+                  ),
+                  onPressed: () {
+                    final conversationBloc = BlocProvider.of<ConversationBloc>(context);
+                    final updatedMessages = List<Message>.from(conversationBloc.currentConversation.messages);
+                    final messageContent = updatedMessages[updatedMessages.length - 2].content;
+                    if (updatedMessages.length > 1) {
+                      updatedMessages.removeRange(updatedMessages.length - 2, updatedMessages.length);
+                    }
+
+                    final updatedConversation = Conversation(id: conversationBloc.currentConversation.id, messages: updatedMessages);
+                    
+                    conversationBloc.add(
+                      ContinueConversation(
+                        content: messageContent,
+                        assistant: {
+                          'id': assistant.id,
+                          'model': assistant.model,
+                        },
+                        conversation: updatedConversation.toMap(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
