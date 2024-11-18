@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
+import 'package:your_ai/features/app/splash_screen.dart';
 import 'package:your_ai/features/app/home_screen.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 import 'package:your_ai/features/chat_bot/presentation/chatbot_screen.dart';
 import 'package:your_ai/testMain.dart';
 
 class Routes {
+  static const String splash = '/splash';
   static const String test = '/test';
   static const String auth = '/auth';
   static const String home = '/home';
@@ -14,6 +16,7 @@ class Routes {
 
 class AppPages {
   static final routes = [
+    GetPage(name: Routes.splash, page: () => SplashScreen()),
     GetPage(name: Routes.test, page: () => AllTestScreen()),
     GetPage(name: Routes.auth, page: () => LoginOrRegisterScreen()),
     GetPage(name: Routes.home, page: () => HomeScreen()),

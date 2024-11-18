@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_ai/core/routes/route.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
@@ -10,8 +12,7 @@ import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.d
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart';
-
-import '../../chat_ai/presentation/ui/widgets/widget_authentication.dart';
+import '../../auth/presentation/ui/widget_authentication.dart';
 import '../../chat_bot/presentation/chatbot_screen.dart';
 import '../../knowledge_base/knowledgebase_screen.dart';
 import '../home_screen.dart';
@@ -25,8 +26,42 @@ class AppDrawerWidget extends StatefulWidget {
   _AppDrawerWidgetState createState() => _AppDrawerWidgetState();
 }
 
-class _AppDrawerWidgetState extends State<AppDrawerWidget> {
+class _AppDrawerWidgetState extends State<AppDrawerWidget>
+    with SingleTickerProviderStateMixin {
   bool showAllChats = false;
+  late AnimationController _animationController;
+  late Animation<Offset> _drawerSlideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 5000),
+    );
+
+    // Set up the sliding animation
+    _drawerSlideAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Open the drawer when the widget is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   Future<ConversationList> _loadConversations() async {
     final chatAIUseCaseFactory = getIt<ChatAIUseCaseFactory>();
@@ -47,50 +82,43 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
     final double horizontalPadding = 20;
     final double verticalPadding = 10;
 
-    return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      child: Column(
-        children: [
-          DrawerHeader(
-            child: Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+    return SlideTransition(
+      position: _drawerSlideAnimation,
+      child: Drawer(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Column(
+          children: [
+            DrawerHeader(
+              child: Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/yourai_logo.png', height: 40),
+                    SizedBox(width: 8),
+                    Text(
+                      'Your AI',
+                      style: GoogleFonts.bebasNeue(fontSize: 35),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Content
+            Expanded(
+              child: Column(
                 children: [
-                  Image.asset('assets/images/yourai_logo.png', height: 40),
-                  SizedBox(width: 8),
-                  Text(
-                    'Your AI',
-                    style: GoogleFonts.bebasNeue(fontSize: 35),
+                  Expanded(
+                    child: showAllChats
+                        ? _buildAllChatsList()
+                        : _buildDefaultContent(),
                   ),
+                  showAllChats ? Container() : AuthenticationWidget(),
                 ],
               ),
             ),
-          ),
-          // Content
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: showAllChats
-                      ? _buildAllChatsList()
-                      : _buildDefaultContent(),
-                ),
-                showAllChats
-                    ? Container()
-                    : MultiBlocProvider(
-                        providers: [
-                          BlocProvider<AuthBloc>(
-                            create: (context) => getIt<AuthBloc>(),
-                          ),
-                        ],
-                        child:
-                            AuthenticationWidget(), // Use AuthenticationWidget here
-                      ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -107,8 +135,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                Get.offAllNamed(Routes.home);
               }),
         ),
         Padding(
@@ -218,7 +245,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                             leading: Icon(Icons.chat_bubble),
                             title: Text(conversation['title']),
                             onTap: () {
-                              if(isSelected) {
+                              if (isSelected) {
                                 return;
                               }
                               BlocProvider.of<ConversationBloc>(context).add(

@@ -14,6 +14,8 @@ class LoginEvent extends AuthEvent {
 
 class LogoutEvent extends AuthEvent {}
 
+class CheckAuthStatusEvent extends AuthEvent {}
+
 class SignUpEvent extends AuthEvent {
   final String email;
   final String password;

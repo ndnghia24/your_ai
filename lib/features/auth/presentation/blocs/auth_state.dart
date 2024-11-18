@@ -5,23 +5,21 @@ abstract class AuthState extends Equatable {
   List<Object?> get props => [];
 }
 
-class AuthInitial extends AuthState {}
-
 class AuthLoading extends AuthState {}
 
-class AuthSuccess extends AuthState {
-  final String message;
+class AuthAuthenticated extends AuthState {
+  final Map<String, dynamic> userInfo;
 
-  AuthSuccess(this.message);
+  AuthAuthenticated(this.userInfo);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [userInfo];
 }
 
-class AuthError extends AuthState {
+class AuthUnauthenticated extends AuthState {
   final String message;
 
-  AuthError(this.message);
+  AuthUnauthenticated(this.message);
 
   @override
   List<Object?> get props => [message];
