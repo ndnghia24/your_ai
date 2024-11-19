@@ -64,4 +64,28 @@ class SPref {
       await prefs.setString('locale', strLocale);
     }
   }
+
+  Future saveUserInfo(Map<String, dynamic> map) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SPrefKey.keyUserName, map['username']);
+    await prefs.setString(SPrefKey.keyEmail, map['email']);
+  }
+
+  Future<Map<String, dynamic>> getLocalUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString(SPrefKey.keyUserName);
+    final email = prefs.getString(SPrefKey.keyEmail);
+
+    if (username == null || email == null) {
+      return {
+        'username': 'N/A',
+        'email': 'N/A',
+      };
+    }
+
+    return {
+      'username': username,
+      'email': email,
+    };
+  }
 }

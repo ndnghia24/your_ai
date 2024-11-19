@@ -54,6 +54,11 @@ class AuthService {
     );
   }
 
+  Future<Response> getTokenUsage() async {
+    return await _dio.get('$baseUrl/tokens/usage',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
+  }
+
   // logout
   Future<Response> logout() async {
     final res = await _dio.get('$baseUrl/auth/sign-out',

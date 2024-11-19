@@ -8,6 +8,8 @@ import 'package:your_ai/testMain.dart';
 
 import 'configs/service_locator.dart';
 import 'core/routes/route.dart';
+import 'features/auth/presentation/blocs/auth_bloc.dart';
+import 'features/auth/presentation/blocs/auth_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,18 @@ void main() async {
   // Setup service locator
   setupServiceLocator();
 
+  //
+  observeAuthBlocState();
+
   runApp(const MyApp());
+}
+
+void observeAuthBlocState() {
+  final authBloc = locator<AuthBloc>();
+
+  authBloc.stream.listen((state) {
+    print("AuthBloc state changed: $state");
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -36,34 +49,24 @@ class MyApp extends StatelessWidget {
       title: 'Your AI',
       theme: ThemeConfig.lightMode,
       darkTheme: ThemeConfig.darkMode,
-      initialRoute: Routes.home,
       getPages: AppPages.routes,
-
-      //home: AllTestScreen(),
-
+      initialRoute: Routes.splash,
       builder: (context, child) {
-        return Scaffold(
-          body: child,
-          floatingActionButton: Builder(
-            builder: (context) {
-              return Stack(
-                children: [
-                  Positioned(
-                    bottom: 200.0,
-                    right: 18.0,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.test);
-                      },
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      child:
-                          Icon(Icons.bug_report_rounded), // Customize FAB icon
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+        return Stack(
+          children: [
+            child ?? SizedBox.shrink(),
+            Positioned(
+              bottom: 200.0,
+              right: 18.0,
+              child: FloatingActionButton(
+                onPressed: () {
+                  Get.toNamed(Routes.test);
+                },
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(Icons.bug_report_rounded),
+              ),
+            ),
+          ],
         );
       },
     );

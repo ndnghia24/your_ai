@@ -20,7 +20,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   Future<void> _onLoadConversation(
       LoadConversation event, Emitter<ConversationState> emit) async {
     if (currentConversation.id == event.conversationId) return;
-
     emit(ConversationLoading(conversation: currentConversation));
     try {
       final result =
@@ -35,6 +34,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       result.isSuccess
           ? emit(ConversationLoaded(result.result))
           : emit(ConversationError(result.message));
+      if(result.isSuccess) {
+        currentConversation = result.result;
+      }
     } catch (e) {
       emit(ConversationError(e.toString()));
     }
@@ -73,7 +75,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   Future<void> _onContinueConversation(
       ContinueConversation event, Emitter<ConversationState> emit) async {
     emit(ConversationLoading(
-        conversation: currentConversation, message: event.content));
+        conversation: Conversation.fromMap(event.conversation), message: event.content));
     try {
       final result =
           await chatAIUseCaseFactory.continueConversationUseCase.execute(

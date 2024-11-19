@@ -7,50 +7,76 @@ import 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCaseFactory authUseCaseFactory;
 
-  AuthBloc(this.authUseCaseFactory) : super(AuthInitial()) {
+  get getAuthUseCaseFactory => authUseCaseFactory;
+
+  AuthBloc(this.authUseCaseFactory) : super(AuthLoading()) {
     on<LoginEvent>(_onLogin);
     on<SignUpEvent>(_onSignUp);
     on<LogoutEvent>(_onLogout);
+    on<CheckAuthStatusEvent>(_onCheckAuthStatus);
   }
 
-  FutureOr<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+  FutureOr<void> _onCheckAuthStatus(
+      CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
     try {
-      final usecaseResult = await authUseCaseFactory.logoutUseCase.execute();
+      final result = await authUseCaseFactory.getUserInfoUseCase.execute();
 
-      if (usecaseResult['isSuccess']) {
-        emit(AuthSuccess("Logout successful"));
+      print('CheckAuthStatusEvent: $result');
+
+      if (result['isSuccess']) {
+        emit(AuthAuthenticated(result['data']));
       } else {
-        emit(AuthError("Logout failed"));
+        emit(AuthUnauthenticated('User not logged in'));
       }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthUnauthenticated("Failed to check auth status: ${e.toString()}"));
     }
   }
 
-  Future<Map<String, dynamic>> getUserInfo() async {
-    return await authUseCaseFactory.getUserInfoUseCase.execute();
+  FutureOr<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
+    try {
+      final result = await authUseCaseFactory.logoutUseCase.execute();
+      if (result['isSuccess']) {
+        emit(AuthUnauthenticated("User logged out"));
+      }
+    } catch (e) {
+      // Handle error as needed
+      emit(AuthUnauthenticated("Logout failed: ${e.toString()}"));
+    }
   }
 
   FutureOr<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
-      await authUseCaseFactory.loginUseCase
+      final result = await authUseCaseFactory.loginUseCase
           .execute(event.email, event.password);
-      emit(AuthSuccess("Login successful"));
+
+      if (result['isSuccess']) {
+        final userInfo = await authUseCaseFactory.getUserInfoUseCase.execute();
+        emit(AuthAuthenticated(userInfo['data']));
+      } else {
+        emit(AuthUnauthenticated("Wrong email or password"));
+      }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthUnauthenticated("Login failed: ${e.toString()}"));
     }
   }
 
   FutureOr<void> _onSignUp(SignUpEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
-      await authUseCaseFactory.signUpUseCase
+      final result = await authUseCaseFactory.signUpUseCase
           .execute(event.email, event.password, event.username);
-      emit(AuthSuccess("Sign up successful"));
+
+      if (result['isSuccess']) {
+        emit(AuthUnauthenticated("Sign up success"));
+      } else {
+        emit(AuthUnauthenticated(result['data']));
+      }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthUnauthenticated("Sign up failed: ${e.toString()}"));
     }
+  }
+
+  checkAuthentication() {
+    add(CheckAuthStatusEvent());
   }
 }
