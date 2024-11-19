@@ -21,7 +21,7 @@ class LanguageSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Category',
+          'Language',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Padding(

@@ -20,26 +20,29 @@ class PrivatePromptItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(prompt.title,
-          style: TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.edit, size: 25),
-            onPressed: () {
-              onEdit(prompt);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, size: 25),
-            onPressed: () {
-              onDelete(prompt);
-            },
-          ),
-        ],
+    return GestureDetector(
+      onTap: onUsePrompt != null ? () => onUsePrompt(prompt) : null,
+      child: ListTile(
+        title: Text(prompt.title,
+            style: TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit, size: 25),
+              onPressed: () {
+                onEdit(prompt);
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, size: 25),
+              onPressed: () {
+                onDelete(prompt);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

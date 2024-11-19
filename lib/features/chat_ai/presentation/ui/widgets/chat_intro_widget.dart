@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_prompt_library.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/prompt_library_popup.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/widget_use_prompt.dart';
 
 class ChatIntroWidget extends StatelessWidget {

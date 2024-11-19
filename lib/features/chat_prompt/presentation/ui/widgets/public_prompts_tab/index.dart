@@ -8,6 +8,8 @@ import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_event.dar
 import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_state.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/public_prompts_tab/widgets/prompt_category_filter/index.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/public_prompts_tab/widgets/public_prompt_item.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/use_prompt_dialog.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/widget_use_prompt.dart';
 
 class PublicPromptTab extends StatefulWidget {
 
@@ -46,7 +48,13 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
     }
   }
 
-  void onUsePrompt(Prompt prompt) {}
+  void onUsePrompt(Prompt prompt) {
+    showDialog(
+      context: context, 
+      builder: (context){
+        return UsePromptPopup(prompt: prompt,);
+      });
+  }
 
   void onViewInfo(Prompt prompt) {}
 

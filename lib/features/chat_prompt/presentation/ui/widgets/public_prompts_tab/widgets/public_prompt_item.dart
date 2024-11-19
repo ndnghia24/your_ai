@@ -20,34 +20,35 @@ class PublicPromptItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(prompt.title,
-          style: TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
-      subtitle: Text(
-        prompt.description,
-        style: TextStyle(fontSize: CustomTextStyles.bodyLarge.fontSize),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            icon: Icon(
-              prompt.isFavorite ? Icons.star : Icons.star_border,
-              size: 25,
-              color: prompt.isFavorite ? Colors.red : Colors.blue,
+    return GestureDetector(
+      onTap: () {
+        onUsePrompt(prompt);
+      },
+      child: ListTile(
+        title: Text(prompt.title,
+            style: TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
+        subtitle: Text(
+          prompt.description,
+          style: TextStyle(fontSize: CustomTextStyles.bodyLarge.fontSize),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(
+                prompt.isFavorite ? Icons.star : Icons.star_border,
+                size: 25,
+                color: prompt.isFavorite ? Colors.red : Colors.blue,
+              ),
+              onPressed: () {
+                prompt.isFavorite ? onRemoveFavorite(prompt) : onAddFavorite(prompt);
+              },
             ),
-            onPressed: () {
-              prompt.isFavorite ? onRemoveFavorite(prompt) : onAddFavorite(prompt);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.info_outline, size: 25, color: Colors.blue),
-            onPressed: () {},
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
