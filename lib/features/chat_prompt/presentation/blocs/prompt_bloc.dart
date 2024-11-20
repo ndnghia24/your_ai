@@ -183,10 +183,10 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
       AddFavoritePromptEvent event, Emitter<PromptState> emit) async {
     emit(PromptLoading(privatePrompts: [], publicPrompts: []));
     try {
-      final useCaseResult = await promptUseCaseFactory.addFavouritePromptUsecase
+      promptUseCaseFactory.addFavouritePromptUsecase
           .execute(promptId: event.promptId);
 
-      if (useCaseResult.isSuccess) {
+      //if (useCaseResult.isSuccess) {
         final publicPrompts = event.publicPrompts;
         final index =
             publicPrompts.indexWhere((element) => element.id == event.promptId);
@@ -203,9 +203,9 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
         );
         publicPrompts[index] = updatePrompt;
         emit(PromptLoaded(event.privatePrompts, publicPrompts));
-      } else {
-        emit(PromptError(useCaseResult.message));
-      }
+      // } else {
+      //   emit(PromptError(useCaseResult.message));
+      // }
     } catch (e) {
       emit(PromptError(e.toString()));
     }
@@ -215,11 +215,11 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
       RemoveFavoritePromptEvent event, Emitter<PromptState> emit) async {
     emit(PromptLoading(privatePrompts: [], publicPrompts: []));
     try {
-      final useCaseResult = await promptUseCaseFactory
+      promptUseCaseFactory
           .removeFavouritePromptUsecase
           .execute(promptId: event.promptId);
 
-      if (useCaseResult.isSuccess) {
+      //if (useCaseResult.isSuccess) {
         final publicPrompts = event.publicPrompts;
         final index =
             publicPrompts.indexWhere((element) => element.id == event.promptId);
@@ -235,9 +235,9 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
         );
         publicPrompts[index] = updatePrompt;
         emit(PromptLoaded(event.privatePrompts, publicPrompts));
-      } else {
-        emit(PromptError(useCaseResult.message));
-      }
+      // } else {
+      //   emit(PromptError(useCaseResult.message));
+      // }
     } catch (e) {
       emit(PromptError(e.toString()));
     }

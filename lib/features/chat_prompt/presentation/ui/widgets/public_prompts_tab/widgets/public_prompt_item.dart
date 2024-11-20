@@ -9,14 +9,12 @@ class PublicPromptItem extends StatelessWidget {
     required this.onUsePrompt,
     required this.onAddFavorite,
     required this.onRemoveFavorite,
-    required this.onViewInfo,
   }) : super(key: key);
 
   final Prompt prompt;
   final Function(Prompt) onUsePrompt;
   final Function(Prompt) onAddFavorite;
   final Function(Prompt) onRemoveFavorite;
-  final Function(Prompt) onViewInfo;
 
   @override
   Widget build(BuildContext context) {

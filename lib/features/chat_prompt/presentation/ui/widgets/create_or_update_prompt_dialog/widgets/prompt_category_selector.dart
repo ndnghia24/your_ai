@@ -23,28 +23,25 @@ class PromptCategorySelector extends StatelessWidget {
           'Category',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: screenColorScheme.surfaceContainer,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: screenColorScheme.surfaceContainer,
+          ),
+          child: DropdownButtonFormField<PromptCategory>(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 8),
             ),
-            child: DropdownButtonFormField<PromptCategory>(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 8),
-              ),
-              value: selectedCategory,
-              items: promptCatgories.map((value) {
-                return DropdownMenuItem<PromptCategory>(
-                  value: value['value'],
-                  child: Text(value['label']),
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
+            value: selectedCategory,
+            items: promptCatgories.map((value) {
+              return DropdownMenuItem<PromptCategory>(
+                value: value['value'],
+                child: Text(value['label']),
+              );
+            }).toList(),
+            onChanged: onChanged,
           ),
         ),
       ],

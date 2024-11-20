@@ -29,7 +29,7 @@ class ChatSessionScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ConversationBloc>(
-          create: (context) => ConversationBloc(getIt<ChatAIUseCaseFactory>()),
+          create: (context) => getIt<ConversationBloc>(),
         ),
         BlocProvider<TokenBloc>(
           create: (context) =>
@@ -37,7 +37,7 @@ class ChatSessionScreen extends StatelessWidget {
         ),
         BlocProvider<ModelBloc>(
           create: (context) =>
-              ModelBloc()..add(UpdateModel(GenerativeAiModel.gpt4oMini)),
+              getIt<ModelBloc>(),
         ),
       ],
       child: Scaffold(

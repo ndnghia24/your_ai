@@ -25,63 +25,67 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
         context: context,
         builder: (dialogContext) {
           return BlocProvider.value(
-              value: bloc, child: CreateOrUpdatePromptPopup(prompt: prompt,));
+              value: bloc,
+              child: CreateOrUpdatePromptPopup(
+                prompt: prompt,
+              ));
         });
   }
 
   void onDeletePrompt(Prompt prompt) {
     showDialog(
-      context: context, 
-      builder: (dialogContext) {
-        
-        return BlocProvider.value(
-          value: BlocProvider.of<PromptBloc>(context),
-          child: BlocBuilder<PromptBloc, PromptState>(
-            builder: (context, state) => AlertDialog(
-              title: Text('Delete Prompt'),
-              content: Text('Are you sure you want to delete this prompt?'),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey[200],
+        context: context,
+        builder: (dialogContext) {
+          return BlocProvider.value(
+            value: BlocProvider.of<PromptBloc>(context),
+            child: BlocBuilder<PromptBloc, PromptState>(
+              builder: (context, state) => AlertDialog(
+                title: Text('Delete Prompt'),
+                content: Text('Are you sure you want to delete this prompt?'),
+                actions: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.grey[200],
+                    ),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop(false);
+                    },
+                    child: Text('Cancel'),
                   ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop(false);
-                  },
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey[500],
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.grey[500],
+                    ),
+                    onPressed: () {
+                      final state = BlocProvider.of<PromptBloc>(context).state;
+                      if (state is PromptLoaded) {
+                        BlocProvider.of<PromptBloc>(context).add(
+                            DeletePrivatePromptEvent(prompt.id,
+                                state.publicPrompts, state.privatePrompts));
+                      }
+                      Navigator.of(dialogContext).pop(true);
+                    },
+                    child: Text('Delete'),
                   ),
-                  onPressed: () {
-                    final state = BlocProvider.of<PromptBloc>(context).state;
-                    if(state is PromptLoaded) {
-                      BlocProvider.of<PromptBloc>(context).add(DeletePrivatePromptEvent(
-                        prompt.id,
-                        state.publicPrompts,
-                        state.privatePrompts
-                        )
-                        );
-                    }
-                    Navigator.of(dialogContext).pop(true);
-                  },
-                  child: Text('Delete'),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
+  }
+
+
+  void closeModalBottom() {
+    Navigator.pop(context);
   }
 
   void onUsePrompt(Prompt prompt) {
-    showDialog(
-      context: context, 
-      builder: (context){
-        return UsePromptPopup(prompt: prompt,);
-      });
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return UsePromptPopup(prompt: prompt, closeDialog: closeModalBottom);
+      },
+    );
   }
 
   @override

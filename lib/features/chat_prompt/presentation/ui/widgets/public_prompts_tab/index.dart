@@ -37,6 +37,10 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
     }
   }
 
+  void closeModalBottom() {
+    Navigator.pop(context);
+  }
+
   void onRemoveFavorite(Prompt prompt) {
     final state = BlocProvider.of<PromptBloc>(context).state;
     if (state is PromptLoaded) {
@@ -48,15 +52,19 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
     }
   }
 
-  void onUsePrompt(Prompt prompt) {
-    showDialog(
-      context: context, 
-      builder: (context){
-        return UsePromptPopup(prompt: prompt,);
-      });
+  void onUsePrompt(Prompt prompt) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return UsePromptPopup(prompt: prompt, closeDialog: closeModalBottom,);
+      },
+    );
+
+    if (result == true) {
+      Navigator.pop(context, true);
+    }
   }
 
-  void onViewInfo(Prompt prompt) {}
 
   void onClickFavorite() {
     setState(() {
@@ -163,7 +171,6 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                       onUsePrompt: onUsePrompt,
                       onAddFavorite: onAddFavorite,
                       onRemoveFavorite: onRemoveFavorite,
-                      onViewInfo: onViewInfo,
                     );
                   },
                 ),

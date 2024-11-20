@@ -24,29 +24,26 @@ class LanguageSelector extends StatelessWidget {
           'Language',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: screenColorScheme.surfaceContainer,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: screenColorScheme.surfaceContainer,
+          ),
+          child: DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 8),
             ),
-            child: DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 8),
-              ),
-              value: selectedLanguage,
-              items: languages.map((value) {
-                return DropdownMenuItem<String>(
-                  value: value.name,
-                  child: Text(value.name),
-                  
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
+            value: selectedLanguage,
+            items: languages.map((value) {
+              return DropdownMenuItem<String>(
+                value: value.name,
+                child: Text(value.name),
+                
+              );
+            }).toList(),
+            onChanged: onChanged,
           ),
         ),
       ],

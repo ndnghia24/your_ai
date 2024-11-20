@@ -149,14 +149,13 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                     const SizedBox(height: 8),
                     if (!isPrivatePrompt)
                       SizedBox(
-                        width: double.infinity,
-                        height: 100,
-                        child: LanguageSelector(
-                          selectedLanguage: _selectedLanguage,
-                          onChanged: _onLanguageSelected,
-                        ),
+                      width: double.infinity,
+                      height: 80,
+                      child: LanguageSelector(
+                        selectedLanguage: _selectedLanguage,
+                        onChanged: _onLanguageSelected,
                       ),
-                    const SizedBox(height: 8),
+                      ),
                     _FormInputField(
                       label: 'Name',
                       controller: _nameController,
@@ -169,11 +168,11 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                       },
                     ),
                     const SizedBox(height: 8),
+                    if (!isPrivatePrompt)
                     PromptCategorySelector(
                       selectedCategory: _selectedCategory,
                       onChanged: _onCategorySelected,
                     ),
-                    const SizedBox(height: 8),
                     _FormInputField(
                       label: 'Description',
                       controller: _descriptionController,

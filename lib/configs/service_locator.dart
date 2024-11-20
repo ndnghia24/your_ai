@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/features/app/domain/entities/model_model.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
 import 'package:your_ai/features/auth/data/data_sources/services/auth_services.dart';
 import 'package:your_ai/features/auth/data/data_sources/auth_remote_datasource.dart';
 import 'package:your_ai/features/auth/data/repositories/auth_repository.dart';
@@ -43,6 +47,11 @@ void setupServiceLocator() {
       () => ChatAIRepository(locator<ChatAIRemoteDataSource>()));
   locator.registerLazySingleton<ChatAIUseCaseFactory>(
       () => ChatAIUseCaseFactory(locator<ChatAIRepository>()));
+  ///Chat AI Bloc
+  locator.registerLazySingleton<ConversationBloc>(
+      () => ConversationBloc(locator<ChatAIUseCaseFactory>()));
+  locator.registerLazySingleton<ModelBloc>(
+      () => ModelBloc()..add(UpdateModel(GenerativeAiModel.gpt4oMini)));
 
   /// Chat Prompt feature dependencies
   locator.registerLazySingleton<ChatPromptService>(() => ChatPromptService());
