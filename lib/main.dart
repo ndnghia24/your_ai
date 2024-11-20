@@ -18,22 +18,22 @@ void main() async {
   // Setup service locator
   setupServiceLocator();
 
-  //
-  observeAuthBlocState();
-
   runApp(const MyApp());
 }
 
-void observeAuthBlocState() {
-  final authBloc = locator<AuthBloc>();
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
-  authBloc.stream.listen((state) {
-    print("AuthBloc state changed: $state");
-  });
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    locator<AuthBloc>().close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
