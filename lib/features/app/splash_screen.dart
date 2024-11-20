@@ -30,7 +30,7 @@ class SplashScreen extends StatelessWidget {
           final state = snapshot.data;
 
           if (state != null) {
-            print('SplashScreen: $state');
+            // Handle error as needed
           }
 
           if (state is AuthAuthenticated) {

@@ -21,8 +21,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final result = await authUseCaseFactory.getUserInfoUseCase.execute();
 
-      print('CheckAuthStatusEvent: $result');
-
       if (result['isSuccess']) {
         emit(AuthAuthenticated(result['data']));
       } else {
@@ -46,6 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
     try {
       final result = await authUseCaseFactory.loginUseCase
           .execute(event.email, event.password);
@@ -62,6 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onSignUp(SignUpEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
     try {
       final result = await authUseCaseFactory.signUpUseCase
           .execute(event.email, event.password, event.username);
