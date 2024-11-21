@@ -15,6 +15,13 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     on<UpdateConversation>(_onUpdateConversation);
     on<CreateNewConversation>(_onCreateNewConversation);
     on<ContinueConversation>(_onContinueConversation);
+    on<ResetConversation>(_onResetConversation);
+  }
+
+  Future<void> _onResetConversation(
+      ResetConversation event, Emitter<ConversationState> emit) async {
+    currentConversation = Conversation(id: '', messages: []);
+    emit(ConversationInitial());
   }
 
   Future<void> _onLoadConversation(

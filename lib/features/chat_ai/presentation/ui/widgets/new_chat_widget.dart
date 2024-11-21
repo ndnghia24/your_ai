@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
@@ -33,6 +34,7 @@ class NewChatWidget extends StatelessWidget {
     }
 
     return BlocListener<ConversationBloc, ConversationState>(
+      bloc: GetIt.I<ConversationBloc>(),
       listener: (context, state) {
         if (state is ConversationLoaded || (state is ConversationLoading && state.message != '')) {
           scrollToEnd();
@@ -42,6 +44,7 @@ class NewChatWidget extends StatelessWidget {
         }
       },
       child: BlocBuilder<ConversationBloc, ConversationState>(
+        bloc: GetIt.I<ConversationBloc>(),
         builder: (context, state) {
           if (state is ConversationInitial) {
             return const ChatIntroWidget();
@@ -82,6 +85,7 @@ class NewChatWidget extends StatelessWidget {
     
     return message == "" ? Center(child: CircularProgressIndicator(color: Colors.grey.shade900)) 
      :BlocBuilder<ModelBloc, ModelState>(
+      bloc: GetIt.I<ModelBloc>(),
       builder: (context, modelState) {
         GenerativeAiModel selectedModel = GenerativeAiModel.gpt4oMini;
         if (modelState is ModelInitial) {
@@ -202,7 +206,7 @@ class NewChatWidget extends StatelessWidget {
                     size: 20, // Reduced icon size
                   ),
                   onPressed: () {
-                    final conversationBloc = BlocProvider.of<ConversationBloc>(context);
+                    final conversationBloc = GetIt.I<ConversationBloc>();
                     final updatedMessages = List<Message>.from(conversationBloc.currentConversation.messages);
                     final messageContent = updatedMessages[updatedMessages.length - 2].content;
                     if (updatedMessages.length > 1) {

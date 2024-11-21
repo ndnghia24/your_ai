@@ -39,7 +39,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
     // Initialize AnimationController
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 5000),
+      duration: const Duration(milliseconds: 1000),
     );
 
     // Set up the sliding animation
@@ -126,17 +126,28 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   Widget _buildDefaultContent() {
     return ListView(
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: ListTile(
-              leading: Image.asset('assets/images/op_newchat.png', height: 20),
-              title: Text(
-                'NEW CHAT',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        BlocBuilder<ConversationBloc, ConversationState>(
+          bloc: GetIt.I<ConversationBloc>(),
+          builder: (context, state) {
+            return Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: ListTile(
+                leading:
+                    Image.asset('assets/images/op_newchat.png', height: 20),
+                title: Text(
+                  'NEW CHAT',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                onTap: () {
+                  if (state is ConversationLoaded) {
+                    GetIt.I<ConversationBloc>()
+                        .add(ResetConversation());
+                  }
+                  Get.offAllNamed(Routes.home);
+                },
               ),
-              onTap: () {
-                Get.offAllNamed(Routes.home);
-              }),
+            );
+          },
         ),
         Padding(
           padding: EdgeInsets.only(left: 10),
@@ -226,6 +237,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
               } else if (snapshot.hasData) {
                 final conversationList = snapshot.data!;
                 return BlocBuilder<ConversationBloc, ConversationState>(
+                  bloc: GetIt.I<ConversationBloc>(),
                   builder: (context, state) {
                     final currentConversationId = (state is ConversationLoaded)
                         ? state.conversation.id
@@ -248,7 +260,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                               if (isSelected) {
                                 return;
                               }
-                              BlocProvider.of<ConversationBloc>(context).add(
+                              GetIt.I<ConversationBloc>().add(
                                 LoadConversation(conversation['id']),
                               );
                               Navigator.pop(context);

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
@@ -37,19 +38,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
           const SizedBox(width: 10),
           Expanded(
             child: BlocBuilder<ModelBloc, ModelState>(
+              bloc: GetIt.I<ModelBloc>(),
               builder: (context, state) {
                 if (state is ModelInitial) {
                   return ModelSelector(
                     selectedModel: state.selectedModel,
                     onModelChanged: (model) {
-                      context.read<ModelBloc>().add(UpdateModel(model));
+                      GetIt.I<ModelBloc>().add(UpdateModel(model));
                     },
                   );
                 } else {
                   return ModelSelector(
                     selectedModel: GenerativeAiModel.gpt4oMini,
                     onModelChanged: (model) {
-                      context.read<ModelBloc>().add(UpdateModel(model));
+                      GetIt.I<ModelBloc>().add(UpdateModel(model));
                     },
                   );
                 }

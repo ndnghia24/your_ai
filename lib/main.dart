@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:your_ai/core/theme/app_theme.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/testMain.dart';
 
 import 'configs/service_locator.dart';
@@ -32,6 +34,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     locator<AuthBloc>().close();
+    locator<ConversationBloc>().close();
+    locator<ModelBloc>().close();
     super.dispose();
   }
 

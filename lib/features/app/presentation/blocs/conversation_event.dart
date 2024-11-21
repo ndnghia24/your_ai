@@ -53,3 +53,6 @@ class ContinueConversation extends ConversationEvent {
   @override
   List<Object?> get props => [content, assistant, conversation];
 }
+
+class ResetConversation extends ConversationEvent {
+}

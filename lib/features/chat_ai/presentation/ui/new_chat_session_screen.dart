@@ -28,16 +28,9 @@ class ChatSessionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ConversationBloc>(
-          create: (context) => getIt<ConversationBloc>(),
-        ),
         BlocProvider<TokenBloc>(
           create: (context) =>
               TokenBloc(getIt<ChatAIUseCaseFactory>())..add(LoadToken()),
-        ),
-        BlocProvider<ModelBloc>(
-          create: (context) =>
-              getIt<ModelBloc>(),
         ),
       ],
       child: Scaffold(
@@ -76,6 +69,7 @@ class ChatSessionScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 10),
                               child: BlocBuilder<ModelBloc, ModelState>(
+                                bloc: GetIt.I<ModelBloc>(),
                                 builder: (context, modelState) {
                                   GenerativeAiModel selectedModel =
                                       GenerativeAiModel.gpt4oMini;
@@ -88,13 +82,12 @@ class ChatSessionScreen extends StatelessWidget {
 
                                   return BlocBuilder<ConversationBloc,
                                       ConversationState>(
+                                    bloc: GetIt.I<ConversationBloc>(),
                                     builder: (context, state) {
                                       return ChatInputWidget(
                                         onSubmitted: (text) {
                                           if (state is ConversationLoaded) {
-                                            BlocProvider.of<ConversationBloc>(
-                                                    context)
-                                                .add(
+                                            GetIt.I<ConversationBloc>().add(
                                               ContinueConversation(
                                                 content: text,
                                                 assistant: {
@@ -107,8 +100,7 @@ class ChatSessionScreen extends StatelessWidget {
                                             );
                                           } else if (state
                                               is ConversationInitial) {
-                                            BlocProvider.of<ConversationBloc>(
-                                                    context)
+                                            GetIt.I<ConversationBloc>()
                                                 .add(
                                               CreateNewConversation(
                                                 content: text,
