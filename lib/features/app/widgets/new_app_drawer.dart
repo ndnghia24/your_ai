@@ -243,6 +243,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                         ? state.conversation.id
                         : null;
                     return ListView.builder(
+                      padding: EdgeInsets.only(top: 0),
                       itemCount: conversationList.conversationsList.length,
                       itemBuilder: (context, index) {
                         final conversation =
