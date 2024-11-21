@@ -39,7 +39,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
     // Initialize AnimationController
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 500),
     );
 
     // Set up the sliding animation

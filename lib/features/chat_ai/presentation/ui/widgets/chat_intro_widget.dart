@@ -89,8 +89,8 @@ class ChatIntroWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          ...quickPrompts.map(
-              (feature) => _quickPrompt(context, screenColorScheme, feature)),
+          //...quickPrompts.map(
+          //    (feature) => _quickPrompt(context, screenColorScheme, feature)),
         ],
       ),
     );
