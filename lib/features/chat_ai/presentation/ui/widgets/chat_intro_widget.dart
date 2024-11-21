@@ -67,7 +67,7 @@ class ChatIntroWidget extends StatelessWidget {
                             BorderRadius.vertical(top: Radius.circular(16)),
                       ),
                       builder: (context) => FractionallySizedBox(
-                        heightFactor: 0.5,
+                        heightFactor: 0.8,
                         child: Padding(
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
