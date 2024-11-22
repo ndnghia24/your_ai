@@ -11,12 +11,12 @@ import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/enum_prompt.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/prompt_library_popup.dart';
-import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/language_selecteor.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/language_selector.dart';
 
 class UsePromptPopup extends StatefulWidget {
   final Prompt prompt;
   final void Function() closeDialog;
-  const UsePromptPopup({super.key, required this.prompt, required this.closeDialog});
+  const UsePromptPopup({super.key, required this.prompt, required this.closeDialog, });
 
   @override
   _UsePromptPopupState createState() => _UsePromptPopupState();

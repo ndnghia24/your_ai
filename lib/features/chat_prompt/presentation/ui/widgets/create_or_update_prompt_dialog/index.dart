@@ -6,7 +6,7 @@ import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_bloc.dart
 import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_event.dart';
 
 import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_state.dart';
-import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/language_selecteor.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/language_selector.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/create_or_update_prompt_dialog/widgets/prompt_category_selector.dart';
 
 class CreateOrUpdatePromptPopup extends StatefulWidget {
@@ -318,7 +318,8 @@ class _PrivacyOption extends StatelessWidget {
     required bool groupValue,
     required ValueChanged<bool?> onChanged,
   }) {
-    return Expanded(
+    return FittedBox(
+      fit: BoxFit.cover,
       child: Row(
         children: [
           Radio<bool>(

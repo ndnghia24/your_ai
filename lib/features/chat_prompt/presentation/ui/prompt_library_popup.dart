@@ -110,10 +110,13 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
                             child: Container(
                               alignment: Alignment.center,
                               width: double.infinity,
-                              child: Text('My Prompt',
-                                  style: TextStyle(
-                                      fontSize: CustomTextStyles.displaySmall
-                                          .fontSize)), // Increased font size
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text('My Prompt',
+                                    style: TextStyle(
+                                        fontSize: CustomTextStyles.displaySmall
+                                            .fontSize)),
+                              ), // Increased font size
                             ),
                           ),
                           Tab(

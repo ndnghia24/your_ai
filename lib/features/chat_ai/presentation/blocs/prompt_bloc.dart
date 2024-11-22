@@ -67,6 +67,70 @@ class ChatPromptBloc extends Bloc<ChatPromptEvent, ChatPromptState> {
     }
   }
 
+  Future<void> _onAddFavoritePromptEvent(
+      AddFavoritePromptEvent event, Emitter<ChatPromptState> emit) async {
+    emit(ChatPromptLoading(privatePrompts: [], publicPrompts: []));
+    try {
+      promptUseCaseFactory.addFavouritePromptUsecase
+          .execute(promptId: event.promptId);
+
+      //if (useCaseResult.isSuccess) {
+        final publicPrompts = event.publicPrompts;
+        final index =
+            publicPrompts.indexWhere((element) => element.id == event.promptId);
+        Prompt updatePrompt = new Prompt(
+          id: publicPrompts[index].id,
+          title: publicPrompts[index].title,
+          description: publicPrompts[index].description,
+          content: publicPrompts[index].content,
+          category: publicPrompts[index].category,
+          isFavorite: true,
+          isPublic: publicPrompts[index].isPublic,
+          userName: publicPrompts[index].userName,
+          language: publicPrompts[index].language,
+        );
+        publicPrompts[index] = updatePrompt;
+        emit(ChatPromptLoaded(event.privatePrompts, publicPrompts));
+      // } else {
+      //   emit(PromptError(useCaseResult.message));
+      // }
+    } catch (e) {
+      emit(ChatPromptError(e.toString()));
+    }
+  }
+
+  Future<void> _onRemoveFavoritePromptEvent(
+      RemoveFavoritePromptEvent event, Emitter<ChatPromptState> emit) async {
+    emit(ChatPromptLoading(privatePrompts: [], publicPrompts: []));
+    try {
+      promptUseCaseFactory
+          .removeFavouritePromptUsecase
+          .execute(promptId: event.promptId);
+
+      //if (useCaseResult.isSuccess) {
+        final publicPrompts = event.publicPrompts;
+        final index =
+            publicPrompts.indexWhere((element) => element.id == event.promptId);
+        Prompt updatePrompt = new Prompt(
+          id: publicPrompts[index].id,
+          title: publicPrompts[index].title,
+          description: publicPrompts[index].description,
+          content: publicPrompts[index].content,
+          category: publicPrompts[index].category,
+          isFavorite: false,
+          isPublic: publicPrompts[index].isPublic,
+          userName: publicPrompts[index].userName,
+        );
+        publicPrompts[index] = updatePrompt;
+        emit(ChatPromptLoaded(event.privatePrompts, publicPrompts));
+      // } else {
+      //   emit(PromptError(useCaseResult.message));
+      // }
+    } catch (e) {
+      emit(ChatPromptError(e.toString()));
+    }
+  }
+
   
   
 }

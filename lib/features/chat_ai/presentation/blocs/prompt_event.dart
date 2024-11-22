@@ -23,4 +23,23 @@ class GetPublicPromptEvent extends ChatPromptEvent {
   GetPublicPromptEvent(this.privatePrompts);
 }
 
+class AddFavoritePromptEvent extends ChatPromptEvent {
+  final String promptId;
+  final List<Prompt> publicPrompts;
+  final List<Prompt> privatePrompts;
+
+  AddFavoritePromptEvent(
+      this.promptId, this.publicPrompts, this.privatePrompts);
+}
+
+class RemoveFavoritePromptEvent extends ChatPromptEvent {
+  final String promptId;
+  final List<Prompt> publicPrompts;
+  final List<Prompt> privatePrompts;
+
+  RemoveFavoritePromptEvent(
+      this.promptId, this.publicPrompts, this.privatePrompts);
+}
+
+
 
