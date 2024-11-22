@@ -15,6 +15,7 @@ import 'package:your_ai/features/chat_ai/data/data_sources/chat_ai_remote_dataso
 import 'package:your_ai/features/chat_ai/data/data_sources/services/chat_ai_service.dart';
 import 'package:your_ai/features/chat_ai/data/repositories/chat_ai_repository.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
+import 'package:your_ai/features/chat_ai/presentation/blocs/prompt_bloc.dart';
 
 ///
 import 'package:your_ai/features/chat_prompt/data/data_sources/chat_prompt_remote_datasource.dart';
@@ -47,6 +48,7 @@ void setupServiceLocator() {
       () => ChatAIRepository(locator<ChatAIRemoteDataSource>()));
   locator.registerLazySingleton<ChatAIUseCaseFactory>(
       () => ChatAIUseCaseFactory(locator<ChatAIRepository>()));
+
   ///Chat AI Bloc
   locator.registerLazySingleton<ConversationBloc>(
       () => ConversationBloc(locator<ChatAIUseCaseFactory>()));
@@ -61,4 +63,6 @@ void setupServiceLocator() {
       () => ChatPromptRepository(locator<ChatPromptRemoteDataSource>()));
   locator.registerLazySingleton<ChatPromptUseCaseFactory>(
       () => ChatPromptUseCaseFactory(locator<ChatPromptRepository>()));
+  locator.registerLazySingleton<ChatPromptBloc>(
+      () => ChatPromptBloc(locator<ChatPromptUseCaseFactory>()));
 }
