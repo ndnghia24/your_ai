@@ -16,7 +16,11 @@ import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/language_se
 class UsePromptPopup extends StatefulWidget {
   final Prompt prompt;
   final void Function() closeDialog;
-  const UsePromptPopup({super.key, required this.prompt, required this.closeDialog, });
+  const UsePromptPopup({
+    super.key,
+    required this.prompt,
+    required this.closeDialog,
+  });
 
   @override
   _UsePromptPopupState createState() => _UsePromptPopupState();
@@ -137,13 +141,10 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                             ),
                           ],
                           const SizedBox(height: 16),
-                          SizedBox(
-                              width: double.infinity,
-                              height: 80,
-                              child: LanguageSelector(
-                                selectedLanguage: _selectedLanguage,
-                                onChanged: _onLanguageSelected,
-                              )),
+                          LanguageSelector(
+                            selectedLanguage: _selectedLanguage,
+                            onChanged: _onLanguageSelected,
+                          ),
                           for (final param in paramList) ...[
                             const SizedBox(height: 16),
                             TextField(
@@ -183,8 +184,7 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                                     ),
                                   );
                                 } else if (state is ConversationInitial) {
-                                  GetIt.I<ConversationBloc>()
-                                      .add(
+                                  GetIt.I<ConversationBloc>().add(
                                     CreateNewConversation(
                                       content: _onSubmit(),
                                       assistantId: assistant.id,
@@ -196,7 +196,6 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                                 //how to close the dialog and modal bottom?
                                 widget.closeDialog();
                                 Navigator.pop(context, true);
-
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
