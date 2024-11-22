@@ -15,42 +15,65 @@ class ModelSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(50),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.shade300, width: 1),
       ),
-      child: DropdownButton<GenerativeAiModel>(
-        icon: Image.asset('assets/images/ic_down.png', height: 16),
-        value: selectedModel,
-        isDense: true,
-        menuMaxHeight: 300,
-        underline: Container(),
-        isExpanded: true,
-        items: generativeAiAssistants.keys.map((GenerativeAiModel model) {
-          final assistant = generativeAiAssistants[model]!;
-          return DropdownMenuItem<GenerativeAiModel>(
-            value: model,
-            child: Row(
-              children: [
-                assistant.icon,
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    assistant.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.grey.shade800, fontSize: 12),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<GenerativeAiModel>(
+          icon: Icon(Icons.keyboard_arrow_down_rounded, 
+            color: Colors.grey.shade700,
+            size: 20,
+          ),
+          value: selectedModel,
+          isDense: true,
+          menuMaxHeight: 300,
+          elevation: 8,
+          dropdownColor: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          isExpanded: true,
+          items: generativeAiAssistants.keys.map((GenerativeAiModel model) {
+            final assistant = generativeAiAssistants[model]!;
+            return DropdownMenuItem<GenerativeAiModel>(
+              value: model,
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    child: assistant.icon,
                   ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-        onChanged: (GenerativeAiModel? newValue) {
-          if (newValue != null) {
-            onModelChanged(newValue); // Call the callback function
-          }
-        },
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      assistant.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey.shade800,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+          onChanged: (GenerativeAiModel? newValue) {
+            if (newValue != null) {
+              onModelChanged(newValue);
+            }
+          },
+        ),
       ),
     );
   }
