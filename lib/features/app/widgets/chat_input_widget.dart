@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:your_ai/features/chat_ai/presentation/ui/widgets/prompt_popup.dart';
+import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/use_prompt_dialog.dart';
 
 import '../../chat_prompt/presentation/ui/prompt_library_popup.dart';
 
@@ -54,6 +57,28 @@ class ChatInputWidget extends StatelessWidget {
         );
         break;
     }
+  }
+
+  void _onSlashLetterInput(BuildContext context) {
+    showDialog<Prompt>(
+      context: context, 
+      builder: (context) => Dialog(
+        child: Container(
+          height: 500,
+          padding: const EdgeInsets.all(16),
+          child: PromptPopup()
+        ),
+      ),
+    ).then((prompt) {
+      if (prompt != null) {
+        showDialog(
+      context: context,
+      builder: (context) {
+        return UsePromptPopup(prompt: prompt, closeDialog: (){},);
+      },
+    );
+      }
+    });
   }
 
   @override
@@ -163,6 +188,11 @@ class ChatInputWidget extends StatelessWidget {
                 if (text.isNotEmpty) {
                   onSubmitted(text);
                   controller.clear();
+                }
+              },
+              onChanged: (text) {
+                if (text.startsWith('/')) {
+                  _onSlashLetterInput(context);
                 }
               },
             ),

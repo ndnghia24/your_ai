@@ -20,6 +20,10 @@ class PromptPopup extends StatelessWidget {
         } else if (state is ChatPromptLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is ChatPromptLoaded) {
+          if (state.privatePrompts.isEmpty && state.publicPrompts.isEmpty) {
+            getIt<ChatPromptBloc>().add(GetAllPromptEvent());
+            return Center(child: CircularProgressIndicator());
+          }
           List<Prompt> allPrompts = state.privatePrompts + state.publicPrompts;
 
           return ListView.builder(
