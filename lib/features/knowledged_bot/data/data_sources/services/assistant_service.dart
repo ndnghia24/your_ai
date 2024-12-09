@@ -1,10 +1,12 @@
 // Vị trí: lib/services/assistant_service.dart
 
 import 'package:dio/dio.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/network/dio_client.dart';
 
 class AssistantService {
   final String token;
-  final Dio dio = Dio(); // Khởi tạo Dio instance
+  final Dio dio = locator<DioClient>().dio;
   final String baseUrl =
       'https://knowledge-api.jarvis.cx/kb-core/v1/ai-assistant';
 

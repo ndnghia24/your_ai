@@ -1,11 +1,13 @@
 // Vị trí: lib/features/knowledge/data/services/knowledge_service.dart
 
 import 'package:dio/dio.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/network/dio_client.dart';
 
 class KnowledgeService {
-  final Dio dio;
+  final Dio dio = locator<DioClient>().dio;
 
-  KnowledgeService(this.dio);
+  KnowledgeService._privateConstructor();
 
   // Tạo Knowledge
   Future<Response> createKnowledge(

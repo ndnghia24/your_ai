@@ -1,11 +1,13 @@
 // Vị trí: lib/features/knowledge/data/services/knowledge_unit_service.dart
 
 import 'package:dio/dio.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/network/dio_client.dart';
 
 class KnowledgeUnitService {
-  final Dio dio;
+  final Dio dio = locator<DioClient>().dio;
 
-  KnowledgeUnitService(this.dio);
+  KnowledgeUnitService._privateConstructor();
 
   /// Upload a local file as a Knowledge Unit
   ///
