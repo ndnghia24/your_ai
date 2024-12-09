@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:your_ai/features/app/splash_screen.dart';
-import 'package:your_ai/features/app/home_screen.dart';
+import 'package:your_ai/features/app/presentation/ui/screens/splash_screen.dart';
+import 'package:your_ai/features/app/presentation/ui/screens/home_screen.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
-import 'package:your_ai/features/chat_bot/presentation/chatbot_screen.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/chatbot_screen.dart';
 import 'package:your_ai/testMain.dart';
 
 class Routes {

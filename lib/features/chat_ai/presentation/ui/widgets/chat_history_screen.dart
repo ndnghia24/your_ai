@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:your_ai/core/utils/CustomTextStyles.dart';
-import 'package:your_ai/features/app/widgets/input_widget.dart';
+import 'package:your_ai/features/app/presentation/ui/widgets/input_widget.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});

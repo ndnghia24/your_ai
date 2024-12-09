@@ -10,9 +10,10 @@ import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_event.dart';
-import 'package:your_ai/features/app/presentation/components/my_appbar.dart';
-import 'package:your_ai/features/app/widgets/chat_input_widget.dart';
-import 'package:your_ai/features/app/widgets/new_app_drawer.dart';
+import 'package:your_ai/features/app/presentation/ui/components/my_appbar.dart';
+import 'package:your_ai/features/app/presentation/ui/widgets/chat_input_widget.dart';
+import 'package:your_ai/features/app/presentation/ui/widgets/new_app_drawer.dart';
+
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/new_chat_widget.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/old_chat_widget.dart';
@@ -100,8 +101,7 @@ class ChatSessionScreen extends StatelessWidget {
                                             );
                                           } else if (state
                                               is ConversationInitial) {
-                                            GetIt.I<ConversationBloc>()
-                                                .add(
+                                            GetIt.I<ConversationBloc>().add(
                                               CreateNewConversation(
                                                 content: text,
                                                 assistantId: assistant.id,
