@@ -7,8 +7,6 @@ import 'package:your_ai/core/network/dio_client.dart';
 class KnowledgeService {
   final Dio dio = locator<DioClient>().dio;
 
-  KnowledgeService._privateConstructor();
-
   // Tạo Knowledge
   Future<Response> createKnowledge(
       Map<String, dynamic> knowledgeData, String token) async {

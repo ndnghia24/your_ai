@@ -22,6 +22,11 @@ import 'package:your_ai/features/chat_prompt/data/data_sources/chat_prompt_remot
 import 'package:your_ai/features/chat_prompt/data/data_sources/services/chat_prompt_service.dart';
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
 import 'package:your_ai/features/chat_prompt/domain/prompt_usecase_factory.dart';
+import 'package:your_ai/features/knowledge_base/data/data_sources/knowledge_remote_data_source.dart';
+import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_service.dart';
+import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_unit_service.dart';
+import 'package:your_ai/features/knowledge_base/data/repositories/knowledge_repository.dart';
+import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 
 final locator = GetIt.instance;
 
@@ -65,4 +70,16 @@ void setupServiceLocator() {
       () => ChatPromptUseCaseFactory(locator<ChatPromptRepository>()));
   locator.registerLazySingleton<ChatPromptBloc>(
       () => ChatPromptBloc(locator<ChatPromptUseCaseFactory>()));
+  
+
+  /// Knowledge Base feature dependencies
+  
+  locator.registerLazySingleton<KnowledgeService>(() => KnowledgeService());
+  locator.registerLazySingleton<KnowledgeUnitService>(() => KnowledgeUnitService());
+  locator.registerLazySingleton<KnowledgeRemoteDataSource>(
+      () => KnowledgeRemoteDataSource(locator<KnowledgeService>(), locator<KnowledgeUnitService>()));
+  locator.registerLazySingleton<KnowledgeRepository>(
+    () => KnowledgeRepository(locator<KnowledgeRemoteDataSource>()));
+  locator.registerLazySingleton<KnowledgeUseCaseFactory>(
+      () => KnowledgeUseCaseFactory(locator<KnowledgeRepository>()));
 }
