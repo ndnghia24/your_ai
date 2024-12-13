@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/app/presentation/ui/widgets/upload_file_screen.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/upload_file_screen.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/upload_website_screen.dart';
 
 class AddUnitPopup extends StatelessWidget {
   const AddUnitPopup({super.key});
@@ -41,7 +42,10 @@ class AddUnitPopup extends StatelessWidget {
               title: Text('Website'),
               subtitle: Text('Connect Website to get data'),
               onTap: () {
-                // Handle action here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UploadWebsiteScreen()),
+                );
               },
             ),
             ListTile(
