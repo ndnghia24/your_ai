@@ -76,7 +76,6 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
     try {
       final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         defautKnowledgeId,
-        webUrl,
         _authService.accessToken!,
         UploadType.websiteContent,
         unitName: name,

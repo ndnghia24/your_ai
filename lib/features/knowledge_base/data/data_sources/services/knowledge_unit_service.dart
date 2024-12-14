@@ -71,4 +71,75 @@ class KnowledgeUnitService {
 
     return response;
   }
+
+    /// Upload Slack content as a Knowledge Unit
+  ///
+  /// [id] - ID of the Knowledge resource.
+  /// [unitName] - Name of the Knowledge Unit.
+  /// [slackWorkspace] - Slack workspace identifier.
+  /// [slackBotToken] - Slack bot token.
+  /// [token] - Authentication token.
+  Future<Response> uploadSlackContentUnit({
+    required String id,
+    required String unitName,
+    required String slackWorkspace,
+    required String slackBotToken,
+    required String token,
+  }) async {
+    final requestData = {
+      'unitName': unitName,
+      'slackWorkspace': slackWorkspace,
+      'slackBotToken': slackBotToken,
+    };
+
+    final response = await dio.post(
+      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/slack',
+      data: requestData,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    return response;
+  }
+
+    /// Upload Confluence content as a Knowledge Unit
+  ///
+  /// [id] - ID of the Knowledge resource.
+  /// [unitName] - Name of the Knowledge Unit.
+  /// [wikiPageUrl] - URL of the Confluence wiki page.
+  /// [confluenceUsername] - Confluence username.
+  /// [confluenceAccessToken] - Confluence access token.
+  /// [token] - Authentication token.
+  Future<Response> uploadConfluenceContentUnit({
+    required String id,
+    required String unitName,
+    required String wikiPageUrl,
+    required String confluenceUsername,
+    required String confluenceAccessToken,
+    required String token,
+  }) async {
+    final requestData = {
+      'unitName': unitName,
+      'wikiPageUrl': wikiPageUrl,
+      'confluenceUsername': confluenceUsername,
+      'confluenceAccessToken': confluenceAccessToken,
+    };
+
+    final response = await dio.post(
+      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/confluence',
+      data: requestData,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    return response;
+  }
 }

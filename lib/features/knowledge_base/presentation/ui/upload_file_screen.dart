@@ -76,8 +76,8 @@ class _UploadFileScreenState extends State<UploadFileScreen> {
     try {
       final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         defautKnowledgeId,
-        _selectedFile!.path!,
         _authService.accessToken!,
+        filePathOrUrl: _selectedFile!.path!,
         UploadType.localFile,
       );
 
