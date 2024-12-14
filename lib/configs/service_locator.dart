@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
@@ -31,7 +32,8 @@ import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory
 final locator = GetIt.instance;
 
 void setupServiceLocator() {
-  locator.registerLazySingleton<DioClient>(() => DioClient());
+  locator.registerLazySingleton<JarvisDioClient>(() => JarvisDioClient());
+  locator.registerLazySingleton<KBDioClient>(() => KBDioClient());
 
   /// Auth feature dependencies
   locator.registerLazySingleton<AuthService>(() => AuthService());
@@ -70,16 +72,17 @@ void setupServiceLocator() {
       () => ChatPromptUseCaseFactory(locator<ChatPromptRepository>()));
   locator.registerLazySingleton<ChatPromptBloc>(
       () => ChatPromptBloc(locator<ChatPromptUseCaseFactory>()));
-  
 
   /// Knowledge Base feature dependencies
-  
+
   locator.registerLazySingleton<KnowledgeService>(() => KnowledgeService());
-  locator.registerLazySingleton<KnowledgeUnitService>(() => KnowledgeUnitService());
-  locator.registerLazySingleton<KnowledgeRemoteDataSource>(
-      () => KnowledgeRemoteDataSource(locator<KnowledgeService>(), locator<KnowledgeUnitService>()));
+  locator.registerLazySingleton<KnowledgeUnitService>(
+      () => KnowledgeUnitService());
+  locator.registerLazySingleton<KnowledgeRemoteDataSource>(() =>
+      KnowledgeRemoteDataSource(
+          locator<KnowledgeService>(), locator<KnowledgeUnitService>()));
   locator.registerLazySingleton<KnowledgeRepository>(
-    () => KnowledgeRepository(locator<KnowledgeRemoteDataSource>()));
+      () => KnowledgeRepository(locator<KnowledgeRemoteDataSource>()));
   locator.registerLazySingleton<KnowledgeUseCaseFactory>(
       () => KnowledgeUseCaseFactory(locator<KnowledgeRepository>()));
 }

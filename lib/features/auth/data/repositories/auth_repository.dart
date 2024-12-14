@@ -22,8 +22,10 @@ class AuthRepository {
         email: email, password: password);
 
     if (response['isSuccess']) {
-      await SPref.instance.setAccessToken(response['data']['accessToken']);
-      await SPref.instance.saveRefreshToken(response['data']['refreshToken']);
+      await SPref.instance
+          .setJarvisAccessToken(response['data']['accessToken']);
+      await SPref.instance
+          .setJarvisRefreshToken(response['data']['refreshToken']);
 
       final userInfo = await _authRemoteDataSource.getUserInfo();
       if (response['isSuccess']) {

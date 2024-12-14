@@ -2,12 +2,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 
 class KnowledgeUnitService {
   //final Dio dio = locator<DioClient>().dio;
   final Dio dio = Dio();
-
 
   /// Upload a local file as a Knowledge Unit
   ///
@@ -24,7 +23,8 @@ class KnowledgeUnitService {
     });
 
     print(formData.files.first.value.filename);
-    print('https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file');
+    print(
+        'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file');
     print('Bearer $token');
 
     final response = await dio.post(

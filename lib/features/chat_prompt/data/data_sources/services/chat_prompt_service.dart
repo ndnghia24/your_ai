@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 import 'package:your_ai/core/storage/spref/spref.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 
@@ -9,7 +9,7 @@ final String? baseUrl = dotenv.env['API_URL'];
 class ChatPromptService {
   String? accessToken;
   String? refreshToken;
-  final Dio _dio = getIt<DioClient>().dio;
+  final Dio _dio = getIt<JarvisDioClient>().dio;
 
   ChatPromptService._privateConstructor() {
     _initializeTokens();
@@ -23,8 +23,8 @@ class ChatPromptService {
   }
 
   Future<void> _initializeTokens() async {
-    accessToken = await SPref.instance.getAccessToken();
-    refreshToken = await SPref.instance.getRefreshToken();
+    accessToken = await SPref.instance.getJarvisAccessToken();
+    refreshToken = await SPref.instance.getJarvisRefreshToken();
   }
 
 /*
