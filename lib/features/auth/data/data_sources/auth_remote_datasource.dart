@@ -78,6 +78,31 @@ class AuthRemoteDataSource {
     }
   }
 
+  Future<Map<String, dynamic>> signInWithGoogleToken(String googleToken) async {
+    try {
+      final response = await _authService.loginWithGoogleToken(googleToken);
+
+      if (response.statusCode == 200) {
+        return {
+          'data': response.data['token'],
+          'isSuccess': true,
+          'message': 'Login successful',
+        };
+      } else {
+        return {
+          'data': {'details': response.data['details']},
+          'isSuccess': false,
+          'message': 'Invalid credentials',
+        };
+      }
+    } catch (e) {
+      return {
+        'isSuccess': false,
+        'message': '${e.toString()}',
+      };
+    }
+  }
+
   Future<Map<String, dynamic>> getUserInfo() async {
     try {
       final userInfo = await _authService.getUserInfo();

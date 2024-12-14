@@ -1,4 +1,5 @@
 import 'package:your_ai/features/auth/data/repositories/auth_repository.dart';
+import 'package:your_ai/features/auth/domain/usecases/google_login_usecase.dart';
 
 import 'usecases/login_usecase.dart';
 import 'usecases/signup_usecase.dart';
@@ -11,6 +12,8 @@ class AuthUseCaseFactory {
   AuthUseCaseFactory(this.authRepository);
 
   LoginUseCase get loginUseCase => LoginUseCase(authRepository);
+  GoogleLoginUseCase get googleLoginUseCase =>
+      GoogleLoginUseCase(authRepository);
   SignUpUseCase get signUpUseCase => SignUpUseCase(authRepository);
   GetUserInfoUseCase get getUserInfoUseCase =>
       GetUserInfoUseCase(authRepository);

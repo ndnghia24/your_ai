@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/features/auth/data/data_sources/services/google_auth_service.dart';
 
 import '../blocs/auth_bloc.dart';
 import '../blocs/auth_event.dart';
@@ -195,7 +196,25 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildMySquareTile(
-                      onTap: () {}, imgPath: 'assets/images/google_logo.png'),
+                    onTap: () async {
+                      try {
+                        final googleSignIn = GoogleSignInService();
+                        final googleToken =
+                            await googleSignIn.signInWithGoogle();
+                        if (googleToken != null) {
+                          // Dispatch GoogleSignInEvent to AuthBloc
+                          locator<AuthBloc>()
+                              .add(GoogleLoginEvent(googleToken));
+                        }
+                      } catch (error) {
+                        print("Google Sign-In Error: $error");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Google Sign-In failed")),
+                        );
+                      }
+                    },
+                    imgPath: 'assets/images/google_logo.png',
+                  ),
                 ],
               ),
               SizedBox(height: 25),

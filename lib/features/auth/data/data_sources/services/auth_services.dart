@@ -40,6 +40,20 @@ class AuthService {
     return res;
   }
 
+  Future<Response> loginWithGoogleToken(String googleToken) async {
+    final res = await _dio.post(
+      '$baseUrl/auth/google-sign-in',
+      data: {'token': googleToken},
+    );
+
+    if (res.statusCode == 200) {
+      accessToken = res.data['token']['accessToken'];
+      refreshToken = res.data['token']['refreshToken'];
+    }
+
+    return res;
+  }
+
   Future<Response> signup(Map<String, dynamic> userInfo) async {
     return await _dio.post(
       '$baseUrl/auth/sign-up',
