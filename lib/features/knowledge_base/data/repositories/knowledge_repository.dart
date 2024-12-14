@@ -18,17 +18,17 @@ class KnowledgeRepository {
   }
 
   // Tạo Knowledge mới
-  Future<Knowledge> createKnowledge(
+  Future<KnowledgeBase> createKnowledge(
       Map<String, dynamic> knowledgeData, String token) async {
     final res = await remoteDataSource.createKnowledge(knowledgeData, token);
-    return handleResponse(res, (data) => Knowledge.fromMap(data));
+    return handleResponse(res, (data) => KnowledgeBase.fromMap(data));
   }
 
   // Lấy danh sách Knowledge
-  Future<List<Knowledge>> getKnowledgeList(String token) async {
+  Future<List<KnowledgeBase>> getKnowledgeList(String token) async {
     final res = await remoteDataSource.getKnowledgeList(token);
     return handleResponse(res, (data) {
-      return (data as List).map((item) => Knowledge.fromMap(item)).toList();
+      return (data as List).map((item) => KnowledgeBase.fromMap(item)).toList();
     });
   }
 
@@ -41,11 +41,11 @@ class KnowledgeRepository {
   }
 
   // Cập nhật Knowledge
-  Future<Knowledge> updateKnowledge(
+  Future<KnowledgeBase> updateKnowledge(
       String id, Map<String, dynamic> knowledgeData, String token) async {
     final res =
         await remoteDataSource.updateKnowledge(id, knowledgeData, token);
-    return handleResponse(res, (data) => Knowledge.fromMap(data));
+    return handleResponse(res, (data) => KnowledgeBase.fromMap(data));
   }
 
   // Xóa Knowledge

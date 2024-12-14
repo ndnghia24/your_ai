@@ -1,16 +1,16 @@
-class Knowledge {
+class KnowledgeBase {
   final String id;
   final String knowledgeName;
   final String description;
 
-  Knowledge({
+  KnowledgeBase({
     required this.id,
     required this.knowledgeName,
     required this.description,
   });
 
-  factory Knowledge.fromMap(Map<String, dynamic> map) {
-    return Knowledge(
+  factory KnowledgeBase.fromMap(Map<String, dynamic> map) {
+    return KnowledgeBase(
       id: map['id'],
       knowledgeName: map['knowledgeName'],
       description: map['description'],
@@ -26,7 +26,7 @@ class Knowledge {
   }
 
   static initial() {
-    return Knowledge(
+    return KnowledgeBase(
       id: '',
       knowledgeName: '',
       description: '',

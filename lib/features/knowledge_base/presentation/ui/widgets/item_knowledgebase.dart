@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 
+final getIt = GetIt.instance;
 class KnowledgeBaseItem extends StatelessWidget {
-  final String title;
-  final String description;
-  final int units;
-  final String size;
-  final String editTime;
+  final KnowledgeBase knowledgeBase;
+
+  final void Function(KnowledgeBase) onDelete;
 
   const KnowledgeBaseItem({super.key, 
-    required this.title,
-    required this.description,
-    required this.units,
-    required this.size,
-    required this.editTime,
+    required this.knowledgeBase,
+    required this.onDelete,
   });
 
   @override
@@ -24,27 +22,19 @@ class KnowledgeBaseItem extends StatelessWidget {
           backgroundColor: Colors.orange,
           child: Icon(Icons.storage, color: Colors.white),
         ),
-        title: Text(title),
+        title: Text(knowledgeBase.knowledgeName),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (description.isNotEmpty) Text(description),
+            if (knowledgeBase.description.isNotEmpty) Text(knowledgeBase.description),
             SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Units: $units'),
-                Text('Size: $size'),
-              ],
-            ),
-            SizedBox(height: 5),
-            Text('Edit time: $editTime'),
           ],
         ),
         trailing: IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
           onPressed: () {
             // Handle delete action
+            onDelete(knowledgeBase);
           },
         ),
       ),

@@ -9,17 +9,17 @@ class GetKnowledgeListUseCase {
 
   GetKnowledgeListUseCase(this.repository);
 
-  Future<UsecaseResultTemplate<List<Knowledge>>> execute(String token) async {
+  Future<UsecaseResultTemplate<List<KnowledgeBase>>> execute(String token) async {
     try {
       final res = await repository.getKnowledgeList(token);
 
-      return UsecaseResultTemplate<List<Knowledge>>(
+      return UsecaseResultTemplate<List<KnowledgeBase>>(
         isSuccess: true,
         result: res,
         message: 'Knowledge list fetched successfully',
       );
     } catch (e) {
-      return UsecaseResultTemplate<List<Knowledge>>(
+      return UsecaseResultTemplate<List<KnowledgeBase>>(
         isSuccess: false,
         result: [],
         message: 'Error fetching knowledge list: $e',

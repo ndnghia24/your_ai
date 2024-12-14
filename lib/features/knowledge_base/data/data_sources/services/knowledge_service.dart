@@ -25,6 +25,7 @@ class KnowledgeService {
 
   // Lấy danh sách Knowledge
   Future<Response> getKnowledgeList(String token) async {
+    print('token: $token');
     final response = await dio.get(
       'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge',
       options: Options(

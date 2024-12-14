@@ -27,6 +27,7 @@ import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowl
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_unit_service.dart';
 import 'package:your_ai/features/knowledge_base/data/repositories/knowledge_repository.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_bloc.dart';
 
 final locator = GetIt.instance;
 
@@ -82,4 +83,6 @@ void setupServiceLocator() {
     () => KnowledgeRepository(locator<KnowledgeRemoteDataSource>()));
   locator.registerLazySingleton<KnowledgeUseCaseFactory>(
       () => KnowledgeUseCaseFactory(locator<KnowledgeRepository>()));
+  locator.registerLazySingleton<KBBloc>(
+      () => KBBloc(locator<KnowledgeUseCaseFactory>()));
 }

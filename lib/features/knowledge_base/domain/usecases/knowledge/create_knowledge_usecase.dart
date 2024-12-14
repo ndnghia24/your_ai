@@ -9,20 +9,20 @@ class CreateKnowledgeUseCase {
 
   CreateKnowledgeUseCase(this.repository);
 
-  Future<UsecaseResultTemplate<Knowledge>> execute(
+  Future<UsecaseResultTemplate<KnowledgeBase>> execute(
       Map<String, dynamic> knowledgeData, String token) async {
     try {
       final res = await repository.createKnowledge(knowledgeData, token);
 
-      return UsecaseResultTemplate<Knowledge>(
+      return UsecaseResultTemplate<KnowledgeBase>(
         isSuccess: true,
         result: res,
         message: 'Knowledge created successfully',
       );
     } catch (e) {
-      return UsecaseResultTemplate<Knowledge>(
+      return UsecaseResultTemplate<KnowledgeBase>(
         isSuccess: false,
-        result: Knowledge.initial(),
+        result: KnowledgeBase.initial(),
         message: 'Error creating knowledge: $e',
       );
     }
