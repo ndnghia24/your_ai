@@ -1,18 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 
 class KnowledgeAuthService {
-  final Dio dio = locator<DioClient>().dio;
+  final Dio dio = locator<JarvisDioClient>().dio;
   String? accessToken;
   String? refreshToken;
 
-  Future<Response> signInWithEmailAndPassword(String email, String password) async {
-    final payload = {
-      "email": email,
-      "password": password,
-      "remember": true
-    };
+  Future<Response> signInWithEmailAndPassword(
+      String email, String password) async {
+    final payload = {"email": email, "password": password, "remember": true};
 
     final res = await dio.post(
       'https://knowledge-api.jarvis.cx/kb-core/v1/auth/sign-in',

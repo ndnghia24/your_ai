@@ -11,6 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this.authUseCaseFactory) : super(AuthLoading()) {
     on<LoginEvent>(_onLogin);
+    on<GoogleLoginEvent>(_onGoogleLoginEvent);
     on<SignUpEvent>(_onSignUp);
     on<LogoutEvent>(_onLogout);
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
@@ -57,6 +58,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(AuthUnauthenticated("Login failed: ${e.toString()}"));
+    }
+  }
+
+  FutureOr<void> _onGoogleLoginEvent(
+      GoogleLoginEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final result = await authUseCaseFactory.googleLoginUseCase
+          .execute(event.googleToken);
+      if (result['isSuccess']) {
+        final userInfo = await authUseCaseFactory.getUserInfoUseCase.execute();
+        emit(AuthAuthenticated(userInfo['data']));
+      } else {
+        emit(AuthUnauthenticated("Google login failed"));
+      }
+    } catch (e) {
+      emit(AuthUnauthenticated("Google login failed: ${e.toString()}"));
     }
   }
 

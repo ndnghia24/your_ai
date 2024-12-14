@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  r_resources: any
+  google_sign_in: any
   build_runner: any
   permission_handler: any
   universal_platform: any
