@@ -22,8 +22,27 @@ class AuthRepository {
         email: email, password: password);
 
     if (response['isSuccess']) {
-      await SPref.instance.setAccessToken(response['data']['accessToken']);
-      await SPref.instance.saveRefreshToken(response['data']['refreshToken']);
+      await SPref.instance
+          .setJarvisAccessToken(response['data']['accessToken']);
+      await SPref.instance
+          .setJarvisRefreshToken(response['data']['refreshToken']);
+
+      final userInfo = await _authRemoteDataSource.getUserInfo();
+      if (response['isSuccess']) {
+        await SPref.instance.saveUserInfo(userInfo['data']);
+      }
+    }
+    return response;
+  }
+
+  Future<Map<String, dynamic>> signInWithGoogleToken(String googleToken) async {
+    final response =
+        await _authRemoteDataSource.signInWithGoogleToken(googleToken);
+    if (response['isSuccess']) {
+      await SPref.instance
+          .setJarvisAccessToken(response['data']['accessToken']);
+      await SPref.instance
+          .setJarvisRefreshToken(response['data']['refreshToken']);
 
       final userInfo = await _authRemoteDataSource.getUserInfo();
       if (response['isSuccess']) {

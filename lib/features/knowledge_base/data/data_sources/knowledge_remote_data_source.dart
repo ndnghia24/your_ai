@@ -154,4 +154,55 @@ class KnowledgeRemoteDataSource {
       );
     }
   }
+
+    // Upload Slack Content Unit
+  Future<DataSourcesResultTemplate> uploadSlackContentUnit(
+      String id, String unitName, String slackWorkspace, String slackBotToken, String token) async {
+    try {
+      final response = await unitService.uploadSlackContentUnit(
+        id: id,
+        unitName: unitName,
+        slackWorkspace: slackWorkspace,
+        slackBotToken: slackBotToken,
+        token: token,
+      );
+      return DataSourcesResultTemplate(
+        isSuccess: true,
+        data: response.data,
+        message: 'Upload Slack content unit successfully',
+      );
+    } catch (e) {
+      return DataSourcesResultTemplate(
+        isSuccess: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+  }
+
+  // Upload Confluence Content Unit
+  Future<DataSourcesResultTemplate> uploadConfluenceContentUnit(
+      String id, String unitName, String wikiPageUrl, String confluenceUsername, String confluenceAccessToken, String token) async {
+    try {
+      final response = await unitService.uploadConfluenceContentUnit(
+        id: id,
+        unitName: unitName,
+        wikiPageUrl: wikiPageUrl,
+        confluenceUsername: confluenceUsername,
+        confluenceAccessToken: confluenceAccessToken,
+        token: token,
+      );
+      return DataSourcesResultTemplate(
+        isSuccess: true,
+        data: response.data,
+        message: 'Upload Confluence content unit successfully',
+      );
+    } catch (e) {
+      return DataSourcesResultTemplate(
+        isSuccess: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+  }
 }

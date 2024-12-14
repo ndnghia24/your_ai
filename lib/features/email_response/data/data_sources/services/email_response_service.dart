@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 import 'package:your_ai/core/storage/spref/spref.dart';
 import 'package:your_ai/configs/service_locator.dart';
 
@@ -8,7 +8,7 @@ final String? baseUrl = dotenv.env['API_URL'];
 
 class EmailResponseService {
   String? accessToken;
-  final Dio _dio = locator<DioClient>().dio;
+  final Dio _dio = locator<JarvisDioClient>().dio;
 
   EmailResponseService._privateConstructor() {
     _initializeTokens();
@@ -22,7 +22,7 @@ class EmailResponseService {
   }
 
   Future<void> _initializeTokens() async {
-    accessToken = await SPref.instance.getAccessToken();
+    accessToken = await SPref.instance.getJarvisAccessToken();
   }
 
   /// Gửi request để lấy các ý tưởng phản hồi email

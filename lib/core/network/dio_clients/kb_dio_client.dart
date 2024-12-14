@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 import 'package:your_ai/core/storage/spref/spref.dart';
 
-final String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
+final String baseUrl = dotenv.env['API_URL_KB'] ?? 'http://localhost:3000';
 
-class DioClient {
+class KBDioClient {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: baseUrl,
@@ -22,10 +24,10 @@ class DioClient {
   bool _isRetrying = false;
   Completer<String?>? _refreshCompleter;
 
-  DioClient() {
+  KBDioClient() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final accessToken = await _getAccessToken();
+        final accessToken = await getKBAccessToken();
 
         if (accessToken != null && accessToken.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $accessToken';
@@ -37,7 +39,7 @@ class DioClient {
           _isRetrying = true;
 
           try {
-            final newAccessToken = await _getAccessToken(forceRefresh: false);
+            final newAccessToken = await getKBAccessToken(forceRefresh: false);
 
             // Retry request with new access token
             error.requestOptions.headers['Authorization'] =
@@ -56,9 +58,36 @@ class DioClient {
     ));
   }
 
-  Future<String?> _getAccessToken({bool forceRefresh = false}) async {
-    String? accessToken = await SPref.instance.getAccessToken();
+  Future<String?> getKBAccessToken({bool forceRefresh = false}) async {
+    /// Get access token from shared preferences
+    String? accessToken = await SPref.instance.getKBAccessToken();
+    String? refreshToken = await SPref.instance.getKBRefreshToken();
 
+    if (refreshToken == null || refreshToken.isEmpty) {
+      final responseExternalLogin = await _dio.post(
+        '$baseUrl/auth/external-sign-in',
+        data: {
+          'token': locator<JarvisDioClient>().getJarvisAccessToken(),
+        },
+      );
+
+      if (responseExternalLogin.statusCode == 200) {
+        final newKBAccessToken =
+            responseExternalLogin.data['token']['accessToken'];
+        final newKBRefreshToken =
+            responseExternalLogin.data['token']['refreshToken'];
+
+        // Save access token to shared preferences
+        await SPref.instance.setKBAccessToken(newKBAccessToken);
+        await SPref.instance.setKBRefreshToken(newKBRefreshToken);
+
+        return newKBAccessToken;
+      } else {
+        throw Exception('Failed to get access token');
+      }
+    }
+
+    /// If access token is null or empty, refresh token
     if (forceRefresh || accessToken == null || accessToken.isEmpty) {
       if (_isRefreshingToken) {
         return _refreshCompleter?.future;
@@ -67,15 +96,18 @@ class DioClient {
         _refreshCompleter = Completer();
 
         try {
-          String? refreshToken = await SPref.instance.getRefreshToken();
+          /// If access token is null or empty, refresh token
+          String? refreshToken = await SPref.instance.getKBRefreshToken();
+
+          /// Get access token from shared preferences
           if (refreshToken == null || refreshToken.isEmpty) {
             return null;
           }
 
-          final response = await _refreshAccessToken(refreshToken);
+          final response = await refreshKBAccessToken(refreshToken);
           if (response.statusCode == 200) {
             final newAccessToken = response.data['token']['accessToken'];
-            await SPref.instance.setAccessToken(newAccessToken);
+            await SPref.instance.setKBAccessToken(newAccessToken);
 
             _refreshCompleter?.complete(newAccessToken);
             return newAccessToken;
@@ -95,7 +127,7 @@ class DioClient {
     return accessToken;
   }
 
-  Future<Response> _refreshAccessToken(String refreshToken) async {
+  Future<Response> refreshKBAccessToken(String refreshToken) async {
     final response = await _dio.get(
       '$baseUrl/auth/refresh',
       queryParameters: {'refreshToken': refreshToken},
