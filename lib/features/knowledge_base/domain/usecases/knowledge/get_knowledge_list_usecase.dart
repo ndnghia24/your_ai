@@ -9,7 +9,8 @@ class GetKnowledgeListUseCase {
 
   GetKnowledgeListUseCase(this.repository);
 
-  Future<UsecaseResultTemplate<List<KnowledgeBase>>> execute(String token) async {
+  Future<UsecaseResultTemplate<List<KnowledgeBase>>> execute(
+      String token) async {
     try {
       final res = await repository.getKnowledgeList(token);
 

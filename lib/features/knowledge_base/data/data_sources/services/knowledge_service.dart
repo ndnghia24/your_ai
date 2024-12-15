@@ -3,9 +3,10 @@
 import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
 
 class KnowledgeService {
-  final Dio dio = locator<JarvisDioClient>().dio;
+  final Dio dio = Dio();
 
   // Tạo Knowledge
   Future<Response> createKnowledge(

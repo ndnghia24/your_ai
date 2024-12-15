@@ -7,15 +7,11 @@ import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_event.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_state.dart';
 
-
 class KBBloc extends Bloc<KBEvent, KBState> {
   final KnowledgeUseCaseFactory KBUseCaseFactory;
   final KnowledgeAuthService _authService = KnowledgeAuthService();
 
-  
-
-  KBBloc(this.KBUseCaseFactory) : super(KBInitial())  {
-
+  KBBloc(this.KBUseCaseFactory) : super(KBInitial()) {
     on<GetAllKBEvent>(_onGetAllKBEvent);
     on<CreateKBEvent>(_onCreateKBEvent);
     on<UpdateKBEvent>(_onUpdateKBEvent);
@@ -38,13 +34,14 @@ class KBBloc extends Bloc<KBEvent, KBState> {
     }
   }
 
- Future<void> _onGetAllKBEvent(GetAllKBEvent event, Emitter<KBState> emit) async {
+  Future<void> _onGetAllKBEvent(
+      GetAllKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: []));
     try {
-      
       await _signIn();
-      print ("_authService.accessToken: ${_authService.accessToken}");
-      final result = await KBUseCaseFactory.getKnowledgeListUseCase.execute(_authService.accessToken!);
+      print("_authService.accessToken: ${_authService.accessToken}");
+      final result = await KBUseCaseFactory.getKnowledgeListUseCase
+          .execute(_authService.accessToken!);
       if (result.isSuccess) {
         emit(KBLoaded(result.result));
         print("KBLoaded");
@@ -57,14 +54,13 @@ class KBBloc extends Bloc<KBEvent, KBState> {
     }
   }
 
-  
-
-  Future<void> _onCreateKBEvent(CreateKBEvent event, Emitter<KBState> emit) async {
+  Future<void> _onCreateKBEvent(
+      CreateKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: []));
     try {
-      final result = await KBUseCaseFactory.createKnowledgeUseCase.execute( {
-        'knowledgeName' : event.knowledgeName,
-        'description' : event.description,
+      final result = await KBUseCaseFactory.createKnowledgeUseCase.execute({
+        'knowledgeName': event.knowledgeName,
+        'description': event.description,
       }, _authService.accessToken!);
 
       if (result.isSuccess) {
@@ -84,15 +80,20 @@ class KBBloc extends Bloc<KBEvent, KBState> {
     }
   }
 
-  Future<void> _onUpdateKBEvent(UpdateKBEvent event, Emitter<KBState> emit) async {
+  Future<void> _onUpdateKBEvent(
+      UpdateKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: []));
     try {
-      final result = await KBUseCaseFactory.updateKnowledgeUseCase.execute(event.id, {
-        'knowledgeName': event.knowledgeName,
-        'description': event.description,
-      }, _authService.accessToken!);
+      final result = await KBUseCaseFactory.updateKnowledgeUseCase.execute(
+          event.id,
+          {
+            'knowledgeName': event.knowledgeName,
+            'description': event.description,
+          },
+          _authService.accessToken!);
       if (result.isSuccess) {
-        final index = event.knowledgeBases.indexWhere((element) => element.id == event.id);
+        final index = event.knowledgeBases
+            .indexWhere((element) => element.id == event.id);
         event.knowledgeBases[index] = KnowledgeBase(
           id: event.id,
           knowledgeName: event.knowledgeName,
@@ -107,10 +108,12 @@ class KBBloc extends Bloc<KBEvent, KBState> {
     }
   }
 
-  Future<void> _onDeleteKBEvent(DeleteKBEvent event, Emitter<KBState> emit) async {
+  Future<void> _onDeleteKBEvent(
+      DeleteKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: []));
     try {
-      final result = await KBUseCaseFactory.deleteKnowledgeUseCase.execute(event.id, _authService.accessToken!);
+      final result = await KBUseCaseFactory.deleteKnowledgeUseCase
+          .execute(event.id, _authService.accessToken!);
       if (result.isSuccess) {
         event.knowledgeBases.removeWhere((element) => element.id == event.id);
         emit(KBLoaded(event.knowledgeBases));
@@ -121,6 +124,4 @@ class KBBloc extends Bloc<KBEvent, KBState> {
       emit(KBError(e.toString()));
     }
   }
-
-  
 }

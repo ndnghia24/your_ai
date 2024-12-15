@@ -27,11 +27,13 @@ class KnowledgeRemoteDataSource {
     }
   }
 
+  fix: fix process logic of knowledge fetch api data
+
   // Lấy danh sách Knowledge
   Future<DataSourcesResultTemplate> getKnowledgeList(String token) async {
     try {
       final response = await service.getKnowledgeList(token);
-      final data = (response.data as List)
+      final data = (response.data['data'] as List)
           .map((item) => item as Map<String, dynamic>)
           .toList();
       return DataSourcesResultTemplate(
@@ -155,9 +157,13 @@ class KnowledgeRemoteDataSource {
     }
   }
 
-    // Upload Slack Content Unit
+  // Upload Slack Content Unit
   Future<DataSourcesResultTemplate> uploadSlackContentUnit(
-      String id, String unitName, String slackWorkspace, String slackBotToken, String token) async {
+      String id,
+      String unitName,
+      String slackWorkspace,
+      String slackBotToken,
+      String token) async {
     try {
       final response = await unitService.uploadSlackContentUnit(
         id: id,
@@ -182,7 +188,12 @@ class KnowledgeRemoteDataSource {
 
   // Upload Confluence Content Unit
   Future<DataSourcesResultTemplate> uploadConfluenceContentUnit(
-      String id, String unitName, String wikiPageUrl, String confluenceUsername, String confluenceAccessToken, String token) async {
+      String id,
+      String unitName,
+      String wikiPageUrl,
+      String confluenceUsername,
+      String confluenceAccessToken,
+      String token) async {
     try {
       final response = await unitService.uploadConfluenceContentUnit(
         id: id,

@@ -69,9 +69,9 @@ class KnowledgeRepository {
     handleResponse(res, (data) => null);
   }
 
-    // Upload Slack Content Unit
-  Future<void> uploadSlackContentUnit(
-      String id, String unitName, String slackWorkspace, String slackBotToken, String token) async {
+  // Upload Slack Content Unit
+  Future<void> uploadSlackContentUnit(String id, String unitName,
+      String slackWorkspace, String slackBotToken, String token) async {
     final res = await remoteDataSource.uploadSlackContentUnit(
         id, unitName, slackWorkspace, slackBotToken, token);
     handleResponse(res, (data) => null);
@@ -79,9 +79,14 @@ class KnowledgeRepository {
 
   // Upload Confluence Content Unit
   Future<void> uploadConfluenceContentUnit(
-      String id, String unitName, String wikiPageUrl, String confluenceUsername, String confluenceAccessToken, String token) async {
-    final res = await remoteDataSource.uploadConfluenceContentUnit(
-        id, unitName, wikiPageUrl, confluenceUsername, confluenceAccessToken, token);
+      String id,
+      String unitName,
+      String wikiPageUrl,
+      String confluenceUsername,
+      String confluenceAccessToken,
+      String token) async {
+    final res = await remoteDataSource.uploadConfluenceContentUnit(id, unitName,
+        wikiPageUrl, confluenceUsername, confluenceAccessToken, token);
     handleResponse(res, (data) => null);
   }
 }
