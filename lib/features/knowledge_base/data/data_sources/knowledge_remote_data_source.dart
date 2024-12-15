@@ -27,8 +27,6 @@ class KnowledgeRemoteDataSource {
     }
   }
 
-  fix: fix process logic of knowledge fetch api data
-
   // Lấy danh sách Knowledge
   Future<DataSourcesResultTemplate> getKnowledgeList(String token) async {
     try {

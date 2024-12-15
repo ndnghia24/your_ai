@@ -11,6 +11,7 @@ import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart'
 import 'package:your_ai/features/auth/presentation/ui/widget_authentication.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart';
+import 'package:your_ai/features/email_response/presentation/ui/email_srceen.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/knowledgebase_screen.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/chatbot_screen.dart';
 
@@ -124,9 +125,22 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
         _buildNewChatTile(),
         _buildAllChatTile(),
         _buildChatBotsTile(),
+        _buildEmailResponseTile(),
         _buildKnowledgeBaseTile(),
       ],
     );
+  }
+
+  Widget _buildEmailResponseTile() {
+    return _buildDrawerTile(
+        icon: 'assets/images/op_emailresponse.png',
+        title: 'EMAIL RESPONSE',
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmailResponseScreen()),
+          );
+        });
   }
 
   Widget _buildNewChatTile() {

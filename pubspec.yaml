@@ -38,6 +38,7 @@ dependencies:
   dynamic_color: any
   fresh_dio: any
   injectable: any
+  url_launcher: any
 
   equatable: any
   bloc_provider: any

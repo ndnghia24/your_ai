@@ -29,7 +29,7 @@ class EmailResponseService {
   Future<Response> getEmailReplyIdeas(Map<String, dynamic> body) async {
     try {
       return await _dio.post(
-        '$baseUrl/api/v1/ai-email/reply-ideas',
+        '$baseUrl/ai-email/reply-ideas',
         data: body,
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
@@ -41,12 +41,17 @@ class EmailResponseService {
   /// Gửi request để tạo phản hồi dựa trên ý tưởng chính
   Future<Response> getReplyByIdea(Map<String, dynamic> body) async {
     try {
-      return await _dio.post(
-        '$baseUrl/api/v1/ai-email',
+      print('Body: $body');
+      final res = await _dio.post(
+        '$baseUrl/ai-email',
         data: body,
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
+
+      print('Response: $res');
+      return res;
     } catch (e) {
+      print('Error: $e');
       rethrow;
     }
   }

@@ -23,6 +23,12 @@ import 'package:your_ai/features/chat_prompt/data/data_sources/chat_prompt_remot
 import 'package:your_ai/features/chat_prompt/data/data_sources/services/chat_prompt_service.dart';
 import 'package:your_ai/features/chat_prompt/data/repositories/chat_prompt_repository.dart';
 import 'package:your_ai/features/chat_prompt/domain/prompt_usecase_factory.dart';
+import 'package:your_ai/features/email_response/data/data_sources/email_response_datasource.dart';
+import 'package:your_ai/features/email_response/data/data_sources/services/email_response_service.dart';
+import 'package:your_ai/features/email_response/data/repositories/email_response_repositoriy.dart';
+import 'package:your_ai/features/email_response/domain/email_usecase_factory.dart';
+
+///
 import 'package:your_ai/features/knowledge_base/data/data_sources/knowledge_remote_data_source.dart';
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_service.dart';
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_unit_service.dart';
@@ -62,6 +68,16 @@ void setupServiceLocator() {
       () => ConversationBloc(locator<ChatAIUseCaseFactory>()));
   locator.registerLazySingleton<ModelBloc>(
       () => ModelBloc()..add(UpdateModel(GenerativeAiModel.gpt4oMini)));
+
+  /// Email Response feature dependencies
+  locator.registerLazySingleton<EmailResponseService>(
+      () => EmailResponseService());
+  locator.registerLazySingleton<EmailResponseRemoteDataSource>(
+      () => EmailResponseRemoteDataSource(locator<EmailResponseService>()));
+  locator.registerLazySingleton<EmailResponseRepository>(
+      () => EmailResponseRepository(locator<EmailResponseRemoteDataSource>()));
+  locator.registerLazySingleton<EmailResponseUseCaseFactory>(
+      () => EmailResponseUseCaseFactory(locator<EmailResponseRepository>()));
 
   /// Chat Prompt feature dependencies
   locator.registerLazySingleton<ChatPromptService>(() => ChatPromptService());

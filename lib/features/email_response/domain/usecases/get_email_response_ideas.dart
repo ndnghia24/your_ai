@@ -18,9 +18,11 @@ class GetEmailReplyIdeasUseCase {
         metadata: metadata,
       );
 
+      final List<String> ideas = res['ideas'].cast<String>();
+
       return UsecaseResultTemplate(
         isSuccess: true,
-        result: res['ideas'],
+        result: ideas,
         message: 'Email reply ideas fetched successfully',
       );
     } catch (e) {
