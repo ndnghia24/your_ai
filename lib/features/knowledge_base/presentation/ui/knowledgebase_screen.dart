@@ -22,6 +22,8 @@ class KnowledgeBaseScreen extends StatelessWidget {
     );
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<KBBloc, KBState>(
@@ -31,22 +33,22 @@ class KnowledgeBaseScreen extends StatelessWidget {
           getIt<KBBloc>().add(GetAllKBEvent());
           
         }
-        // if(KBState is KBError) {
-        //   return Scaffold(
-        //     appBar: AppBar(
-        //       title: Text('Knowledge'),
-        //       leading: IconButton(
-        //         icon: const Icon(Icons.arrow_back, color: Colors.black),
-        //         onPressed: () {
-        //           Navigator.pop(context);
-        //         },
-        //       ),
-        //     ),
-        //     body: Center(
-        //       child: Text(KBState.message),
-        //     ),
-        //   );
-        //}
+        if(KBState is KBError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Knowledge'),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: Center(
+              child: Text(KBState.message),
+            ),
+          );
+        }
         return Scaffold(
           appBar: AppBar(
             title: Text('Knowledge'),
@@ -93,6 +95,15 @@ class KnowledgeBaseScreen extends StatelessWidget {
                     itemCount: KBState.knowledgeBases.length,
                     itemBuilder: (context, index) {
                       return KnowledgeBaseItem(
+                        onTapItem: (knowledgeBase) {
+                          // Handle click on item
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => KnowledgeDetailScreen(knowledgeBase: knowledgeBase),
+                            ),
+                          );
+                        },
                         knowledgeBase: KBState.knowledgeBases[index],
                         onDelete: (knowledgeBase) {
                           // Handle delete action

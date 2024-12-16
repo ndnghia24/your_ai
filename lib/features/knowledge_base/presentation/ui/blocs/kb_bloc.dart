@@ -112,14 +112,10 @@ class KBBloc extends Bloc<KBEvent, KBState> {
       DeleteKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: []));
     try {
-      final result = await KBUseCaseFactory.deleteKnowledgeUseCase
+      KBUseCaseFactory.deleteKnowledgeUseCase
           .execute(event.id, _authService.accessToken!);
-      if (result.isSuccess) {
-        event.knowledgeBases.removeWhere((element) => element.id == event.id);
-        emit(KBLoaded(event.knowledgeBases));
-      } else {
-        emit(KBError(result.message));
-      }
+      event.knowledgeBases.removeWhere((element) => element.id == event.id);
+      emit(KBLoaded(event.knowledgeBases));
     } catch (e) {
       emit(KBError(e.toString()));
     }

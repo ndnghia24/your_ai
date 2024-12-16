@@ -3,7 +3,8 @@ import 'package:your_ai/features/knowledge_base/presentation/ui/upload_file_scre
 import 'package:your_ai/features/knowledge_base/presentation/ui/upload_website_screen.dart';
 
 class AddUnitPopup extends StatelessWidget {
-  const AddUnitPopup({super.key});
+  final String knowledgeBaseId;
+  const AddUnitPopup({super.key, required this.knowledgeBaseId});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class AddUnitPopup extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UploadFileScreen()),
+                  MaterialPageRoute(builder: (context) => UploadFileScreen(knowledgeId: knowledgeBaseId,)),
                 );
               },
               child: ListTile(
@@ -85,17 +86,18 @@ class AddUnitPopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey.shade400,
+                    foregroundColor: Colors.white,
+                  ),
                   child: Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                ElevatedButton(
-                  child: Text('Next'),
-                  onPressed: () {
-                    // Handle Next action
-                  },
-                ),
+                SizedBox(width: 8),
+                
+                
               ],
             ),
           ],

@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart';
 
 class KnowledgeUnitItem extends StatelessWidget {
-  final String fileName;
-  final String source;
-  final String size;
-  final String createTime;
-  final String latestUpdate;
-  final bool isEnabled;
+  final UnitModel unit;
 
   const KnowledgeUnitItem({super.key, 
-    required this.fileName,
-    required this.source,
-    required this.size,
-    required this.createTime,
-    required this.latestUpdate,
-    required this.isEnabled,
+    required this.unit,
   });
 
   @override
@@ -31,18 +22,18 @@ class KnowledgeUnitItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(fileName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(source),
-                  Text(size),
-                  Text('Create Time: $createTime'),
-                  Text('Latest Update: $latestUpdate'),
+                  Text(unit.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  // Text(source),
+                  // Text(size),
+                  // Text('Create Time: $createTime'),
+                  // Text('Latest Update: $latestUpdate'),
                 ],
               ),
             ),
             Column(
               children: [
                 Switch(
-                  value: isEnabled,
+                  value: unit.status,
                   onChanged: (value) {
                     // Handle toggle action
                   },
