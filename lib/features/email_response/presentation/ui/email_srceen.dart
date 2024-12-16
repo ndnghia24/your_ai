@@ -119,6 +119,18 @@ class _EmailResponseScreenState extends State<EmailResponseScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          // preprocess input
+          if (noteText.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Please enter email'),
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+            return;
+          }
+
           showDialog(
             context: context,
             barrierDismissible: false,
