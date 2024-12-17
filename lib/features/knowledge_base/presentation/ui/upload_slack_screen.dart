@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_auth_service.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 
-class UploadWebsiteScreen extends StatefulWidget {
+class UploadSlackScreen extends StatefulWidget {
   final String knowledgeId;
-  const UploadWebsiteScreen({super.key, required this.knowledgeId});
+  const UploadSlackScreen({super.key, required this.knowledgeId});
 
   @override
-  _UploadWebsiteScreenState createState() => _UploadWebsiteScreenState();
+  _UploadSlackScreenState createState() => _UploadSlackScreenState();
 }
 
-class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
+class _UploadSlackScreenState extends State<UploadSlackScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _webUrlController = TextEditingController();
+  final TextEditingController _workspaceController = TextEditingController();
+  final TextEditingController _botTokenController = TextEditingController();
   final KnowledgeAuthService _authService = KnowledgeAuthService();
   final KnowledgeUseCaseFactory _useCaseFactory = locator<KnowledgeUseCaseFactory>();
   bool _isLoading = false;
@@ -43,26 +43,13 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
     }
   }
 
-  bool _isValidUrl(String url) {
-    final Uri? uri = Uri.tryParse(url);
-    return uri != null && uri.host.isNotEmpty;
-  }
-
   void _connect() async {
     final name = _nameController.text;
-    String webUrl = _webUrlController.text;
+    final workspace = _workspaceController.text;
+    final botToken = _botTokenController.text;
 
-    if (name.isEmpty || webUrl.isEmpty) {
-      Fluttertoast.showToast(msg: 'Name and Web URL cannot be empty');
-      return;
-    }
-
-    if (!webUrl.startsWith('http://') && !webUrl.startsWith('https://')) {
-      webUrl = 'http://$webUrl';
-    }
-    
-    if (!_isValidUrl(webUrl)) {
-      Fluttertoast.showToast(msg: 'Invalid Web URL format');
+    if (name.isEmpty || workspace.isEmpty || botToken.isEmpty) {
+      Fluttertoast.showToast(msg: 'All fields are required');
       return;
     }
 
@@ -77,16 +64,17 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
       final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         widget.knowledgeId,
         _authService.accessToken!,
-        UploadType.websiteContent,
+        UploadType.slackContent,
         unitName: name,
-        webUrl: webUrl,
+        slackWorkspace: workspace,
+        slackBotToken: botToken,
       );
 
       if (result.isSuccess) {
         Fluttertoast.showToast(msg: 'Upload successful');
         Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(msg: 'Cannot upload website content, your website may not be accessible or there is a network error'); 
+        Fluttertoast.showToast(msg: 'Cannot upload Slack content, please check your inputs or network connection');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error during upload: $e');
@@ -101,7 +89,7 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Website'),
+        title: const Text('Slack'),
         centerTitle: true,
       ),
       body: Stack(
@@ -113,7 +101,7 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Upload Website Content:',
+                  'Upload Slack Content:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 const SizedBox(height: 20),
@@ -128,9 +116,19 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
-                  controller: _webUrlController,
+                  controller: _workspaceController,
                   decoration: InputDecoration(
-                    labelText: 'Web URL',
+                    labelText: 'Slack Workspace',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _botTokenController,
+                  decoration: InputDecoration(
+                    labelText: 'Slack Bot Token',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

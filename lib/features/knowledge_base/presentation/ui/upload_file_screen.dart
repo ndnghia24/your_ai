@@ -25,7 +25,6 @@ class _UploadFileScreenState extends State<UploadFileScreen> {
   PlatformFile? _selectedFile;
   final KnowledgeAuthService _authService = KnowledgeAuthService();
   final KnowledgeUseCaseFactory _useCaseFactory = locator<KnowledgeUseCaseFactory>();
-  final defautKnowledgeId = '65003728-1738-42a5-b98e-a91113f45694';
   bool _isLoading = false;
 
   @override
@@ -91,7 +90,7 @@ class _UploadFileScreenState extends State<UploadFileScreen> {
         Fluttertoast.showToast(msg: 'Upload successful');
         
         // Load lại danh sách unit
-        getIt<UnitBloc>().add(GetAllUnitEvent(defautKnowledgeId));
+        getIt<UnitBloc>().add(GetAllUnitEvent(widget.knowledgeId));
         Navigator.pop(context);
       } else {
         Fluttertoast.showToast(msg: 'Upload failed: ${result.message}');

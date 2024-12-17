@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/upload_file_screen.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/upload_website_screen.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/upload_slack_screen.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/upload_confluence_screen.dart';
 
 class AddUnitPopup extends StatelessWidget {
   final String knowledgeBaseId;
@@ -25,18 +27,18 @@ class AddUnitPopup extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            GestureDetector(
+            ListTile(
+              leading: Icon(Icons.insert_drive_file),
+              title: Text('Local files'),
+              subtitle: Text('Upload pdf, docx,...'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UploadFileScreen(knowledgeId: knowledgeBaseId,)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          UploadFileScreen(knowledgeId: knowledgeBaseId)),
                 );
               },
-              child: ListTile(
-                leading: Icon(Icons.insert_drive_file),
-                title: Text('Local files'),
-                subtitle: Text('Upload pdf, docx,...'),
-              ),
             ),
             ListTile(
               leading: Icon(Icons.web),
@@ -45,38 +47,42 @@ class AddUnitPopup extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UploadWebsiteScreen()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          UploadWebsiteScreen(knowledgeId: knowledgeBaseId)),
                 );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.code),
-              title: Text('Github repositories'),
-              subtitle: Text('Connect Github repositories to get data'),
-              onTap: () {
-                // Handle action here
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.code),
-              title: Text('Gitlab repositories'),
-              subtitle: Text('Connect Gitlab repositories to get data'),
-              onTap: () {
-                // Handle action here
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.cloud),
-              title: Text('Google drive'),
-              subtitle: Text('Connect Google drive to get data'),
-              onTap: () {
-                // Handle action here
               },
             ),
             ListTile(
               leading: Icon(Icons.chat),
               title: Text('Slack'),
               subtitle: Text('Connect Slack to get data'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          UploadSlackScreen(knowledgeId: knowledgeBaseId)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text('Confluence'),
+              subtitle: Text('Connect Confluence to get data'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          UploadConfluenceScreen(knowledgeId: knowledgeBaseId)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.cloud),
+              title: Text('Google drive'),
+              subtitle: Text('Connect Google drive to get data'),
               onTap: () {
                 // Handle action here
               },
@@ -96,8 +102,6 @@ class AddUnitPopup extends StatelessWidget {
                   },
                 ),
                 SizedBox(width: 8),
-                
-                
               ],
             ),
           ],
