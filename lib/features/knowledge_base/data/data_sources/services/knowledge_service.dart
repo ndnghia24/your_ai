@@ -82,4 +82,17 @@ class KnowledgeService {
     );
     return response;
   }
+
+  Future<Response> deleteUnit(String knowledgeID, String id, String token) async {
+    final response = await dio.delete(
+      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$knowledgeID/units/$id',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    return response;
+  }
 }

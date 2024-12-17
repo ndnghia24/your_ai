@@ -17,6 +17,7 @@ class UnitBloc extends Bloc<UnitEvent, UnitState> {
   UnitBloc(this.KBUseCaseFactory) : super(UnitInitial()) {
     on<GetAllUnitEvent>(_onGetAllUnitEvent);
     on<UploadUnitEvent>(_onUploadUnitEvent);
+    on<DeleteUnitEvent>(_onDeleteUnitEvent);
 
   }
 
@@ -41,15 +42,14 @@ class UnitBloc extends Bloc<UnitEvent, UnitState> {
     emit(UnitLoading(units: []));
     try {
       await _signIn();
-      print("_authService.accessToken: ${_authService.accessToken}");
+
       final result = await KBUseCaseFactory.getKnowledgeUnitsUseCase
           .execute(event.id, _authService.accessToken!);
       if (result.isSuccess) {
         emit(UnitLoaded(result.result));
-        print("KBLoaded");
+
       } else {
         emit(UnitError(result.message));
-        print("KBError");
       }
     } catch (e) {
       emit(UnitError(e.toString()));
@@ -62,6 +62,32 @@ class UnitBloc extends Bloc<UnitEvent, UnitState> {
     
     
   }
+
+  Future<void> _onDeleteUnitEvent(
+      DeleteUnitEvent event, Emitter<UnitState> emit) async {
+    emit(UnitLoading(units: []));
+    try {
+
+        KBUseCaseFactory.deleteKnowledgeUnitUseCase
+          .execute(event.knowledgeId, event.id, _authService.accessToken!);
+      //print("units length: ${event.units.length}");
+        print("event id: ${event.id}");
+
+        for (var i = 0; i < event.units.length; i++) {
+          print("unit id: ${event.units[i].id}");
+        }
+
+        event.units.removeWhere((element) => element.id == event.id);
+        emit(UnitLoaded(event.units));
+
+ 
+      
+    } catch (e) {
+      emit(UnitError(e.toString()));
+    }
+  }
+
+
 
   
 }

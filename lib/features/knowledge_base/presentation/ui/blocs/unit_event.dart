@@ -24,5 +24,15 @@ class UploadUnitEvent extends UnitEvent {
 
 }
 
+class DeleteUnitEvent extends UnitEvent {
+  final String knowledgeId;
+  final String id;
+  final List<UnitModel> units;
+  DeleteUnitEvent(this.knowledgeId, this.id, this.units);
+
+  @override
+  List<Object?> get props => [id, knowledgeId, units];
+}
+
 
 

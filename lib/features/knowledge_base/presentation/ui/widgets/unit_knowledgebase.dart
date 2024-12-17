@@ -3,9 +3,12 @@ import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart'
 
 class KnowledgeUnitItem extends StatelessWidget {
   final UnitModel unit;
+  final void Function(UnitModel unit) onDelete;
 
-  const KnowledgeUnitItem({super.key, 
+  const KnowledgeUnitItem({
+    super.key,
     required this.unit,
+    required this.onDelete,
   });
 
   @override
@@ -22,7 +25,9 @@ class KnowledgeUnitItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(unit.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(unit.name,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   // Text(source),
                   // Text(size),
                   // Text('Create Time: $createTime'),
@@ -30,21 +35,12 @@ class KnowledgeUnitItem extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
-              children: [
-                Switch(
-                  value: unit.status,
-                  onChanged: (value) {
-                    // Handle toggle action
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    // Handle delete action
-                  },
-                ),
-              ],
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                // Handle delete action
+                onDelete(unit);
+              },
             ),
           ],
         ),

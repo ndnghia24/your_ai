@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
+import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_state.dart';
@@ -49,12 +50,21 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
     
   }
 
+  void _onDeleteUnit(UnitModel unit) {
+    // Handle delete unit
+    final state = getIt<UnitBloc>().state;
+    if (state is UnitLoaded) {
+      getIt<UnitBloc>().add(DeleteUnitEvent( unit.knowledgeId,unit.id, state.units));
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
     knowledgeName = widget.knowledgeBase.knowledgeName;
     knowledgeDescription = widget.knowledgeBase.description;
-    
+    getIt<UnitBloc>().add(GetAllUnitEvent(widget.knowledgeBase.id));
     
   }
 
@@ -133,7 +143,7 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                 child: ListView.builder(
                   itemCount: state.units.length,
                   itemBuilder: (context, index) {
-                    return KnowledgeUnitItem(unit: state.units[index]);
+                    return KnowledgeUnitItem(unit: state.units[index], onDelete: _onDeleteUnit);
                   },
                   
                   

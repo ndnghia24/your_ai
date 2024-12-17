@@ -3,6 +3,7 @@
 import 'package:your_ai/features/knowledge_base/data/repositories/knowledge_repository.dart';
 import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/create_knowledge_usecase.dart';
 import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/delete_knowledge_usecase.dart';
+import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/delete_unit_usecase.dart';
 import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/get_knowledge_list_usecase.dart';
 import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/get_knowledge_units_usecase.dart';
 import 'package:your_ai/features/knowledge_base/domain/usecases/knowledge/update_knowledge_usecase.dart';
@@ -27,6 +28,9 @@ class KnowledgeUseCaseFactory {
 
   DeleteKnowledgeUseCase get deleteKnowledgeUseCase =>
       DeleteKnowledgeUseCase(repository);
+
+  DeleteKnowledgeUnitUseCase get deleteKnowledgeUnitUseCase =>
+      DeleteKnowledgeUnitUseCase(repository);
 
   UploadKnowledgeDataSourceUseCase get uploadKnowledgeDataSourceUseCase =>
       UploadKnowledgeDataSourceUseCase(repository);

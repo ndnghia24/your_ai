@@ -53,7 +53,7 @@ class KnowledgeRemoteDataSource {
       String id, String token) async {
     try {
       final response = await service.getKnowledgeUnits(id, token);
-      final data = (response.data as List)
+      final data = (response.data["data"] as List)
           .map((item) => item as Map<String, dynamic>)
           .toList();
       return DataSourcesResultTemplate(
@@ -70,6 +70,8 @@ class KnowledgeRemoteDataSource {
     }
   }
 
+  
+
   // Cập nhật Knowledge
   Future<DataSourcesResultTemplate> updateKnowledge(
       String id, Map<String, dynamic> knowledgeData, String token) async {
@@ -79,6 +81,25 @@ class KnowledgeRemoteDataSource {
         isSuccess: true,
         data: response.data,
         message: 'Update knowledge successfully',
+      );
+    } catch (e) {
+      return DataSourcesResultTemplate(
+        isSuccess: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<DataSourcesResultTemplate> deleteKnowledgeUnit(String knowledgeId,
+      String id, String token) async {
+    try {
+      await service.deleteUnit(knowledgeId,id, token);
+
+      return DataSourcesResultTemplate(
+        isSuccess: true,
+        data: null,
+        message: 'Delete unit successfully',
       );
     } catch (e) {
       return DataSourcesResultTemplate(

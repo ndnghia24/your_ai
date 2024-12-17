@@ -40,6 +40,11 @@ class KnowledgeRepository {
     });
   }
 
+  Future<void> deleteUnit(String knowledgeId, String id, String token) async {
+    final res = await remoteDataSource.deleteKnowledgeUnit(knowledgeId,id, token);
+    handleResponse(res, (data) => null);
+  }
+
   // Cập nhật Knowledge
   Future<KnowledgeBase> updateKnowledge(
       String id, Map<String, dynamic> knowledgeData, String token) async {
