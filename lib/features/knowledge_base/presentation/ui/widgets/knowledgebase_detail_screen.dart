@@ -105,10 +105,7 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                         ),
                         ],
                       ),
-                      Text(
-                        '2 Units - 658.00 Bytes',
-                        style: TextStyle(color: Colors.red),
-                      ),
+                     
                       ],
                     ),
                   ],
