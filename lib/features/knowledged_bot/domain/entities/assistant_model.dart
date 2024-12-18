@@ -6,7 +6,6 @@ class Assistant {
   final String description;
   final bool isFavorite;
   final bool isPublished;
-  final AssistantRepository _repository;
 
   Assistant({
     required this.id,
@@ -14,23 +13,18 @@ class Assistant {
     required this.description,
     required this.isFavorite,
     required this.isPublished,
-    required AssistantRepository repository,
-  }) : _repository = repository;
+  });
 
-  // Chuyển đổi từ Map (JSON) sang đối tượng Assistant
-  factory Assistant.fromMap(
-      Map<String, dynamic> map, AssistantRepository repository) {
+  factory Assistant.fromMap(Map<String, dynamic> map) {
     return Assistant(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       isFavorite: map['is_favorite'] ?? false,
       isPublished: map['is_published'] ?? false,
-      repository: repository,
     );
   }
 
-  // Chuyển đổi từ đối tượng Assistant sang Map (JSON)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -41,35 +35,17 @@ class Assistant {
     };
   }
 
-  // Xem knowledge đã được gắn với assistant
-  Future<void> getAttachedKnowledges() async {
-    try {
-      final result = await _repository.getAttachedKnowledges(assistantId: id);
-      print('Attached knowledges: $result');
-    } catch (e) {
-      throw Exception('Failed to get attached knowledges: $e');
-    }
+  static Assistant initial() {
+    return Assistant(
+      id: '',
+      name: '',
+      description: '',
+      isFavorite: false,
+      isPublished: false,
+    );
   }
 
-  // Thêm knowledge
-  Future<void> addKnowledge(String knowledgeId) async {
-    try {
-      await _repository.attachKnowledge(
-          assistantId: id, knowledgeId: knowledgeId);
-      print('Knowledge $knowledgeId attached to assistant $id');
-    } catch (e) {
-      throw Exception('Failed to add knowledge: $e');
-    }
-  }
-
-  // Gỡ knowledge
-  Future<void> removeKnowledge(String knowledgeId) async {
-    try {
-      await _repository.detachKnowledge(
-          assistantId: id, knowledgeId: knowledgeId);
-      print('Knowledge $knowledgeId detached from assistant $id');
-    } catch (e) {
-      throw Exception('Failed to remove knowledge: $e');
-    }
+  toMapString() {
+    return 'id: $id, name: $name, description: $description';
   }
 }

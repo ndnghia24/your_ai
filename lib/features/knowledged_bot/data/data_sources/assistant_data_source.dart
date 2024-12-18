@@ -1,5 +1,3 @@
-// Vị trí: lib/features/assistant/data/data_sources/assistant_remote_data_source.dart
-
 import 'package:your_ai/core/templates/data_sources_result_template.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_service.dart';
 
@@ -7,7 +5,6 @@ class AssistantRemoteDataSource {
   final AssistantService _assistantService;
   AssistantRemoteDataSource(this._assistantService);
 
-  // Lấy danh sách Assistants
   Future<DataSourcesResultTemplate> getAssistants({
     bool? isFavorite,
     bool? isPublished,
@@ -48,7 +45,6 @@ class AssistantRemoteDataSource {
     }
   }
 
-  // Tạo Assistant mới
   Future<DataSourcesResultTemplate> createAssistant(
       Map<String, dynamic> assistantData) async {
     try {
@@ -76,7 +72,6 @@ class AssistantRemoteDataSource {
     }
   }
 
-  // Cập nhật Assistant
   Future<DataSourcesResultTemplate> updateAssistant(
       String assistantId, Map<String, dynamic> assistantData) async {
     try {
@@ -105,7 +100,6 @@ class AssistantRemoteDataSource {
     }
   }
 
-  // Xóa Assistant
   Future<DataSourcesResultTemplate> deleteAssistant(String assistantId) async {
     try {
       final response = await _assistantService.deleteAssistant(assistantId);

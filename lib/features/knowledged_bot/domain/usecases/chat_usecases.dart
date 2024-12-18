@@ -1,15 +1,31 @@
-// Vị trí: lib/features/assistant/domain/usecases/chat_usecases.dart
-
 import 'package:your_ai/core/templates/data_sources_result_template.dart';
+import 'package:your_ai/core/templates/usecase_result_template.dart';
 import 'package:your_ai/features/knowledged_bot/data/repositories/assistant_repository.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
 
 class GetThreadsUseCase {
   final AssistantRepository _repository;
 
   GetThreadsUseCase(this._repository);
 
-  Future<DataSourcesResultTemplate> execute(String assistantId) {
-    return _repository.getThreads(assistantId);
+  Future<UsecaseResultTemplate<List<Thread>>> execute(
+      String assistantId) async {
+    /*return _repository.chat.getThreads(assistantId);*/
+    try {
+      final thread = await _repository.chat.getThreads(assistantId);
+
+      return UsecaseResultTemplate<List<Thread>>(
+        isSuccess: true,
+        result: thread,
+        message: 'Success',
+      );
+    } catch (e) {
+      return UsecaseResultTemplate<List<Thread>>(
+        isSuccess: false,
+        result: [],
+        message: e.toString(),
+      );
+    }
   }
 }
 
@@ -18,8 +34,24 @@ class GetThreadDetailsUseCase {
 
   GetThreadDetailsUseCase(this._repository);
 
-  Future<DataSourcesResultTemplate> execute(String openAiThreadId) {
-    return _repository.getThreadDetails(openAiThreadId);
+  Future<UsecaseResultTemplate<Thread>> execute(String openAiThreadId) async {
+    /*return _repository.chat.getThreadDetails(openAiThreadId);*/
+
+    try {
+      final thread = await _repository.chat.getThreadDetails(openAiThreadId);
+
+      return UsecaseResultTemplate<Thread>(
+        isSuccess: true,
+        result: thread,
+        message: 'Success',
+      );
+    } catch (e) {
+      return UsecaseResultTemplate<Thread>(
+        isSuccess: false,
+        result: Thread.initial(),
+        message: e.toString(),
+      );
+    }
   }
 }
 
@@ -28,14 +60,35 @@ class ContinueChatUseCase {
 
   ContinueChatUseCase(this._repository);
 
-  Future<DataSourcesResultTemplate> execute(
+  Future<UsecaseResultTemplate<String>> execute(
       String assistantId, String message, String openAiThreadId,
-      {String additionalInstruction = ''}) {
-    return _repository.continueChat(
+      {String additionalInstruction = ''}) async {
+    /*return _repository.chat.continueChat(
       assistantId,
       message,
       openAiThreadId,
       additionalInstruction: additionalInstruction,
-    );
+    );*/
+
+    try {
+      final result = await _repository.chat.continueChat(
+        assistantId,
+        message,
+        openAiThreadId,
+        additionalInstruction: additionalInstruction,
+      );
+
+      return UsecaseResultTemplate<String>(
+        isSuccess: true,
+        result: result,
+        message: 'Success',
+      );
+    } catch (e) {
+      return UsecaseResultTemplate<String>(
+        isSuccess: false,
+        result: '',
+        message: e.toString(),
+      );
+    }
   }
 }

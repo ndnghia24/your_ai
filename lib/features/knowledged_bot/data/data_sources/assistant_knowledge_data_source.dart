@@ -1,5 +1,3 @@
-// Vị trí: lib/features/assistant/data/data_sources/assistant_knowledge_remote_data_source.dart
-
 import 'package:your_ai/core/templates/data_sources_result_template.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_knowledge_service.dart';
 
@@ -7,7 +5,6 @@ class AssistantKnowledgeRemoteDataSource {
   final AssistantKnowledgeService _assistantKnowledgeService;
   AssistantKnowledgeRemoteDataSource(this._assistantKnowledgeService);
 
-  // Lấy danh sách Knowledge gắn với Assistant
   Future<DataSourcesResultTemplate> getAttachedKnowledges(
       String assistantId) async {
     try {
@@ -36,7 +33,6 @@ class AssistantKnowledgeRemoteDataSource {
     }
   }
 
-  // Gắn Knowledge cho Assistant
   Future<DataSourcesResultTemplate> attachKnowledge(
       String assistantId, String knowledgeId) async {
     try {
@@ -65,7 +61,6 @@ class AssistantKnowledgeRemoteDataSource {
     }
   }
 
-  // Tách Knowledge khỏi Assistant
   Future<DataSourcesResultTemplate> detachKnowledge(
       String assistantId, String knowledgeId) async {
     try {

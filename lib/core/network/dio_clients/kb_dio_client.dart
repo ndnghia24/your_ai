@@ -8,6 +8,8 @@ import 'package:your_ai/core/storage/spref/spref.dart';
 
 final String baseUrl = dotenv.env['API_URL_KB'] ?? 'http://localhost:3000';
 
+final JarvisDioClient jarvisDioClient = locator<JarvisDioClient>();
+
 class KBDioClient {
   final Dio _dio = Dio(
     BaseOptions(
@@ -67,7 +69,7 @@ class KBDioClient {
       final responseExternalLogin = await _dio.post(
         '$baseUrl/auth/external-sign-in',
         data: {
-          'token': locator<JarvisDioClient>().getJarvisAccessToken(),
+          'token': jarvisDioClient.getJarvisAccessToken(),
         },
       );
 
