@@ -8,11 +8,13 @@ class GetThreadsUseCase {
 
   GetThreadsUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<List<Thread>>> execute(
-      String assistantId) async {
-    /*return _repository.chat.getThreads(assistantId);*/
+  Future<UsecaseResultTemplate<List<Thread>>> execute({
+    required String assistantId,
+  }) async {
     try {
       final thread = await _repository.chat.getThreads(assistantId);
+
+      print('USECASE: $thread');
 
       return UsecaseResultTemplate<List<Thread>>(
         isSuccess: true,
@@ -34,15 +36,47 @@ class GetThreadDetailsUseCase {
 
   GetThreadDetailsUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<Thread>> execute(String openAiThreadId) async {
-    /*return _repository.chat.getThreadDetails(openAiThreadId);*/
-
+  Future<UsecaseResultTemplate<Thread>> execute({
+    required Thread currentThread,
+    required String openAiThreadId,
+  }) async {
     try {
-      final thread = await _repository.chat.getThreadDetails(openAiThreadId);
+      final thread = await _repository.chat.getThreadDetails(
+        currentThread,
+        openAiThreadId,
+      );
 
       return UsecaseResultTemplate<Thread>(
         isSuccess: true,
         result: thread,
+        message: 'Success',
+      );
+    } catch (e) {
+      return UsecaseResultTemplate<Thread>(
+        isSuccess: false,
+        result: Thread.initial(),
+        message: e.toString(),
+      );
+    }
+  }
+}
+
+class CreateThreadUseCase {
+  final AssistantRepository _repository;
+
+  CreateThreadUseCase(this._repository);
+
+  Future<UsecaseResultTemplate<Thread>> execute({
+    required String assistantId,
+    required String threadName,
+  }) async {
+    try {
+      final result =
+          await _repository.chat.createThread(assistantId, threadName);
+
+      return UsecaseResultTemplate<Thread>(
+        isSuccess: true,
+        result: result,
         message: 'Success',
       );
     } catch (e) {
@@ -60,9 +94,12 @@ class ContinueChatUseCase {
 
   ContinueChatUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<String>> execute(
-      String assistantId, String message, String openAiThreadId,
-      {String additionalInstruction = ''}) async {
+  Future<UsecaseResultTemplate<String>> execute({
+    required String assistantId,
+    required String message,
+    required String openAiThreadId,
+    String? additionalInstruction,
+  }) async {
     /*return _repository.chat.continueChat(
       assistantId,
       message,
@@ -75,7 +112,7 @@ class ContinueChatUseCase {
         assistantId,
         message,
         openAiThreadId,
-        additionalInstruction: additionalInstruction,
+        additionalInstruction: additionalInstruction ?? '',
       );
 
       return UsecaseResultTemplate<String>(

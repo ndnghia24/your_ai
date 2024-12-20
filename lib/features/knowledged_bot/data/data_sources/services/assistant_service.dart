@@ -1,37 +1,40 @@
 import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
-import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
 
 class AssistantService {
-  final String token;
-  final Dio dio = locator<JarvisDioClient>().dio;
+  final Dio dio = locator<KBDioClient>().dio;
 
-  AssistantService(this.token);
+  AssistantService();
 
   Future<Response> getAssistants({
     bool? isFavorite,
     bool? isPublished,
     String? order,
     String? orderField,
-    int offset = 0,
-    int limit = 10,
+    int? offset,
+    int? limit,
   }) async {
     try {
+      final queryParameters = {
+        if (isFavorite != null) 'is_favorite': isFavorite,
+        if (isPublished != null) 'is_published': isPublished,
+        if (order != null) 'order': order,
+        if (orderField != null) 'order_field': orderField,
+        if (offset != null) 'offset': offset,
+        if (limit != null) 'limit': limit,
+      };
+
       final response = await dio.get(
         '/ai-assistant',
         queryParameters: {
-          'is_favorite': isFavorite,
-          'is_published': isPublished,
-          'order': order,
-          'order_field': orderField,
-          'offset': offset,
-          'limit': limit,
+          for (var key in queryParameters.keys)
+            if (queryParameters[key] != null) key: queryParameters[key]
         },
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
-      return response; // Trả về Response từ Dio
+
+      print('SER: ${response.data}');
+      return response;
     } catch (e) {
       throw Exception('Failed to load assistants: $e');
     }
@@ -44,7 +47,6 @@ class AssistantService {
         data: assistantData,
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
         ),
@@ -63,7 +65,6 @@ class AssistantService {
         data: assistantData,
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
         ),
@@ -78,9 +79,6 @@ class AssistantService {
     try {
       final response = await dio.delete(
         '/ai-assistant/$assistantId',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
       return response;
     } catch (e) {

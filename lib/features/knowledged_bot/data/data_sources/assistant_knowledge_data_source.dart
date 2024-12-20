@@ -39,6 +39,8 @@ class AssistantKnowledgeRemoteDataSource {
       final response = await _assistantKnowledgeService.attachKnowledge(
           assistantId, knowledgeId);
 
+      print('DTS: $response');
+
       if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,

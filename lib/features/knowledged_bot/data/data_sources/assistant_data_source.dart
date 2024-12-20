@@ -23,6 +23,8 @@ class AssistantRemoteDataSource {
         limit: limit,
       );
 
+      print('DTS: ${response.data}');
+
       if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,
@@ -32,7 +34,7 @@ class AssistantRemoteDataSource {
       } else {
         return DataSourcesResultTemplate(
           isSuccess: false,
-          data: response.data,
+          data: {},
           message: 'Error occurred during fetching assistants',
         );
       }
@@ -50,7 +52,7 @@ class AssistantRemoteDataSource {
     try {
       final response = await _assistantService.createAssistant(assistantData);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return DataSourcesResultTemplate(
           isSuccess: true,
           data: response.data,
@@ -59,7 +61,7 @@ class AssistantRemoteDataSource {
       } else {
         return DataSourcesResultTemplate(
           isSuccess: false,
-          data: response.data,
+          data: {},
           message: 'Error occurred during creating assistant',
         );
       }

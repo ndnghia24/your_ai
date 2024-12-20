@@ -3,10 +3,10 @@ import 'package:your_ai/features/knowledged_bot/domain/usecases/assistant_usecas
 import 'package:your_ai/features/knowledged_bot/domain/usecases/chat_usecases.dart';
 import 'package:your_ai/features/knowledged_bot/domain/usecases/knowledge_usecase.dart';
 
-class UseCaseFactory {
+class AssistantUseCaseFactory {
   final AssistantRepository _repository;
 
-  UseCaseFactory(this._repository);
+  AssistantUseCaseFactory(this._repository);
 
   // Assistant Use Cases
   GetAssistantsUseCase getAssistantsUseCase() {
@@ -25,19 +25,6 @@ class UseCaseFactory {
     return DeleteAssistantUseCase(_repository);
   }
 
-  // Chat Use Cases
-  GetThreadsUseCase getThreadsUseCase() {
-    return GetThreadsUseCase(_repository);
-  }
-
-  GetThreadDetailsUseCase getThreadDetailsUseCase() {
-    return GetThreadDetailsUseCase(_repository);
-  }
-
-  ContinueChatUseCase continueChatUseCase() {
-    return ContinueChatUseCase(_repository);
-  }
-
   // Knowledge Use Cases
   GetAttachedKnowledgesUseCase getAttachedKnowledgesUseCase() {
     return GetAttachedKnowledgesUseCase(_repository);
@@ -49,5 +36,22 @@ class UseCaseFactory {
 
   DetachKnowledgeUseCase detachKnowledgeUseCase() {
     return DetachKnowledgeUseCase(_repository);
+  }
+
+  // Chat Use Cases
+  GetThreadsUseCase getThreadsUseCase() {
+    return GetThreadsUseCase(_repository);
+  }
+
+  GetThreadDetailsUseCase getThreadDetailsUseCase() {
+    return GetThreadDetailsUseCase(_repository);
+  }
+
+  CreateThreadUseCase createThreadUseCase() {
+    return CreateThreadUseCase(_repository);
+  }
+
+  ContinueChatUseCase continueChatUseCase() {
+    return ContinueChatUseCase(_repository);
   }
 }

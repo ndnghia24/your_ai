@@ -9,6 +9,8 @@ class AssistantChatRemoteDataSource {
     try {
       final response = await _assistantChatService.getThreads(assistantId);
 
+      print('DATA SOURCE: $response');
+
       if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,
@@ -48,6 +50,36 @@ class AssistantChatRemoteDataSource {
           isSuccess: false,
           data: response.data,
           message: 'Error occurred during fetching thread details',
+        );
+      }
+    } catch (e) {
+      return DataSourcesResultTemplate(
+        isSuccess: false,
+        data: e.toString(),
+        message: 'Error occurred: ${e.toString()}',
+      );
+    }
+  }
+
+  Future<DataSourcesResultTemplate> createThread(
+      String assistantId, String firstMessage) async {
+    try {
+      final response = await _assistantChatService.createThread(
+        assistantId,
+        firstMessage,
+      );
+
+      if (response.statusCode == 201) {
+        return DataSourcesResultTemplate(
+          isSuccess: true,
+          data: response.data,
+          message: 'Thread created successfully',
+        );
+      } else {
+        return DataSourcesResultTemplate(
+          isSuccess: false,
+          data: response.data,
+          message: 'Error occurred during creating thread',
         );
       }
     } catch (e) {

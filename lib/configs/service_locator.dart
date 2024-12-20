@@ -37,6 +37,17 @@ import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
 
+///
+import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_chat_data_source.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_data_source.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_knowledge_data_source.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_chat_service.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_knowledge_service.dart';
+import 'package:your_ai/features/knowledged_bot/data/repositories/assistant_repository.dart';
+import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+
+import '../features/knowledged_bot/data/data_sources/services/assistant_service.dart';
+
 final locator = GetIt.instance;
 
 void setupServiceLocator() {
@@ -107,4 +118,28 @@ void setupServiceLocator() {
       () => KBBloc(locator<KnowledgeUseCaseFactory>()));
   locator.registerLazySingleton<UnitBloc>(
       () => UnitBloc(locator<KnowledgeUseCaseFactory>()));
+
+  /// Assistant feature dependencies
+  // service
+  locator.registerLazySingleton<AssistantService>(() => AssistantService());
+  locator.registerLazySingleton<AssistantChatService>(
+      () => AssistantChatService());
+  locator.registerLazySingleton<AssistantKnowledgeService>(
+      () => AssistantKnowledgeService());
+  // Datasource
+  locator.registerLazySingleton<AssistantRemoteDataSource>(
+      () => AssistantRemoteDataSource(locator<AssistantService>()));
+  locator.registerLazySingleton<AssistantChatRemoteDataSource>(
+      () => AssistantChatRemoteDataSource(locator<AssistantChatService>()));
+  locator.registerLazySingleton<AssistantKnowledgeRemoteDataSource>(() =>
+      AssistantKnowledgeRemoteDataSource(locator<AssistantKnowledgeService>()));
+  // Repository
+  locator.registerLazySingleton<AssistantRepository>(() => AssistantRepository(
+        locator<AssistantRemoteDataSource>(),
+        locator<AssistantKnowledgeRemoteDataSource>(),
+        locator<AssistantChatRemoteDataSource>(),
+      ));
+  // UseCaseFactory
+  locator.registerLazySingleton<AssistantUseCaseFactory>(
+      () => AssistantUseCaseFactory(locator<AssistantRepository>()));
 }

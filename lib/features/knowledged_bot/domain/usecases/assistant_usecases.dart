@@ -35,6 +35,8 @@ class GetAssistantsUseCase {
         limit: limit,
       );
 
+      print('USECASE: ${assistants.length}');
+
       return UsecaseResultTemplate<List<Assistant>>(
         isSuccess: true,
         result: assistants,
@@ -55,23 +57,32 @@ class CreateAssistantUseCase {
 
   CreateAssistantUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<void>> execute(
-      Map<String, dynamic> assistantData) async {
+  Future<UsecaseResultTemplate<Assistant>> execute({
+    required String assistantName,
+    required String description,
+  }) async {
     /*return _repository.assistants.createAssistant(assistantData);*/
 
     try {
-      final result =
+      final assistantData = {
+        'assistantName': assistantName,
+        'description': description,
+      };
+
+      final newAssistant =
           await _repository.assistants.createAssistant(assistantData);
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<Assistant>(
         isSuccess: true,
-        result: null,
+        result: newAssistant,
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      print("ERROR: $e");
+
+      return UsecaseResultTemplate<Assistant>(
         isSuccess: false,
-        result: null,
+        result: Assistant.initial(),
         message: e.toString(),
       );
     }
@@ -83,25 +94,33 @@ class UpdateAssistantUseCase {
 
   UpdateAssistantUseCase(this._repository);
 
-  Future<UsecaseResultTemplate> execute(
-      String assistantId, Map<String, dynamic> assistantData) async {
+  Future<UsecaseResultTemplate<Assistant>> execute({
+    required String assistantId,
+    required String assistantName,
+    required String description,
+  }) async {
     /*return _repository.assistants.updateAssistant(assistantId, assistantData);*/
 
     try {
+      final assistantData = {
+        'assistantName': assistantName,
+        'description': description,
+      };
+
       final result = await _repository.assistants.updateAssistant(
         assistantId,
         assistantData,
       );
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<Assistant>(
         isSuccess: true,
-        result: null,
+        result: result,
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<Assistant>(
         isSuccess: false,
-        result: null,
+        result: Assistant.initial(),
         message: e.toString(),
       );
     }
@@ -113,21 +132,23 @@ class DeleteAssistantUseCase {
 
   DeleteAssistantUseCase(this._repository);
 
-  Future<UsecaseResultTemplate> execute(String assistantId) async {
+  Future<UsecaseResultTemplate<bool>> execute({
+    required String assistantId,
+  }) async {
     /*return _repository.assistants.deleteAssistant(assistantId);*/
 
     try {
       final result = await _repository.assistants.deleteAssistant(assistantId);
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<bool>(
         isSuccess: true,
-        result: null,
+        result: result,
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<bool>(
         isSuccess: false,
-        result: null,
+        result: false,
         message: e.toString(),
       );
     }

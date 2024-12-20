@@ -1,22 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:your_ai/configs/service_locator.dart';
-import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
 
 class AssistantKnowledgeService {
-  final String token;
-  final Dio dio = locator<JarvisDioClient>().dio;
+  final Dio dio = locator<KBDioClient>().dio;
 
-  AssistantKnowledgeService(this.token);
+  AssistantKnowledgeService();
 
   Future<Response> getAttachedKnowledges(String assistantId) async {
     try {
       final response = await dio.get(
         '/ai-assistant/$assistantId/knowledges',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
-      return response; // Trả về Response từ Dio
+      return response;
     } catch (e) {
       throw Exception('Failed to get attached knowledges: $e');
     }
@@ -27,10 +23,8 @@ class AssistantKnowledgeService {
     try {
       final response = await dio.post(
         '/ai-assistant/$assistantId/knowledges/$knowledgeId',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
+      print('SER: $response');
       return response;
     } catch (e) {
       throw Exception('Failed to attach knowledge: $e');
@@ -42,9 +36,6 @@ class AssistantKnowledgeService {
     try {
       final response = await dio.delete(
         '/ai-assistant/$assistantId/knowledges/$knowledgeId',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
       return response;
     } catch (e) {

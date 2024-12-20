@@ -3,19 +3,16 @@ import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
 
 class AssistantChatService {
-  final String token;
   final Dio dio = locator<KBDioClient>().dio;
 
-  AssistantChatService(this.token);
+  AssistantChatService();
 
   Future<Response> getThreads(String assistantId) async {
     try {
       final response = await dio.get(
         '/ai-assistant/$assistantId/threads',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
+      print('SERVICE: $response');
       return response;
     } catch (e) {
       throw Exception('Failed to load thread details: $e');
@@ -26,9 +23,6 @@ class AssistantChatService {
     try {
       final response = await dio.get(
         '/ai-assistant/thread/$openAiThreadId/messages',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
       );
       return response;
     } catch (e) {
@@ -46,7 +40,6 @@ class AssistantChatService {
         },
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
         ),
@@ -70,7 +63,6 @@ class AssistantChatService {
         },
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
         ),

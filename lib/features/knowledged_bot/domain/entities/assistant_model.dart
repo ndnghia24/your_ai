@@ -4,21 +4,21 @@ class Assistant {
   final String id;
   final String name;
   final String description;
-  final bool isFavorite;
-  final bool isPublished;
+  late bool isFavorite;
+  late bool isPublished;
 
   Assistant({
     required this.id,
     required this.name,
     required this.description,
-    required this.isFavorite,
-    required this.isPublished,
+    this.isFavorite = false,
+    this.isPublished = false,
   });
 
   factory Assistant.fromMap(Map<String, dynamic> map) {
     return Assistant(
       id: map['id'] ?? '',
-      name: map['name'] ?? '',
+      name: map['assistantName'] ?? '',
       description: map['description'] ?? '',
       isFavorite: map['is_favorite'] ?? false,
       isPublished: map['is_published'] ?? false,

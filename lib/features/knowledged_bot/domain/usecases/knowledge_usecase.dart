@@ -37,7 +37,7 @@ class AttachKnowledgeUseCase {
 
   AttachKnowledgeUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<void>> execute({
+  Future<UsecaseResultTemplate<bool>> execute({
     required String assistantId,
     required String knowledgeId,
   }) async {
@@ -46,20 +46,22 @@ class AttachKnowledgeUseCase {
       knowledgeId: knowledgeId,
     );*/
     try {
-      final result = _repository.knowledge.attachKnowledge(
+      final res = await _repository.knowledge.attachKnowledge(
         assistantId: assistantId,
         knowledgeId: knowledgeId,
       );
 
-      return UsecaseResultTemplate<void>(
+      print('USE: $res');
+
+      return UsecaseResultTemplate<bool>(
         isSuccess: true,
-        result: null,
+        result: res == "true",
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<bool>(
         isSuccess: false,
-        result: null,
+        result: false,
         message: e.toString(),
       );
     }
@@ -81,20 +83,20 @@ class DetachKnowledgeUseCase {
     );*/
 
     try {
-      final result = _repository.knowledge.detachKnowledge(
+      final res = await _repository.knowledge.detachKnowledge(
         assistantId: assistantId,
         knowledgeId: knowledgeId,
       );
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<bool>(
         isSuccess: true,
-        result: null,
+        result: res == "true",
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<bool>(
         isSuccess: false,
-        result: null,
+        result: false,
         message: e.toString(),
       );
     }

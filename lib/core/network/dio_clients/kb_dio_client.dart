@@ -11,6 +11,17 @@ final String baseUrl = dotenv.env['API_URL_KB'] ?? 'http://localhost:3000';
 final JarvisDioClient jarvisDioClient = locator<JarvisDioClient>();
 
 class KBDioClient {
+  final Dio _externalDio = Dio(
+    BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 6000),
+      receiveTimeout: const Duration(seconds: 6000),
+      responseType: ResponseType.json,
+      contentType: 'application/json',
+      validateStatus: (status) => status != 401,
+    ),
+  );
+
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: baseUrl,
@@ -66,12 +77,20 @@ class KBDioClient {
     String? refreshToken = await SPref.instance.getKBRefreshToken();
 
     if (refreshToken == null || refreshToken.isEmpty) {
-      final responseExternalLogin = await _dio.post(
+      print('refreshToken is null or empty');
+
+      final jarvisAccessToken = await jarvisDioClient.getJarvisAccessToken();
+
+      print('jarvisAccessToken: $jarvisAccessToken');
+
+      final responseExternalLogin = await _externalDio.post(
         '$baseUrl/auth/external-sign-in',
         data: {
-          'token': jarvisDioClient.getJarvisAccessToken(),
+          'token': jarvisAccessToken,
         },
       );
+
+      print('responseExternalLogin: ${responseExternalLogin.data}');
 
       if (responseExternalLogin.statusCode == 200) {
         final newKBAccessToken =
@@ -82,6 +101,9 @@ class KBDioClient {
         // Save access token to shared preferences
         await SPref.instance.setKBAccessToken(newKBAccessToken);
         await SPref.instance.setKBRefreshToken(newKBRefreshToken);
+
+        print('newKBAccessToken: $newKBAccessToken');
+        print('newKBRefreshToken: $newKBRefreshToken');
 
         return newKBAccessToken;
       } else {

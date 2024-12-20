@@ -13,8 +13,8 @@ class AssistantRepository {
   final AssistantChatRemoteDataSource _assistantChatRemoteDataSource;
 
   late final AssistantsRepository assistants;
-  late final KnowledgeRepository knowledge;
-  late final BotChatRepository chat;
+  late final AssistantKnowledgeRepository knowledge;
+  late final AssistantBotChatRepository chat;
 
   AssistantRepository(
     this._assistantRemoteDataSource,
@@ -22,8 +22,9 @@ class AssistantRepository {
     this._assistantChatRemoteDataSource,
   ) {
     assistants = AssistantsRepository(_assistantRemoteDataSource);
-    knowledge = KnowledgeRepository(_assistantKnowledgeRemoteDataSource);
-    chat = BotChatRepository(_assistantChatRemoteDataSource);
+    knowledge =
+        AssistantKnowledgeRepository(_assistantKnowledgeRemoteDataSource);
+    chat = AssistantBotChatRepository(_assistantChatRemoteDataSource);
   }
 }
 
@@ -78,20 +79,20 @@ class AssistantsRepository {
     final res = await _dataSource.createAssistant(assistantData);
 
     if (res.isSuccess) {
-      return res.data;
+      return Assistant.fromMap(res.data);
     } else {
       throw Exception(res.message);
     }
   }
 
-  Future<bool> updateAssistant(
+  Future<Assistant> updateAssistant(
       String assistantId, Map<String, dynamic> assistantData) async {
     /*return await _dataSource.updateAssistant(assistantId, assistantData);*/
 
     final res = await _dataSource.updateAssistant(assistantId, assistantData);
 
     if (res.isSuccess) {
-      return true;
+      return Assistant.fromMap(res.data);
     } else {
       throw Exception(res.message);
     }
@@ -111,10 +112,10 @@ class AssistantsRepository {
 }
 
 // Sub-repository for knowledge
-class KnowledgeRepository {
+class AssistantKnowledgeRepository {
   final AssistantKnowledgeRemoteDataSource _dataSource;
 
-  KnowledgeRepository(this._dataSource);
+  AssistantKnowledgeRepository(this._dataSource);
 
   Future<List<Knowledge>> getAttachedKnowledges({
     required String assistantId,
@@ -134,7 +135,7 @@ class KnowledgeRepository {
     }
   }
 
-  Future<void> attachKnowledge({
+  Future<String> attachKnowledge({
     required String assistantId,
     required String knowledgeId,
   }) async {
@@ -143,26 +144,29 @@ class KnowledgeRepository {
     if (!res.isSuccess) {
       throw Exception(res.message);
     }
-    return;
+    return res.data;
   }
 
-  Future<DataSourcesResultTemplate> detachKnowledge({
+  Future<String> detachKnowledge({
     required String assistantId,
     required String knowledgeId,
   }) async {
-    return await _dataSource.detachKnowledge(assistantId, knowledgeId);
+    final res = await _dataSource.detachKnowledge(assistantId, knowledgeId);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+    return res.data;
   }
 }
 
 // Sub-repository for chat
-class BotChatRepository {
+class AssistantBotChatRepository {
   final AssistantChatRemoteDataSource _dataSource;
 
-  BotChatRepository(this._dataSource);
+  AssistantBotChatRepository(this._dataSource);
 
   Future<List<Thread>> getThreads(String assistantId) async {
-    /*return await _dataSource.getThreads(assistantId);*/
-
     final res = await _dataSource.getThreads(assistantId);
 
     if (res.isSuccess) {
@@ -177,17 +181,31 @@ class BotChatRepository {
     }
   }
 
-  Future<Thread> getThreadDetails(String assistantId) async {
+  Future<Thread> getThreadDetails(
+      Thread currentThread, String openAiThreadId) async {
     /*return await _dataSource.getThreadDetails(assistantId);*/
 
-    final res = await _dataSource.getThreadDetails(assistantId);
+    final res = await _dataSource.getThreadDetails(openAiThreadId);
 
     if (res.isSuccess) {
-      final threadData = res.data['data'];
+      final threadData = res.data as List;
 
-      final Thread thread = Thread.fromMap(threadData);
+      final Thread thread = Thread.fromDetailMap(
+          currentThread, threadData.cast<Map<String, dynamic>>());
 
       return thread;
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<Thread> createThread(String assistantId, String threadName) async {
+    /*return await _dataSource.createThread(assistantId, threadName);*/
+
+    final res = await _dataSource.createThread(assistantId, threadName);
+
+    if (res.isSuccess) {
+      return Thread.fromMap(res.data);
     } else {
       throw Exception(res.message);
     }
