@@ -1,12 +1,17 @@
 // Vị trí: lib/features/knowledge/data/services/knowledge_unit_service.dart
 
+import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:your_ai/configs/service_locator.dart';
-import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
 class KnowledgeUnitService {
   //final Dio dio = locator<DioClient>().dio;
-  final Dio dio = Dio();
+  final Dio dio = Dio(BaseOptions(
+    connectTimeout: Duration(minutes: 10),
+    sendTimeout: Duration(minutes: 10),
+    receiveTimeout: Duration(minutes: 10),
+  ));
 
   /// Upload a local file as a Knowledge Unit
   ///
@@ -18,27 +23,41 @@ class KnowledgeUnitService {
     required String filePath,
     required String token,
   }) async {
-    final formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(filePath),
-    });
+    try {
+      final file = File(filePath);
+      if (!file.existsSync()) {
+        throw Exception("File does not exist: $filePath");
+      }
 
-    print(formData.files.first.value.filename);
-    print(
-        'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file');
-    print('Bearer $token');
+      final mimeType = lookupMimeType(filePath);
+      if (mimeType == null) {
+        throw Exception("Cannot determine mime type of file: $filePath");
+      }
 
-    final response = await dio.post(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file',
-      data: formData,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'multipart/form-data',
-        },
-      ),
-    );
-    print("response " + response.data);
-    return response;
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          filePath,
+          filename: file.uri.pathSegments.last,
+          contentType: MediaType.parse(mimeType),
+        ),
+      });
+
+      final response = await dio.post(
+        'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+
+      print("Response: ${response.data}");
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// Upload website content as a Knowledge Unit
@@ -72,7 +91,7 @@ class KnowledgeUnitService {
     return response;
   }
 
-    /// Upload Slack content as a Knowledge Unit
+  /// Upload Slack content as a Knowledge Unit
   ///
   /// [id] - ID of the Knowledge resource.
   /// [unitName] - Name of the Knowledge Unit.
@@ -106,7 +125,7 @@ class KnowledgeUnitService {
     return response;
   }
 
-    /// Upload Confluence content as a Knowledge Unit
+  /// Upload Confluence content as a Knowledge Unit
   ///
   /// [id] - ID of the Knowledge resource.
   /// [unitName] - Name of the Knowledge Unit.
