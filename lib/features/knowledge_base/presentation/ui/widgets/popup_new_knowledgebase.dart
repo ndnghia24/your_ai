@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_event.dart';
