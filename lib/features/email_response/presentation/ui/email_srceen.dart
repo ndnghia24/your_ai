@@ -222,7 +222,9 @@ class _EmailResponseScreenState extends State<EmailResponseScreen> {
         children: [
           IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           Text(
             'Email AI',
