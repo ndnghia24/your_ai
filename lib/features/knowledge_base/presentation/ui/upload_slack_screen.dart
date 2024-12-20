@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_auth_service.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
-
+import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
+import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
+final getIt = GetIt.instance;
 class UploadSlackScreen extends StatefulWidget {
   final String knowledgeId;
   const UploadSlackScreen({super.key, required this.knowledgeId});
@@ -71,6 +74,7 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
       );
 
       if (result.isSuccess) {
+        getIt<UnitBloc>().add(GetAllUnitEvent(widget.knowledgeId));
         Fluttertoast.showToast(msg: 'Upload successful');
         Navigator.pop(context);
       } else {
