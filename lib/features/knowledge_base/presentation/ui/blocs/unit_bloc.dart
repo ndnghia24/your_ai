@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_auth_service.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
