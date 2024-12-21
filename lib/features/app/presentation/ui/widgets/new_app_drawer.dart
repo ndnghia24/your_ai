@@ -8,6 +8,7 @@ import 'package:your_ai/core/routes/route.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
+import 'package:your_ai/features/app/presentation/ui/screens/banner_ads_widget.dart';
 import 'package:your_ai/features/auth/presentation/ui/widget_authentication.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
 import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart';
@@ -91,7 +92,13 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                         ? _buildAllChatsList()
                         : _buildDefaultContent(),
                   ),
-                  if (!_showAllChats) AuthenticationWidget(),
+                  if (!_showAllChats)
+                    Column(
+                      children: [
+                        BannerAdWidget(),
+                        AuthenticationWidget(),
+                      ],
+                    )
                 ],
               ),
             ),

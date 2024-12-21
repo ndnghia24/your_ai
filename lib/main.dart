@@ -6,12 +6,10 @@ import 'package:get/get.dart';
 import 'package:your_ai/core/theme/app_theme.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
-import 'package:your_ai/testMain.dart';
 
 import 'configs/service_locator.dart';
 import 'core/routes/route.dart';
 import 'features/auth/presentation/blocs/auth_bloc.dart';
-import 'features/auth/presentation/blocs/auth_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -9,6 +9,7 @@ import 'package:your_ai/features/app/presentation/blocs/model_state.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_state.dart';
 import 'package:your_ai/features/app/presentation/ui/widgets/model_selector_widget.dart';
+import 'package:your_ai/features/chat_ai/presentation/ui/widgets/subscription_webview.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -63,7 +64,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
             builder: (context, state) {
               if (state is TokenLoaded) {
                 return TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    // subscription active
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => SubscriptionWebView(
+                        title: 'Subscription',
+                        url: 'https://admin.jarvis.cx/pricing/overview',
+                      ),
+                    ));
+                  },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
                   ),
