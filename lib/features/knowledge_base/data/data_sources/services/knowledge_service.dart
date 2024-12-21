@@ -11,7 +11,7 @@ class KnowledgeService {
   // Tạo Knowledge
   Future<Response> createKnowledge(Map<String, dynamic> knowledgeData) async {
     final response = await dio.post(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge',
+      '/knowledge',
       data: knowledgeData,
       options: Options(
         headers: {
@@ -25,7 +25,7 @@ class KnowledgeService {
   // Lấy danh sách Knowledge
   Future<Response> getKnowledgeList() async {
     final response = await dio.get(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge',
+      '/knowledge',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ class KnowledgeService {
   Future<Response> updateKnowledge(
       String id, Map<String, dynamic> knowledgeData) async {
     final response = await dio.patch(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id',
+      '/knowledge/$id',
       data: knowledgeData,
       options: Options(
         headers: {
@@ -53,7 +53,7 @@ class KnowledgeService {
   // Xóa Knowledge
   Future<Response> deleteKnowledge(String id) async {
     final response = await dio.delete(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id',
+      '/knowledge/$id',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class KnowledgeService {
   // get KnowledgeUnits
   Future<Response> getKnowledgeUnits(String id) async {
     final response = await dio.get(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/units',
+      '/knowledge/$id/units',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ class KnowledgeService {
 
   Future<Response> deleteUnit(String knowledgeID, String id) async {
     final response = await dio.delete(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$knowledgeID/units/$id',
+      '/knowledge/$knowledgeID/units/$id',
       options: Options(
         headers: {
           'Content-Type': 'application/json',

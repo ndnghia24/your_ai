@@ -40,7 +40,7 @@ class KnowledgeUnitService {
       });
 
       final response = await dio.post(
-        'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/local-file',
+        '/knowledge/$id/local-file',
         data: formData,
         options: Options(
           headers: {
@@ -73,7 +73,7 @@ class KnowledgeUnitService {
     };
 
     final response = await dio.post(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/web',
+      '/knowledge/$id/web',
       data: requestData,
       options: Options(
         headers: {
@@ -105,7 +105,7 @@ class KnowledgeUnitService {
     };
 
     final response = await dio.post(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/slack',
+      '/knowledge/$id/slack',
       data: requestData,
       options: Options(
         headers: {
@@ -140,7 +140,7 @@ class KnowledgeUnitService {
     };
 
     final response = await dio.post(
-      'https://knowledge-api.jarvis.cx/kb-core/v1/knowledge/$id/confluence',
+      '/knowledge/$id/confluence',
       data: requestData,
       options: Options(
         headers: {
