@@ -8,18 +8,26 @@ class UploadKnowledgeDataSourceUseCase {
   UploadKnowledgeDataSourceUseCase(this.repository);
 
   // Thực hiện upload Knowledge Unit với các kiểu upload khác nhau
-  Future<UsecaseResultTemplate<void>> execute(
-      String id, String token, UploadType uploadType,
-      {String filePathOrUrl = '', String unitName = '', String webUrl = '', String slackWorkspace = '', String slackBotToken = '', String wikiPageUrl = '', String confluenceUsername = '', String confluenceAccessToken = ''}) async {
+  Future<UsecaseResultTemplate<void>> execute(String id, UploadType uploadType,
+      {String filePathOrUrl = '',
+      String unitName = '',
+      String webUrl = '',
+      String slackWorkspace = '',
+      String slackBotToken = '',
+      String wikiPageUrl = '',
+      String confluenceUsername = '',
+      String confluenceAccessToken = ''}) async {
     try {
       if (uploadType == UploadType.localFile) {
-        await repository.uploadLocalFileUnit(id, filePathOrUrl, token);
+        await repository.uploadLocalFileUnit(id, filePathOrUrl);
       } else if (uploadType == UploadType.websiteContent) {
-        await repository.uploadWebsiteContentUnit(id, unitName, webUrl, token);
+        await repository.uploadWebsiteContentUnit(id, unitName, webUrl);
       } else if (uploadType == UploadType.slackContent) {
-        await repository.uploadSlackContentUnit(id, unitName, slackWorkspace, slackBotToken, token);
+        await repository.uploadSlackContentUnit(
+            id, unitName, slackWorkspace, slackBotToken);
       } else if (uploadType == UploadType.confluenceContent) {
-        await repository.uploadConfluenceContentUnit(id, unitName, wikiPageUrl, confluenceUsername, confluenceAccessToken, token);
+        await repository.uploadConfluenceContentUnit(id, unitName, wikiPageUrl,
+            confluenceUsername, confluenceAccessToken);
       }
 
       return UsecaseResultTemplate<void>(

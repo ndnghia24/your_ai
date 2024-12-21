@@ -8,9 +8,10 @@ class DeleteKnowledgeUnitUseCase {
 
   DeleteKnowledgeUnitUseCase(this.repository);
 
-  Future<UsecaseResultTemplate<void>> execute(String knowledgeId, String id, String token) async {
+  Future<UsecaseResultTemplate<void>> execute(
+      String knowledgeId, String id) async {
     try {
-      await repository.deleteUnit(knowledgeId, id, token);
+      await repository.deleteUnit(knowledgeId, id);
 
       return UsecaseResultTemplate<void>(
         isSuccess: true,

@@ -10,9 +10,9 @@ class KnowledgeRemoteDataSource {
 
   // Tạo Knowledge mới
   Future<DataSourcesResultTemplate> createKnowledge(
-      Map<String, dynamic> knowledgeData, String token) async {
+      Map<String, dynamic> knowledgeData) async {
     try {
-      final response = await service.createKnowledge(knowledgeData, token);
+      final response = await service.createKnowledge(knowledgeData);
       return DataSourcesResultTemplate(
         isSuccess: true,
         data: response.data,
@@ -28,9 +28,9 @@ class KnowledgeRemoteDataSource {
   }
 
   // Lấy danh sách Knowledge
-  Future<DataSourcesResultTemplate> getKnowledgeList(String token) async {
+  Future<DataSourcesResultTemplate> getKnowledgeList() async {
     try {
-      final response = await service.getKnowledgeList(token);
+      final response = await service.getKnowledgeList();
       final data = (response.data['data'] as List)
           .map((item) => item as Map<String, dynamic>)
           .toList();
@@ -49,10 +49,9 @@ class KnowledgeRemoteDataSource {
   }
 
   // Lấy danh sách Knowledge Units
-  Future<DataSourcesResultTemplate> getKnowledgeUnits(
-      String id, String token) async {
+  Future<DataSourcesResultTemplate> getKnowledgeUnits(String id) async {
     try {
-      final response = await service.getKnowledgeUnits(id, token);
+      final response = await service.getKnowledgeUnits(id);
       final data = (response.data["data"] as List)
           .map((item) => item as Map<String, dynamic>)
           .toList();
@@ -70,13 +69,11 @@ class KnowledgeRemoteDataSource {
     }
   }
 
-  
-
   // Cập nhật Knowledge
   Future<DataSourcesResultTemplate> updateKnowledge(
-      String id, Map<String, dynamic> knowledgeData, String token) async {
+      String id, Map<String, dynamic> knowledgeData) async {
     try {
-      final response = await service.updateKnowledge(id, knowledgeData, token);
+      final response = await service.updateKnowledge(id, knowledgeData);
       return DataSourcesResultTemplate(
         isSuccess: true,
         data: response.data,
@@ -91,10 +88,10 @@ class KnowledgeRemoteDataSource {
     }
   }
 
-  Future<DataSourcesResultTemplate> deleteKnowledgeUnit(String knowledgeId,
-      String id, String token) async {
+  Future<DataSourcesResultTemplate> deleteKnowledgeUnit(
+      String knowledgeId, String id) async {
     try {
-      await service.deleteUnit(knowledgeId,id, token);
+      await service.deleteUnit(knowledgeId, id);
 
       return DataSourcesResultTemplate(
         isSuccess: true,
@@ -111,10 +108,9 @@ class KnowledgeRemoteDataSource {
   }
 
   // Xóa Knowledge
-  Future<DataSourcesResultTemplate> deleteKnowledge(
-      String id, String token) async {
+  Future<DataSourcesResultTemplate> deleteKnowledge(String id) async {
     try {
-      await service.deleteKnowledge(id, token);
+      await service.deleteKnowledge(id);
       return DataSourcesResultTemplate(
         isSuccess: true,
         data: null,
@@ -131,12 +127,11 @@ class KnowledgeRemoteDataSource {
 
   // Upload Local File Unit
   Future<DataSourcesResultTemplate> uploadLocalFileUnit(
-      String id, String filePath, String token) async {
+      String id, String filePath) async {
     try {
       final response = await unitService.uploadLocalFileUnit(
         id: id,
         filePath: filePath,
-        token: token,
       );
       return DataSourcesResultTemplate(
         isSuccess: true,
@@ -154,13 +149,12 @@ class KnowledgeRemoteDataSource {
 
   // Upload Website Content Unit
   Future<DataSourcesResultTemplate> uploadWebsiteContentUnit(
-      String id, String unitName, String webUrl, String token) async {
+      String id, String unitName, String webUrl) async {
     try {
       final response = await unitService.uploadWebsiteContentUnit(
         id: id,
         unitName: unitName,
         webUrl: webUrl,
-        token: token,
       );
       return DataSourcesResultTemplate(
         isSuccess: true,
@@ -178,18 +172,17 @@ class KnowledgeRemoteDataSource {
 
   // Upload Slack Content Unit
   Future<DataSourcesResultTemplate> uploadSlackContentUnit(
-      String id,
-      String unitName,
-      String slackWorkspace,
-      String slackBotToken,
-      String token) async {
+    String id,
+    String unitName,
+    String slackWorkspace,
+    String slackBotToken,
+  ) async {
     try {
       final response = await unitService.uploadSlackContentUnit(
         id: id,
         unitName: unitName,
         slackWorkspace: slackWorkspace,
         slackBotToken: slackBotToken,
-        token: token,
       );
       return DataSourcesResultTemplate(
         isSuccess: true,
@@ -211,8 +204,7 @@ class KnowledgeRemoteDataSource {
       String unitName,
       String wikiPageUrl,
       String confluenceUsername,
-      String confluenceAccessToken,
-      String token) async {
+      String confluenceAccessToken) async {
     try {
       final response = await unitService.uploadConfluenceContentUnit(
         id: id,
@@ -220,7 +212,6 @@ class KnowledgeRemoteDataSource {
         wikiPageUrl: wikiPageUrl,
         confluenceUsername: confluenceUsername,
         confluenceAccessToken: confluenceAccessToken,
-        token: token,
       );
       return DataSourcesResultTemplate(
         isSuccess: true,

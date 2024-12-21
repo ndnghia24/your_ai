@@ -4,14 +4,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
+
+import '../../../../../configs/service_locator.dart';
 
 class KnowledgeUnitService {
-  //final Dio dio = locator<DioClient>().dio;
-  final Dio dio = Dio(BaseOptions(
-    connectTimeout: Duration(minutes: 10),
-    sendTimeout: Duration(minutes: 10),
-    receiveTimeout: Duration(minutes: 10),
-  ));
+  final Dio dio = locator<KBDioClient>().dio;
 
   /// Upload a local file as a Knowledge Unit
   ///
@@ -21,7 +19,6 @@ class KnowledgeUnitService {
   Future<Response> uploadLocalFileUnit({
     required String id,
     required String filePath,
-    required String token,
   }) async {
     try {
       final file = File(filePath);
@@ -47,7 +44,6 @@ class KnowledgeUnitService {
         data: formData,
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
             'Content-Type': 'multipart/form-data',
           },
         ),
@@ -70,7 +66,6 @@ class KnowledgeUnitService {
     required String id,
     required String unitName,
     required String webUrl,
-    required String token,
   }) async {
     final requestData = {
       'unitName': unitName,
@@ -82,7 +77,6 @@ class KnowledgeUnitService {
       data: requestData,
       options: Options(
         headers: {
-          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       ),
@@ -103,7 +97,6 @@ class KnowledgeUnitService {
     required String unitName,
     required String slackWorkspace,
     required String slackBotToken,
-    required String token,
   }) async {
     final requestData = {
       'unitName': unitName,
@@ -116,7 +109,6 @@ class KnowledgeUnitService {
       data: requestData,
       options: Options(
         headers: {
-          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       ),
@@ -139,7 +131,6 @@ class KnowledgeUnitService {
     required String wikiPageUrl,
     required String confluenceUsername,
     required String confluenceAccessToken,
-    required String token,
   }) async {
     final requestData = {
       'unitName': unitName,
@@ -153,7 +144,6 @@ class KnowledgeUnitService {
       data: requestData,
       options: Options(
         headers: {
-          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       ),

@@ -7,7 +7,9 @@ import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
+
 final getIt = GetIt.instance;
+
 class UploadSlackScreen extends StatefulWidget {
   final String knowledgeId;
   const UploadSlackScreen({super.key, required this.knowledgeId});
@@ -20,30 +22,13 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _workspaceController = TextEditingController();
   final TextEditingController _botTokenController = TextEditingController();
-  final KnowledgeAuthService _authService = KnowledgeAuthService();
-  final KnowledgeUseCaseFactory _useCaseFactory = locator<KnowledgeUseCaseFactory>();
+  final KnowledgeUseCaseFactory _useCaseFactory =
+      locator<KnowledgeUseCaseFactory>();
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _signIn();
-  }
-
-  Future<void> _signIn() async {
-    try {
-      final response = await _authService.signInWithEmailAndPassword(
-        "anony24@gmail.com",
-        "Anony24",
-      );
-      if (response.statusCode == 200) {
-        print('Sign in successful');
-      } else {
-        print('Sign in failed');
-      }
-    } catch (e) {
-      print('Error during sign in: $e');
-    }
   }
 
   void _connect() async {
@@ -64,9 +49,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
     });
 
     try {
-      final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
+      final result =
+          await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         widget.knowledgeId,
-        _authService.accessToken!,
         UploadType.slackContent,
         unitName: name,
         slackWorkspace: workspace,
@@ -78,7 +63,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
         Fluttertoast.showToast(msg: 'Upload successful');
         Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(msg: 'Cannot upload Slack content, please check your inputs or network connection');
+        Fluttertoast.showToast(
+            msg:
+                'Cannot upload Slack content, please check your inputs or network connection');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error during upload: $e');
@@ -150,7 +137,8 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Connect', style: TextStyle(color: Colors.white)),
+                      child: const Text('Connect',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

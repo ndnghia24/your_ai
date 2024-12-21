@@ -7,7 +7,9 @@ import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
+
 final getIt = GetIt.instance;
+
 class UploadWebsiteScreen extends StatefulWidget {
   final String knowledgeId;
   const UploadWebsiteScreen({super.key, required this.knowledgeId});
@@ -19,30 +21,13 @@ class UploadWebsiteScreen extends StatefulWidget {
 class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _webUrlController = TextEditingController();
-  final KnowledgeAuthService _authService = KnowledgeAuthService();
-  final KnowledgeUseCaseFactory _useCaseFactory = locator<KnowledgeUseCaseFactory>();
+  final KnowledgeUseCaseFactory _useCaseFactory =
+      locator<KnowledgeUseCaseFactory>();
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _signIn();
-  }
-
-  Future<void> _signIn() async {
-    try {
-      final response = await _authService.signInWithEmailAndPassword(
-        "anony24@gmail.com",
-        "Anony24",
-      );
-      if (response.statusCode == 200) {
-        print('Sign in successful');
-      } else {
-        print('Sign in failed');
-      }
-    } catch (e) {
-      print('Error during sign in: $e');
-    }
   }
 
   bool _isValidUrl(String url) {
@@ -62,7 +47,7 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
     if (!webUrl.startsWith('http://') && !webUrl.startsWith('https://')) {
       webUrl = 'http://$webUrl';
     }
-    
+
     if (!_isValidUrl(webUrl)) {
       Fluttertoast.showToast(msg: 'Invalid Web URL format');
       return;
@@ -76,9 +61,9 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
     });
 
     try {
-      final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
+      final result =
+          await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         widget.knowledgeId,
-        _authService.accessToken!,
         UploadType.websiteContent,
         unitName: name,
         webUrl: webUrl,
@@ -89,7 +74,9 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
         Fluttertoast.showToast(msg: 'Upload successful');
         Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(msg: 'Cannot upload website content, your website may not be accessible or there is a network error'); 
+        Fluttertoast.showToast(
+            msg:
+                'Cannot upload website content, your website may not be accessible or there is a network error');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error during upload: $e');
@@ -151,7 +138,8 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Connect', style: TextStyle(color: Colors.white)),
+                      child: const Text('Connect',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

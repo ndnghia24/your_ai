@@ -19,79 +19,77 @@ class KnowledgeRepository {
 
   // Tạo Knowledge mới
   Future<KnowledgeBase> createKnowledge(
-      Map<String, dynamic> knowledgeData, String token) async {
-    final res = await remoteDataSource.createKnowledge(knowledgeData, token);
+      Map<String, dynamic> knowledgeData) async {
+    final res = await remoteDataSource.createKnowledge(knowledgeData);
     return handleResponse(res, (data) => KnowledgeBase.fromMap(data));
   }
 
   // Lấy danh sách Knowledge
-  Future<List<KnowledgeBase>> getKnowledgeList(String token) async {
-    final res = await remoteDataSource.getKnowledgeList(token);
+  Future<List<KnowledgeBase>> getKnowledgeList() async {
+    final res = await remoteDataSource.getKnowledgeList();
     return handleResponse(res, (data) {
       return (data as List).map((item) => KnowledgeBase.fromMap(item)).toList();
     });
   }
 
   // Lấy danh sách Knowledge Units
-  Future<List<UnitModel>> getKnowledgeUnits(String id, String token) async {
-    final res = await remoteDataSource.getKnowledgeUnits(id, token);
+  Future<List<UnitModel>> getKnowledgeUnits(String id) async {
+    final res = await remoteDataSource.getKnowledgeUnits(id);
     return handleResponse(res, (data) {
       return (data as List).map((item) => UnitModel.fromMap(item)).toList();
     });
   }
 
-  Future<void> deleteUnit(String knowledgeId, String id, String token) async {
-    final res = await remoteDataSource.deleteKnowledgeUnit(knowledgeId,id, token);
+  Future<void> deleteUnit(String knowledgeId, String id) async {
+    final res = await remoteDataSource.deleteKnowledgeUnit(knowledgeId, id);
     handleResponse(res, (data) => null);
   }
 
   // Cập nhật Knowledge
   Future<KnowledgeBase> updateKnowledge(
-      String id, Map<String, dynamic> knowledgeData, String token) async {
-    final res =
-        await remoteDataSource.updateKnowledge(id, knowledgeData, token);
+      String id, Map<String, dynamic> knowledgeData) async {
+    final res = await remoteDataSource.updateKnowledge(id, knowledgeData);
     return handleResponse(res, (data) => KnowledgeBase.fromMap(data));
   }
 
   // Xóa Knowledge
-  Future<void> deleteKnowledge(String id, String token) async {
-    final res = await remoteDataSource.deleteKnowledge(id, token);
+  Future<void> deleteKnowledge(String id) async {
+    final res = await remoteDataSource.deleteKnowledge(id);
     handleResponse(res, (data) => null);
   }
 
   // Upload Local File Unit
-  Future<void> uploadLocalFileUnit(
-      String id, String filePath, String token) async {
-    final res = await remoteDataSource.uploadLocalFileUnit(id, filePath, token);
+  Future<void> uploadLocalFileUnit(String id, String filePath) async {
+    final res = await remoteDataSource.uploadLocalFileUnit(id, filePath);
     handleResponse(res, (data) => null);
   }
 
   // Upload Website Content Unit
   Future<void> uploadWebsiteContentUnit(
-      String id, String unitName, String webUrl, String token) async {
-    final res = await remoteDataSource.uploadWebsiteContentUnit(
-        id, unitName, webUrl, token);
+      String id, String unitName, String webUrl) async {
+    final res =
+        await remoteDataSource.uploadWebsiteContentUnit(id, unitName, webUrl);
     handleResponse(res, (data) => null);
   }
 
   // Upload Slack Content Unit
   Future<void> uploadSlackContentUnit(String id, String unitName,
-      String slackWorkspace, String slackBotToken, String token) async {
+      String slackWorkspace, String slackBotToken) async {
     final res = await remoteDataSource.uploadSlackContentUnit(
-        id, unitName, slackWorkspace, slackBotToken, token);
+        id, unitName, slackWorkspace, slackBotToken);
     handleResponse(res, (data) => null);
   }
 
   // Upload Confluence Content Unit
   Future<void> uploadConfluenceContentUnit(
-      String id,
-      String unitName,
-      String wikiPageUrl,
-      String confluenceUsername,
-      String confluenceAccessToken,
-      String token) async {
-    final res = await remoteDataSource.uploadConfluenceContentUnit(id, unitName,
-        wikiPageUrl, confluenceUsername, confluenceAccessToken, token);
+    String id,
+    String unitName,
+    String wikiPageUrl,
+    String confluenceUsername,
+    String confluenceAccessToken,
+  ) async {
+    final res = await remoteDataSource.uploadConfluenceContentUnit(
+        id, unitName, wikiPageUrl, confluenceUsername, confluenceAccessToken);
     handleResponse(res, (data) => null);
   }
 }

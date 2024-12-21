@@ -10,9 +10,9 @@ class UpdateKnowledgeUseCase {
   UpdateKnowledgeUseCase(this.repository);
 
   Future<UsecaseResultTemplate<KnowledgeBase>> execute(
-      String id, Map<String, dynamic> knowledgeData, String token) async {
+      String id, Map<String, dynamic> knowledgeData) async {
     try {
-      final res = await repository.updateKnowledge(id, knowledgeData, token);
+      final res = await repository.updateKnowledge(id, knowledgeData);
 
       return UsecaseResultTemplate<KnowledgeBase>(
         isSuccess: true,

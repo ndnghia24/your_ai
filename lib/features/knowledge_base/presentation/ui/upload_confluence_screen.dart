@@ -7,7 +7,9 @@ import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
+
 final getIt = GetIt.instance;
+
 class UploadConfluenceScreen extends StatefulWidget {
   final String knowledgeId;
   const UploadConfluenceScreen({super.key, required this.knowledgeId});
@@ -21,30 +23,13 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
   final TextEditingController _wikiPageUrlController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _accessTokenController = TextEditingController();
-  final KnowledgeAuthService _authService = KnowledgeAuthService();
-  final KnowledgeUseCaseFactory _useCaseFactory = locator<KnowledgeUseCaseFactory>();
+  final KnowledgeUseCaseFactory _useCaseFactory =
+      locator<KnowledgeUseCaseFactory>();
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _signIn();
-  }
-
-  Future<void> _signIn() async {
-    try {
-      final response = await _authService.signInWithEmailAndPassword(
-        "anony24@gmail.com",
-        "Anony24",
-      );
-      if (response.statusCode == 200) {
-        print('Sign in successful');
-      } else {
-        print('Sign in failed');
-      }
-    } catch (e) {
-      print('Error during sign in: $e');
-    }
   }
 
   void _connect() async {
@@ -53,7 +38,10 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
     final username = _usernameController.text;
     final accessToken = _accessTokenController.text;
 
-    if (name.isEmpty || wikiPageUrl.isEmpty || username.isEmpty || accessToken.isEmpty) {
+    if (name.isEmpty ||
+        wikiPageUrl.isEmpty ||
+        username.isEmpty ||
+        accessToken.isEmpty) {
       Fluttertoast.showToast(msg: 'All fields are required');
       return;
     }
@@ -66,9 +54,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
     });
 
     try {
-      final result = await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
+      final result =
+          await _useCaseFactory.uploadKnowledgeDataSourceUseCase.execute(
         widget.knowledgeId,
-        _authService.accessToken!,
         UploadType.confluenceContent,
         unitName: name,
         wikiPageUrl: wikiPageUrl,
@@ -81,7 +69,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
         Fluttertoast.showToast(msg: 'Upload successful');
         Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(msg: 'Cannot upload Confluence content, please check your inputs or network connection');
+        Fluttertoast.showToast(
+            msg:
+                'Cannot upload Confluence content, please check your inputs or network connection');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error during upload: $e');
@@ -163,7 +153,8 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Connect', style: TextStyle(color: Colors.white)),
+                      child: const Text('Connect',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

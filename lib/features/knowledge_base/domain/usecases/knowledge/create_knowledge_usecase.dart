@@ -10,9 +10,9 @@ class CreateKnowledgeUseCase {
   CreateKnowledgeUseCase(this.repository);
 
   Future<UsecaseResultTemplate<KnowledgeBase>> execute(
-      Map<String, dynamic> knowledgeData, String token) async {
+      Map<String, dynamic> knowledgeData) async {
     try {
-      final res = await repository.createKnowledge(knowledgeData, token);
+      final res = await repository.createKnowledge(knowledgeData);
 
       return UsecaseResultTemplate<KnowledgeBase>(
         isSuccess: true,

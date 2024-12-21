@@ -10,10 +10,9 @@ class GetKnowledgeUnitsUseCase {
 
   GetKnowledgeUnitsUseCase(this.repository);
 
-  Future<UsecaseResultTemplate<List<UnitModel>>> execute(
-      String id, String token) async {
+  Future<UsecaseResultTemplate<List<UnitModel>>> execute(String id) async {
     try {
-      final res = await repository.getKnowledgeUnits(id, token);
+      final res = await repository.getKnowledgeUnits(id);
 
       return UsecaseResultTemplate<List<UnitModel>>(
         isSuccess: true,
