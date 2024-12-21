@@ -76,10 +76,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
                   ),
-                  icon: Icon(CupertinoIcons.flame,
-                      color: screenColorScheme.secondary),
+                  icon: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Colors.red, Colors.yellow],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    child: Icon(
+                      CupertinoIcons.flame,
+                      color: Colors
+                          .white, // This color will be masked by the gradient
+                    ),
+                  ),
                   label: Text(
-                    '${state.remainingQuery}',
+                    '${state.remainingQuery == -1 ? '∞' : state.remainingQuery}',
                     style: TextStyle(
                       color: screenColorScheme.onSecondary,
                       fontSize: 12,
@@ -92,8 +104,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
                   ),
-                  icon: Icon(CupertinoIcons.flame,
-                      color: screenColorScheme.secondary),
+                  icon: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Colors.red, Colors.yellow],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    child: Icon(
+                      CupertinoIcons.flame,
+                      color: Colors
+                          .white, // This color will be masked by the gradient
+                    ),
+                  ),
                   label: Text(
                     'N/A',
                     style: TextStyle(

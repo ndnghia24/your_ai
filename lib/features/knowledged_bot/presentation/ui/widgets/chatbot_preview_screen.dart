@@ -1,8 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/popup_add_knowledgebase.dart';
 
-class ChatBotPreviewScreen extends StatelessWidget {
+class ChatBotPreviewScreen extends StatefulWidget {
   const ChatBotPreviewScreen({super.key});
+
+  @override
+  _ChatBotPreviewScreenState createState() => _ChatBotPreviewScreenState();
+}
+
+class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  final AssistantUseCaseFactory _assistantUseCaseFactory = GetIt.I<AssistantUseCaseFactory>();
+  final String _assistantId = 'hardcoded-assistant-id'; // Hard code assistantId
+  Thread? _currentThread;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final result = await _assistantUseCaseFactory.getThreadsUseCase().execute(assistantId: _assistantId);
+    if (result.isSuccess && result.result.isNotEmpty) {
+      setState(() {
+        _currentThread = result.result.first;
+      });
+    }
+  }
+
+  Future<void> _sendMessage() async {
+    if (_messageController.text.isEmpty || _currentThread == null) return;
+
+    final result = await _assistantUseCaseFactory.continueChatUseCase().execute(
+      assistantId: _assistantId,
+      message: _messageController.text,
+      openAiThreadId: _currentThread!.openAiThreadId,
+    );
+
+    if (result.isSuccess) {
+      final threadDetails = await _assistantUseCaseFactory.getThreadDetailsUseCase().execute(
+        currentThread: _currentThread!,
+        openAiThreadId: _currentThread!.openAiThreadId,
+      );
+
+      if (threadDetails.isSuccess) {
+        setState(() {
+          _currentThread = threadDetails.result;
+          _messageController.clear();
+        });
+      }
+    }
+  }
 
   void showKnowledgeBaseDialog(BuildContext context) {
     showDialog(
@@ -107,59 +160,43 @@ class ChatBotPreviewScreen extends StatelessWidget {
                         color: Colors.grey[100], // Nền trắng nhạt hơn
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: ListView(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'You',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                      child: _currentThread == null
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              itemCount: _currentThread!.messages.length,
+                              itemBuilder: (context, index) {
+                                final message = _currentThread!.messages[index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        message.role == 'user' ? 'You' : 'Assistant',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Container(
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: message.role == 'user'
+                                              ? Colors.grey[300]
+                                              : Colors.blue[100],
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          message.content.first.text?.value ?? '',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(height: 4),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .grey[300], // Màu nền tin nhắn xám nhạt
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    'What the file 21120303.txt contain?',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                SizedBox(height: 12),
-                                Text(
-                                  'Assistant',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[
-                                        100], // Màu nền tin nhắn từ Assistant
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    'The file 21120303.txt contains a link to a video that demonstrates the completion of 24 levels of Flexbox Froggy.',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ],
@@ -174,6 +211,7 @@ class ChatBotPreviewScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _messageController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[300], // Nền ô nhập liệu
@@ -188,9 +226,7 @@ class ChatBotPreviewScreen extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 IconButton(
-                  onPressed: () {
-                    // Send message action
-                  },
+                  onPressed: _sendMessage,
                   icon: Icon(Icons.send, color: Colors.blue),
                 ),
               ],

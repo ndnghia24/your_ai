@@ -57,7 +57,7 @@ class AuthenticationWidget extends StatelessWidget {
                     BlocBuilder<TokenBloc, TokenState>(
                       builder: (context, state) {
                         if (state is TokenLoaded) {
-                          return Text(
+                          return Text( state.remainingQuery == -1 ? '∞' :
                               '${state.remainingQuery}/${state.totalQuery}');
                         } else if (state is TokenLoading) {
                           return CircularProgressIndicator();

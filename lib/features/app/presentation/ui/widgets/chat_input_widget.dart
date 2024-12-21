@@ -102,7 +102,7 @@ class ChatInputWidget extends StatelessWidget {
         ],
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           PopupMenuButton<int>(
             icon: Image.asset(
