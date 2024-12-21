@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,8 @@ import 'package:your_ai/features/chat_ai/domain/entities/conversation_list.dart'
 import 'package:your_ai/features/email_response/presentation/ui/email_srceen.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/knowledgebase_screen.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/chatbot_screen.dart';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 final getIt = GetIt.instance;
 
@@ -95,7 +99,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                   if (!_showAllChats)
                     Column(
                       children: [
-                        BannerAdWidget(),
+                        if (!kIsWeb) BannerAdWidget(),
                         AuthenticationWidget(),
                       ],
                     )
