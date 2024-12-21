@@ -11,6 +11,9 @@ import 'package:your_ai/features/app/presentation/blocs/token_state.dart';
 import 'package:your_ai/features/app/presentation/ui/widgets/model_selector_widget.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/subscription_webview.dart';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:js' as js;
+
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
 
@@ -66,12 +69,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 return TextButton.icon(
                   onPressed: () {
                     // subscription active
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => SubscriptionWebView(
-                        title: 'Subscription',
-                        url: 'https://admin.jarvis.cx/pricing/overview',
-                      ),
-                    ));
+                    if (!kIsWeb) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => SubscriptionWebView(
+                          title: 'Subscription',
+                          url: 'https://admin.jarvis.cx/pricing/overview',
+                        ),
+                      ));
+                    } else {
+                      // open website in new tab with new flutter
+                      js.context.callMethod('open', [
+                        'https://admin.jarvis.cx/pricing/overview',
+                        '_blank'
+                      ]);
+                    }
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
