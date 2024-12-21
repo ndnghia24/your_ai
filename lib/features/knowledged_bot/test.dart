@@ -40,6 +40,7 @@ class _TestAssistantScreenState extends State<TestAssistantScreen> {
   void _updateAssistantList(List<Assistant> assistants) {
     setState(() {
       assistantList = assistants;
+      currentAssistant = assistants.first;
     });
   }
 
@@ -52,7 +53,9 @@ class _TestAssistantScreenState extends State<TestAssistantScreen> {
   void _updateThreadList(List<Thread> threads) {
     setState(() {
       threadList = threads;
-      currentThread = threads.first;
+      if (threads.isNotEmpty) {
+        currentThread = threads.first;
+      }
     });
   }
 
