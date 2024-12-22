@@ -99,122 +99,125 @@ class _AssistantSettingPopupState extends State<AssistantSettingPopup> {
           if(state is KBInitial) {
             context.read<KBBloc>().add(GetAllKBEvent( widget.assistantId));
           }
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Container(
-              padding: EdgeInsets.all(20.0), // Increased padding for better UI
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Assistant Settings',
+          return SingleChildScrollView(
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(20.0), // Increased padding for better UI
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Assistant Settings',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22, // Increased font size
+                            color: Colors.blueAccent, // Consistent color
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _updateInstructions();
+                            Navigator.pop(context); // Close dialog
+                          },
+                          icon: Icon(Icons.close, color: Colors.grey[700]), // Styled icon
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20), // Added spacing
+            
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Persona & Prompt',
                         style: TextStyle(
+                          color: Colors.grey[600], // Light grey text color
                           fontWeight: FontWeight.bold,
-                          fontSize: 22, // Increased font size
-                          color: Colors.blueAccent, // Consistent color
+                          fontSize: 16, // Consistent font size
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          _updateInstructions();
-                          Navigator.pop(context); // Close dialog
-                        },
-                        icon: Icon(Icons.close, color: Colors.grey[700]), // Styled icon
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20), // Added spacing
-          
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Persona & Prompt',
-                      style: TextStyle(
-                        color: Colors.grey[600], // Light grey text color
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16, // Consistent font size
-                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey[100], // Light grey input background
-                      hintText:
-                          'Design the bot\'s persona, features and workflows using natural language.',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
+                    SizedBox(height: 8),
+                    TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.grey[100], // Light grey input background
+                        hintText:
+                            'Design the bot\'s persona, features and workflows using natural language.',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      maxLines: 3, // Increased input height to 3 lines
+                      onChanged: widget.onUpdateInstructions, // Update instructions via callback
+                      controller: _controller, // Use the initialized controller
+                    ),
+            
+                    SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Add Knowledge Base',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ),
-                    maxLines: 3, // Increased input height to 3 lines
-                    onChanged: widget.onUpdateInstructions, // Update instructions via callback
-                    controller: _controller, // Use the initialized controller
-                  ),
-          
-                  SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Add Knowledge Base',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Handle create knowledge action
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()),
-                      );
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text('Create Knowledge'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  if(state is KBLoaded)
-                   
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.knowledgeBases.length,
-                      itemBuilder: (context, index) {
-                        return KnowledgeBaseItem(
-                          knowledge: state.knowledgeBases[index],
-                          onAttach: (knowledge) {
-                            _onAttachKB(knowledge.id, context);
-                          },
-                          onDetach: (knowledge) {
-                            _onDetachKB(knowledge.id, context);
-                          },
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // Handle create knowledge action
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()),
                         );
                       },
-                      
+                      icon: Icon(Icons.add),
+                      label: Text('Create Knowledge'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
                     ),
-                  ),
-                  if(state is KBLoading)
-                   
-                  Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
+                    SizedBox(height: 10),
+                    if(state is KBLoaded)
+                     
+                    SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.knowledgeBases.length,
+                        itemBuilder: (context, index) {
+                          return KnowledgeBaseItem(
+                            knowledge: state.knowledgeBases[index],
+                            onAttach: (knowledge) {
+                              _onAttachKB(knowledge.id, context);
+                            },
+                            onDetach: (knowledge) {
+                              _onDetachKB(knowledge.id, context);
+                            },
+                          );
+                        },
+                        
+                      ),
                     ),
-                  ),
-                ],
+                    if(state is KBLoading)
+                     
+                    Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
