@@ -58,63 +58,69 @@ class KnowledgeBaseScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  // Handle Create Knowledge
-                  showNewKnowledgeDialog(context);
-                },
-              )
-            ],
+            
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
                 ),
-              ),
-
-              if (KBState is KBLoading)
-                Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+            
+                if (KBState is KBLoading)
+                  Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                ),
-              if (KBState is KBLoaded)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: KBState.knowledgeBases.length,
-                    itemBuilder: (context, index) {
-                      return KnowledgeBaseItem(
-                        onTapItem: (knowledgeBase) {
-                          // Handle click on item
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => KnowledgeDetailScreen(knowledgeBase: knowledgeBase),
-                            ),
-                          );
-                        },
-                        knowledgeBase: KBState.knowledgeBases[index],
-                        onDelete: (knowledgeBase) {
-                          // Handle delete action
-                          getIt<KBBloc>().add(DeleteKBEvent(knowledgeBase.id, KBState.knowledgeBases));
-                        },
-                      );
-                    },
+                if (KBState is KBLoaded)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: KBState.knowledgeBases.length,
+                      itemBuilder: (context, index) {
+                        return KnowledgeBaseItem(
+                          onTapItem: (knowledgeBase) {
+                            // Handle click on item
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => KnowledgeDetailScreen(knowledgeBase: knowledgeBase),
+                              ),
+                            );
+                          },
+                          knowledgeBase: KBState.knowledgeBases[index],
+                          onDelete: (knowledgeBase) {
+                            // Handle delete action
+                            getIt<KBBloc>().add(DeleteKBEvent(knowledgeBase.id, KBState.knowledgeBases));
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              PaginationWidget(),
-            ],
+                  Spacer(),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          // Action to create new bot
+                          showNewKnowledgeDialog(context);
+                        },
+                        backgroundColor: Colors.orange.shade300,
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+              ],
+            ),
           ),
         );
       }
