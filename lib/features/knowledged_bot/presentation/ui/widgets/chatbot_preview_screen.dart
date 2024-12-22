@@ -6,6 +6,7 @@ import 'package:your_ai/features/knowledged_bot/domain/entities/content_model.da
 import 'package:your_ai/features/knowledged_bot/domain/entities/message_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/assistant_setting_popup.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/publish_bot_screen.dart';
 
 class ChatBotPreviewScreen extends StatefulWidget {
   final Assistant assistant;
@@ -170,6 +171,13 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
               showKnowledgeBaseDialog(context);
             },
             icon: const Icon(Icons.edit, color: Colors.black),
+          ),
+          IconButton(
+            onPressed: () {
+              //call publish screen
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PublishScreen(assistantId: widget.assistant.id)));
+            },
+            icon: const Icon(Icons.cloud_upload, color: Colors.black),
           ),
         ],
       ),
