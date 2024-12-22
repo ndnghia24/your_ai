@@ -12,7 +12,7 @@ import 'package:your_ai/features/app/presentation/ui/widgets/model_selector_widg
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/subscription_webview.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:js' as js;
+//import 'dart:js' as js;
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -77,11 +77,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                       ));
                     } else {
-                      // open website in new tab with new flutter
-                      js.context.callMethod('open', [
-                        'https://admin.jarvis.cx/pricing/overview',
-                        '_blank'
-                      ]);
+                      // // open website in new tab with new flutter
+                      // js.context.callMethod('open', [
+                      //   'https://admin.jarvis.cx/pricing/overview',
+                      //   '_blank'
+                      // ]);
                     }
                   },
                   style: TextButton.styleFrom(

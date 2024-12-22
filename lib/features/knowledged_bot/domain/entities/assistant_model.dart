@@ -6,6 +6,7 @@ class Assistant {
   final String description;
   late bool isFavorite;
   late bool isPublished;
+  late String instructions;
 
   Assistant({
     required this.id,
@@ -13,6 +14,7 @@ class Assistant {
     required this.description,
     this.isFavorite = false,
     this.isPublished = false,
+    this.instructions = '',
   });
 
   factory Assistant.fromMap(Map<String, dynamic> map) {
@@ -22,6 +24,7 @@ class Assistant {
       description: map['description'] ?? '',
       isFavorite: map['is_favorite'] ?? false,
       isPublished: map['is_published'] ?? false,
+      instructions: map['instructions'] ?? '',
     );
   }
 
@@ -32,6 +35,7 @@ class Assistant {
       'description': description,
       'is_favorite': isFavorite,
       'is_published': isPublished,
+      'instructions': instructions,
     };
   }
 
@@ -42,6 +46,7 @@ class Assistant {
       description: '',
       isFavorite: false,
       isPublished: false,
+      instructions: '',
     );
   }
 

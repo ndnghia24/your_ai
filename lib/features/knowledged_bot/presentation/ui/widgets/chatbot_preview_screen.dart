@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/content_model.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/message_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
-import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/popup_add_knowledgebase.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/assistant_setting_popup.dart';
 
 class ChatBotPreviewScreen extends StatefulWidget {
   const ChatBotPreviewScreen({super.key});
@@ -14,9 +15,14 @@ class ChatBotPreviewScreen extends StatefulWidget {
 
 class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final AssistantUseCaseFactory _assistantUseCaseFactory = GetIt.I<AssistantUseCaseFactory>();
-  final String _assistantId = 'hardcoded-assistant-id'; // Hard code assistantId
+  final ScrollController _scrollController = ScrollController();
+  final AssistantUseCaseFactory _assistantUseCaseFactory =
+      GetIt.I<AssistantUseCaseFactory>();
+  final String _assistantId =
+      '4bdfbc2a-c396-48cc-986f-4bab5cdbe5e0'; // Hard code assistantId
+  List<Message> _messages = [];
   Thread? _currentThread;
+  String instructions = '123123211';
 
   @override
   void initState() {
@@ -25,43 +31,123 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
   }
 
   Future<void> _loadInitialData() async {
-    final result = await _assistantUseCaseFactory.getThreadsUseCase().execute(assistantId: _assistantId);
+    final result = await _assistantUseCaseFactory
+        .getThreadsUseCase()
+        .execute(assistantId: _assistantId);
+
     if (result.isSuccess && result.result.isNotEmpty) {
       setState(() {
         _currentThread = result.result.first;
       });
+
+      final threadDetails =
+          await _assistantUseCaseFactory.getThreadDetailsUseCase().execute(
+                currentThread: _currentThread!,
+                openAiThreadId: _currentThread!.openAiThreadId,
+              );
+
+      if (threadDetails.isSuccess) {
+        setState(() {
+          _currentThread = threadDetails.result;
+          _messages = _currentThread!.messages.reversed.toList();
+          _scrollToEnd();
+        });
+      }
+    } else if (result.isSuccess && result.result.isEmpty) {
+      final thread =
+          await _assistantUseCaseFactory.createThreadUseCase().execute(
+                assistantId: _assistantId,
+                threadName: 'Test chat',
+              );
+      print('Thread: ${thread.result.openAiThreadId}');
+      if (thread.isSuccess) {
+        setState(() {
+          _currentThread = thread.result;
+          _messages = _currentThread!.messages.reversed.toList();
+          _scrollToEnd();
+        });
+      }
     }
   }
 
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty || _currentThread == null) return;
 
+    // Unfocus the keyboard
+    FocusScope.of(context).unfocus();
+
+    final messageText = _messageController.text;
+    _messageController.clear();
+
+    setState(() {
+      _messages.add(Message(
+        role: 'user',
+        content: [
+          Content(
+            type: 'text',
+            text: TextContent(value: messageText),
+          ),
+        ],
+      ));
+
+      _messages.add(Message(
+        role: 'assistant',
+        content: [
+          Content(
+            type: 'text',
+            text: TextContent(value: "..."),
+          ),
+        ],
+      ));
+      _scrollToEnd();
+    });
+
     final result = await _assistantUseCaseFactory.continueChatUseCase().execute(
-      assistantId: _assistantId,
-      message: _messageController.text,
-      openAiThreadId: _currentThread!.openAiThreadId,
-    );
+          assistantId: _assistantId,
+          message: messageText,
+          openAiThreadId: _currentThread!.openAiThreadId,
+        );
 
     if (result.isSuccess) {
-      final threadDetails = await _assistantUseCaseFactory.getThreadDetailsUseCase().execute(
-        currentThread: _currentThread!,
-        openAiThreadId: _currentThread!.openAiThreadId,
-      );
+      final threadDetails =
+          await _assistantUseCaseFactory.getThreadDetailsUseCase().execute(
+                currentThread: _currentThread!,
+                openAiThreadId: _currentThread!.openAiThreadId,
+              );
 
       if (threadDetails.isSuccess) {
         setState(() {
           _currentThread = threadDetails.result;
-          _messageController.clear();
+          _messages = _currentThread!.messages.reversed.toList();
+          _scrollToEnd();
         });
       }
     }
+  }
+
+  void _scrollToEnd() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  onUpdateInstructions(String newInstructions) {
+    setState(() {
+      instructions = newInstructions;
+    });
   }
 
   void showKnowledgeBaseDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return KnowledgeBasePopup();
+        return AssistantSettingPopup(assistantId: _assistantId, description: '', assistantName: 'HaHaHa', instructions: instructions, onUpdateInstructions: onUpdateInstructions);
       },
     );
   }
@@ -70,169 +156,157 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, // Nền trắng cho AppBar
-        elevation: 0, // Loại bỏ shadow của AppBar
-        title: Text(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
           'Test chat bot',
-          style: TextStyle(color: Colors.black), // Đổi màu text thành đen
+          style: TextStyle(color: Colors.black),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              // Add edit action here
               showKnowledgeBaseDialog(context);
             },
-            icon: Icon(Icons.edit, color: Colors.black), // Đổi icon thành đen
+            icon: const Icon(Icons.edit, color: Colors.black),
           ),
         ],
       ),
       body: Column(
         children: [
-          // Develop section
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Develop',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black), // Màu text đen
-                ),
-                SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[200], // Nền xám nhạt
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Persona & Prompt',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      TextField(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300], // Nền ô nhập liệu
-                          hintText: 'Enter your prompt...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(),
-
-          // Preview section
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Preview',
+                  const Text(
+                    'Preview chat',
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black), // Text màu đen
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[100], // Nền trắng nhạt hơn
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: _currentThread == null
-                          ? Center(child: CircularProgressIndicator())
-                          : ListView.builder(
-                              itemCount: _currentThread!.messages.length,
-                              itemBuilder: (context, index) {
-                                final message = _currentThread!.messages[index];
-                                return Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                          ? const Center(child: CircularProgressIndicator())
+                          : _messages.isEmpty
+                              ? Center(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        message.role == 'user' ? 'You' : 'Assistant',
+                                      Icon(Icons.chat,
+                                          size: 50, color: Colors.grey),
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        'Start a conversation with the assistant\nby typing a message in the input box below.',
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: message.role == 'user'
-                                              ? Colors.grey[300]
-                                              : Colors.blue[100],
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Text(
-                                          message.content.first.text?.value ?? '',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
+                                            color: Colors.grey, fontSize: 16),
                                       ),
                                     ],
                                   ),
-                                );
-                              },
-                            ),
+                                )
+                              : ListView.builder(
+                                  controller: _scrollController,
+                                  itemCount: _messages.length,
+                                  itemBuilder: (context, index) {
+                                    final message = _messages[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            message.role == 'user'
+                                                ? CrossAxisAlignment.end
+                                                : CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            message.role == 'user'
+                                                ? 'You'
+                                                : 'Assistant',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: message.role == 'user'
+                                                  ? Colors.grey[300]
+                                                  : Colors.blue[100],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              message.content.first.text
+                                                      ?.value ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-
-          // Input section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey[300], // Nền ô nhập liệu
-                      hintText: 'Type a message...',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      focusNode: FocusNode(),
+                      decoration: const InputDecoration(
+                        hintText: 'Type a message...',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                       ),
+                      textInputAction: TextInputAction
+                          .send, // Hiển thị nút gửi trên bàn phím
+                      onSubmitted: (value) {
+                        if (value.trim().isNotEmpty) {
+                          _sendMessage(); // Gọi hàm gửi khi nhấn Enter
+                        }
+                      },
                     ),
                   ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
-                  onPressed: _sendMessage,
-                  icon: Icon(Icons.send, color: Colors.blue),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () {
+                      if (_messageController.text.trim().isNotEmpty) {
+                        _sendMessage(); // Gọi hàm gửi khi nhấn nút gửi
+                      }
+                    },
+                    icon: const Icon(Icons.send, color: Colors.blue),
+                    splashRadius: 20,
+                  ),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );

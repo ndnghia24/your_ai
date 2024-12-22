@@ -98,6 +98,7 @@ class UpdateAssistantUseCase {
     required String assistantId,
     required String assistantName,
     required String description,
+    String instructions = '',
   }) async {
     /*return _repository.assistants.updateAssistant(assistantId, assistantData);*/
 
@@ -105,6 +106,7 @@ class UpdateAssistantUseCase {
       final assistantData = {
         'assistantName': assistantName,
         'description': description,
+        'instructions': instructions,
       };
 
       final result = await _repository.assistants.updateAssistant(
