@@ -22,6 +22,17 @@ class ChatBotScreen extends StatelessWidget {
     );
   }
 
+  void showUpdateChatBotDialog(BuildContext context, Assistant assistant) {
+   showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CreateAssistantDialog(assistant: assistant);
+      },
+    );
+
+  
+  }
+
   void _onDeleteAssistant(Assistant assistant) {
     final state = getIt<AssistantBloc>().state;
     if (state is AssistantLoaded) {
@@ -75,10 +86,17 @@ class ChatBotScreen extends StatelessWidget {
                                 spacing: 12,
                                 children: <Widget>[
                                   IconButton(
-                                    icon: Icon(Icons.star_border),
-                                    onPressed: () {},
+                                    
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      showUpdateChatBotDialog(context, assistant);
+                                    },
                                   ),
                                   IconButton(
+                                    style: ButtonStyle(
+                                      foregroundColor: MaterialStateProperty.all(
+                                          Colors.red),
+                                    ),
                                     icon: Icon(Icons.delete_outline),
                                     onPressed: () {
                                       _onDeleteAssistant(assistant);

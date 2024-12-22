@@ -64,16 +64,13 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
         description: event.description,
       );
 
-      if (useCaseResult.isSuccess) {
         final assistants = event.assistants;
         final index = assistants
             .indexWhere((element) => element.id == event.assistantId);
         assistants[index] = useCaseResult.result;
 
         emit(AssistantLoaded(assistants));
-      } else {
-        emit(AssistantError(useCaseResult.message));
-      }
+
     } catch (e) {
       emit(AssistantError(e.toString()));
     }

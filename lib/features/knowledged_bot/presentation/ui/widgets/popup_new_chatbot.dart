@@ -134,6 +134,9 @@ class _CreateAssistantDialogState extends State<CreateAssistantDialog> {
                     ),
                     SizedBox(width: 16),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade700,
+                      ),
                       onPressed: () {
                         if (widget.assistant != null) {
                           _updateAssistant(widget.assistant!);
@@ -143,7 +146,7 @@ class _CreateAssistantDialogState extends State<CreateAssistantDialog> {
                         // OK action, do something with form data
                         Navigator.of(context).pop();
                       },
-                      child: Text('OK'),
+                      child: Text(widget.assistant != null ? 'Update' : 'Create'),
                     ),
                   ],
                 ),
