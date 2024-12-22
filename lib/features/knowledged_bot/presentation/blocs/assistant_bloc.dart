@@ -42,9 +42,7 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
       );
 
       if (useCaseResult.isSuccess) {
-        final assistatns = event.assistants;
-        assistatns.add(useCaseResult.result);
-        emit(AssistantLoaded(assistatns));
+        this.add(GetAllAssistantEvent());
       } else {
         emit(AssistantError(useCaseResult.message));
       }

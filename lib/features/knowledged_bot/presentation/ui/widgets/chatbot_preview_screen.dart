@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/content_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/message_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/assistant_setting_popup.dart';
 
 class ChatBotPreviewScreen extends StatefulWidget {
-  const ChatBotPreviewScreen({super.key});
+  final Assistant assistant;
+  const ChatBotPreviewScreen({super.key, required this.assistant});
 
   @override
   _ChatBotPreviewScreenState createState() => _ChatBotPreviewScreenState();
@@ -18,22 +20,22 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
   final ScrollController _scrollController = ScrollController();
   final AssistantUseCaseFactory _assistantUseCaseFactory =
       GetIt.I<AssistantUseCaseFactory>();
-  final String _assistantId =
-      '4bdfbc2a-c396-48cc-986f-4bab5cdbe5e0'; // Hard code assistantId
+// Hard code assistantId
   List<Message> _messages = [];
   Thread? _currentThread;
-  String instructions = '123123211';
+  String instructions = '';
 
   @override
   void initState() {
     super.initState();
+    instructions = widget.assistant.instructions;
     _loadInitialData();
   }
 
   Future<void> _loadInitialData() async {
     final result = await _assistantUseCaseFactory
         .getThreadsUseCase()
-        .execute(assistantId: _assistantId);
+        .execute(assistantId: widget.assistant.id);
 
     if (result.isSuccess && result.result.isNotEmpty) {
       setState(() {
@@ -56,7 +58,7 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
     } else if (result.isSuccess && result.result.isEmpty) {
       final thread =
           await _assistantUseCaseFactory.createThreadUseCase().execute(
-                assistantId: _assistantId,
+                assistantId: widget.assistant.id,
                 threadName: 'Test chat',
               );
       print('Thread: ${thread.result.openAiThreadId}');
@@ -103,7 +105,7 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
     });
 
     final result = await _assistantUseCaseFactory.continueChatUseCase().execute(
-          assistantId: _assistantId,
+          assistantId: widget.assistant.id,
           message: messageText,
           openAiThreadId: _currentThread!.openAiThreadId,
         );
@@ -147,7 +149,7 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AssistantSettingPopup(assistantId: _assistantId, description: '', assistantName: 'HaHaHa', instructions: instructions, onUpdateInstructions: onUpdateInstructions);
+        return AssistantSettingPopup(assistantId: widget.assistant.id, description: widget.assistant.description, assistantName: widget.assistant.name, instructions: instructions, onUpdateInstructions: onUpdateInstructions);
       },
     );
   }

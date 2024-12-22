@@ -110,7 +110,7 @@ class ChatBotScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChatBotPreviewScreen()),
+                                          ChatBotPreviewScreen(assistant: assistant,)),
                                 );
                               },
                             ),
