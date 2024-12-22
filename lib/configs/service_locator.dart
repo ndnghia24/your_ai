@@ -45,6 +45,7 @@ import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assis
 import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_knowledge_service.dart';
 import 'package:your_ai/features/knowledged_bot/data/repositories/assistant_repository.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_bloc.dart';
 
 import '../features/knowledged_bot/data/data_sources/services/assistant_service.dart';
 
@@ -142,4 +143,7 @@ void setupServiceLocator() {
   // UseCaseFactory
   locator.registerLazySingleton<AssistantUseCaseFactory>(
       () => AssistantUseCaseFactory(locator<AssistantRepository>()));
+  // Bloc
+  locator.registerLazySingleton<AssistantBloc>(
+      () => AssistantBloc(locator<AssistantUseCaseFactory>()));
 }
