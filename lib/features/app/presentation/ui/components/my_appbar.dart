@@ -77,7 +77,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                       ));
                     } else {
-                      // // open website in new tab with new flutter
+                      // open website in new tab with new flutter
                       // js.context.callMethod('open', [
                       //   'https://admin.jarvis.cx/pricing/overview',
                       //   '_blank'
