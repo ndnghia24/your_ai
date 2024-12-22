@@ -10,7 +10,7 @@ class AssistantKnowledgeService {
   Future<Response> getAttachedKnowledges(String assistantId) async {
     try {
       final response = await dio.get(
-        '/ai-assistant/$assistantId/knowledges',
+        '/knowledge/assistant-relationship/$assistantId?offset=0&limit=10',
       );
       return response;
     } catch (e) {

@@ -1,19 +1,16 @@
   import 'package:flutter/material.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/knowledge_model.dart';
 
   class KnowledgeBaseItem extends StatelessWidget {
-    final String title;
-    final String size;
-    final String date;
-    final int units;
-    final bool isRemovable;
+    final Knowledge knowledge;
+    final void Function(Knowledge knowledge) onAttach;
+    final void Function(Knowledge knowledge) onDetach;
 
     const KnowledgeBaseItem({
       super.key,
-      required this.title,
-      required this.size,
-      required this.date,
-      required this.units,
-      this.isRemovable = false,
+      required this.knowledge,
+      required this.onAttach,
+      required this.onDetach,
     });
 
     @override
@@ -24,22 +21,32 @@
             backgroundColor: Colors.redAccent,
             child: Icon(Icons.storage, color: Colors.white),
           ),
-          title: Text(title),
+          title: Text(knowledge.knowledgeName),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                    Text('$units unit', overflow: TextOverflow.ellipsis),
-                    Text(size, overflow: TextOverflow.ellipsis),  
-                    Text(date),
+                    Text('${knowledge.numUnits} unit', overflow: TextOverflow.ellipsis),
             ],
           ),
-          trailing: IconButton(
-            onPressed: () {
-              // Handle add/remove action
-            },
-            icon: Icon(isRemovable ? Icons.remove : Icons.add),
-            color: isRemovable ? Colors.red : Colors.blue,
-          ),
+          trailing: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: knowledge.isImported ? Colors.red : Colors.blue,
+                ),
+                onPressed: () {
+                  // Handle add/remove action
+                  if (knowledge.isImported) {
+                  onDetach(knowledge);
+                  } else {
+                  onAttach(knowledge);
+                  }
+                },
+                child: Text(
+                  knowledge.isImported ? 'Remove' : 'Add',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                ),
         ),
       );
     }

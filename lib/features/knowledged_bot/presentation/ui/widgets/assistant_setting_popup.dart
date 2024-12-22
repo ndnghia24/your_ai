@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/knowledgebase_screen.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/blocs/kb_bloc.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/blocs/kb_event.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/blocs/kb_state.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/item_knowledgebase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/knowledged_bot/domain/usecases/assistant_usecases.dart';
@@ -58,119 +62,163 @@ class _AssistantSettingPopupState extends State<AssistantSettingPopup> {
       print('Failed to update instructions');
     }
   }
+
+  void _onAttachKB(String knowledgeId, BuildContext context) async {
+    final state = context.read<KBBloc>().state;
+    if (state is KBLoaded) {
+      context.read<KBBloc>().add(AttachKBEvent(
+        widget.assistantId,
+        knowledgeId,
+        state.knowledgeBases,
+      ));
+    }
+  }
+
+  void _onDetachKB(String knowledgeId, BuildContext context) async {
+    final state = context.read<KBBloc>().state;
+    if (state is KBLoaded) {
+      context.read<KBBloc>().add(DetachKBEvent(
+        widget.assistantId,
+        knowledgeId,
+        state.knowledgeBases,
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Container(
-        padding: EdgeInsets.all(20.0), // Increased padding for better UI
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Assistant Settings',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22, // Increased font size
-                    color: Colors.blueAccent, // Consistent color
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _updateInstructions();
-                    Navigator.pop(context); // Close dialog
-                  },
-                  icon: Icon(Icons.close, color: Colors.grey[700]), // Styled icon
-                ),
-              ],
+    
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<KBBloc>(
+          create: (context) => KBBloc(getIt<AssistantUseCaseFactory>()),
+        ),
+      ],
+      child: BlocBuilder<KBBloc, KBState>(
+        builder: (context, state) {
+          if(state is KBInitial) {
+            context.read<KBBloc>().add(GetAllKBEvent( widget.assistantId));
+          }
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            SizedBox(height: 20), // Added spacing
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Persona & Prompt',
-                style: TextStyle(
-                  color: Colors.grey[600], // Light grey text color
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16, // Consistent font size
-                ),
-              ),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100], // Light grey input background
-                hintText:
-                    'Design the bot\'s persona, features and workflows using natural language.',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              maxLines: 3, // Increased input height to 3 lines
-              onChanged: widget.onUpdateInstructions, // Update instructions via callback
-              controller: _controller, // Use the initialized controller
-            ),
-
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Add Knowledge Base',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Handle create knowledge action
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()),
-                );
-              },
-              icon: Icon(Icons.add),
-              label: Text('Create Knowledge'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
+            child: Container(
+              padding: EdgeInsets.all(20.0), // Increased padding for better UI
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  KnowledgeBaseItem(
-                    title: 'KB 01',
-                    size: '526.00 Bytes',
-                    date: '17/10/2024',
-                    units: 1,
-                    isRemovable: false,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Assistant Settings',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22, // Increased font size
+                          color: Colors.blueAccent, // Consistent color
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _updateInstructions();
+                          Navigator.pop(context); // Close dialog
+                        },
+                        icon: Icon(Icons.close, color: Colors.grey[700]), // Styled icon
+                      ),
+                    ],
                   ),
-                  KnowledgeBaseItem(
-                    title: 'Chat bot',
-                    size: '132.00 Bytes',
-                    date: '9/10/2024',
-                    units: 1,
-                    isRemovable: true,
+                  SizedBox(height: 20), // Added spacing
+          
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Persona & Prompt',
+                      style: TextStyle(
+                        color: Colors.grey[600], // Light grey text color
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16, // Consistent font size
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[100], // Light grey input background
+                      hintText:
+                          'Design the bot\'s persona, features and workflows using natural language.',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    maxLines: 3, // Increased input height to 3 lines
+                    onChanged: widget.onUpdateInstructions, // Update instructions via callback
+                    controller: _controller, // Use the initialized controller
+                  ),
+          
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Add Knowledge Base',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Handle create knowledge action
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => KnowledgeBaseScreen()),
+                      );
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text('Create Knowledge'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  if(state is KBLoaded)
+                   
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.knowledgeBases.length,
+                      itemBuilder: (context, index) {
+                        return KnowledgeBaseItem(
+                          knowledge: state.knowledgeBases[index],
+                          onAttach: (knowledge) {
+                            _onAttachKB(knowledge.id, context);
+                          },
+                          onDetach: (knowledge) {
+                            _onDetachKB(knowledge.id, context);
+                          },
+                        );
+                      },
+                      
+                    ),
+                  ),
+                  if(state is KBLoading)
+                   
+                  Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }
