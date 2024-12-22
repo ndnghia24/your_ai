@@ -98,16 +98,17 @@ class UpdateAssistantUseCase {
     required String assistantId,
     required String assistantName,
     required String description,
-    String instructions = '',
+    String? instructions, // Allow instructions to be nullable
   }) async {
-    /*return _repository.assistants.updateAssistant(assistantId, assistantData);*/
-
     try {
       final assistantData = {
         'assistantName': assistantName,
         'description': description,
-        'instructions': instructions,
       };
+
+      if (instructions != null) {
+        assistantData['instructions'] = instructions;
+      }
 
       final result = await _repository.assistants.updateAssistant(
         assistantId,

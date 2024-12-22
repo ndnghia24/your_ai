@@ -160,9 +160,9 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Test chat bot',
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          widget.assistant.name,
+          style: const TextStyle(color: Colors.black),
         ),
         actions: [
           IconButton(
@@ -271,7 +271,7 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(

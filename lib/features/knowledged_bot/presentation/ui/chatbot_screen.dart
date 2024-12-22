@@ -118,7 +118,6 @@ class ChatBotScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                  Spacer(),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton(

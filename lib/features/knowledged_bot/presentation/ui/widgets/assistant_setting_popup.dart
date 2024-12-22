@@ -106,7 +106,7 @@ class _AssistantSettingPopupState extends State<AssistantSettingPopup> {
             TextField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.grey[300], // Light grey input background
+                fillColor: Colors.grey[100], // Light grey input background
                 hintText:
                     'Design the bot\'s persona, features and workflows using natural language.',
                 hintStyle: TextStyle(color: Colors.grey),
