@@ -1,6 +1,7 @@
 import 'package:your_ai/features/knowledged_bot/data/repositories/assistant_repository.dart';
 import 'package:your_ai/features/knowledged_bot/domain/usecases/assistant_usecases.dart';
 import 'package:your_ai/features/knowledged_bot/domain/usecases/chat_usecases.dart';
+import 'package:your_ai/features/knowledged_bot/domain/usecases/integration_usecase.dart';
 import 'package:your_ai/features/knowledged_bot/domain/usecases/knowledge_usecase.dart';
 
 class AssistantUseCaseFactory {
@@ -53,5 +54,38 @@ class AssistantUseCaseFactory {
 
   ContinueChatUseCase continueChatUseCase() {
     return ContinueChatUseCase(_repository);
+  }
+
+  // Integration Use Cases
+  GetIntegrationConfigurationsUseCase getIntegrationConfigurationsUseCase() {
+    return GetIntegrationConfigurationsUseCase(_repository);
+  }
+
+  DisconnectIntegrationUseCase disconnectIntegrationUseCase() {
+    return DisconnectIntegrationUseCase(_repository);
+  }
+
+  VerifyTelegramConfigUseCase verifyTelegramConfigUseCase() {
+    return VerifyTelegramConfigUseCase(_repository);
+  }
+
+  PublishTelegramBotUseCase publishTelegramBotUseCase() {
+    return PublishTelegramBotUseCase(_repository);
+  }
+
+  VerifySlackConfigUseCase verifySlackConfigUseCase() {
+    return VerifySlackConfigUseCase(_repository);
+  }
+
+  PublishSlackBotUseCase publishSlackBotUseCase() {
+    return PublishSlackBotUseCase(_repository);
+  }
+
+  VerifyMessengerConfigUseCase verifyMessengerConfigUseCase() {
+    return VerifyMessengerConfigUseCase(_repository);
+  }
+
+  PublishMessengerBotUseCase publishMessengerBotUseCase() {
+    return PublishMessengerBotUseCase(_repository);
   }
 }

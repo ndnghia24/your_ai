@@ -1,6 +1,7 @@
 import 'package:your_ai/core/templates/data_sources_result_template.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_chat_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_data_source.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_integration_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_knowledge_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dart';
@@ -11,20 +12,25 @@ class AssistantRepository {
   final AssistantRemoteDataSource _assistantRemoteDataSource;
   final AssistantKnowledgeRemoteDataSource _assistantKnowledgeRemoteDataSource;
   final AssistantChatRemoteDataSource _assistantChatRemoteDataSource;
+  final AssistantIntegrationRemoteDataSource _assistantIntegrationDataSource;
 
   late final AssistantsRepository assistants;
   late final AssistantKnowledgeRepository knowledge;
   late final AssistantBotChatRepository chat;
+  late final AssistantIntegrationRepository integration;
 
   AssistantRepository(
     this._assistantRemoteDataSource,
     this._assistantKnowledgeRemoteDataSource,
     this._assistantChatRemoteDataSource,
+    this._assistantIntegrationDataSource,
   ) {
     assistants = AssistantsRepository(_assistantRemoteDataSource);
     knowledge =
         AssistantKnowledgeRepository(_assistantKnowledgeRemoteDataSource);
     chat = AssistantBotChatRepository(_assistantChatRemoteDataSource);
+    integration =
+        AssistantIntegrationRepository(_assistantIntegrationDataSource);
   }
 }
 
@@ -234,6 +240,87 @@ class AssistantBotChatRepository {
     if (res.isSuccess) {
       return res.data;
     } else {
+      throw Exception(res.message);
+    }
+  }
+}
+
+// Sub-repository for integration
+class AssistantIntegrationRepository {
+  final AssistantIntegrationRemoteDataSource _dataSource;
+
+  AssistantIntegrationRepository(this._dataSource);
+
+  Future<Map<String, dynamic>> getConfigurations(String assistantId) async {
+    final res = await _dataSource.getConfigurations(assistantId);
+
+    if (res.isSuccess) {
+      return res.data;
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> disconnectIntegration(String assistantId, String type) async {
+    final res = await _dataSource.disconnectBotIntegration(assistantId, type);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> verifyTelegramConfig(String botToken) async {
+    final res = await _dataSource.verifyTelegramBotConfigure(botToken);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> publishTelegramBot(String assistantId, String botToken) async {
+    final res = await _dataSource.publishTelegramBot(assistantId, botToken);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> verifySlackConfig(String botToken, String clientId,
+      String clientSecret, String signingSecret) async {
+    final res = await _dataSource.verifySlackBotConfigure(
+        botToken, clientId, clientSecret, signingSecret);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> publishSlackBot(String assistantId, String botToken,
+      String clientId, String clientSecret, String signingSecret) async {
+    final res = await _dataSource.publishSlackBot(
+        assistantId, botToken, clientId, clientSecret, signingSecret);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> verifyMessengerConfig(
+      String botToken, String pageId, String appSecret) async {
+    final res = await _dataSource.verifyMessengerBotConfigure(
+        botToken, pageId, appSecret);
+
+    if (!res.isSuccess) {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<void> publishMessengerBot(String assistantId, String botToken,
+      String pageId, String appSecret) async {
+    final res = await _dataSource.publishMessengerBot(
+        assistantId, botToken, pageId, appSecret);
+
+    if (!res.isSuccess) {
       throw Exception(res.message);
     }
   }
