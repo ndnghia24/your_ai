@@ -21,6 +21,7 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
     try {
       final result = await assistantUseCaseFactory.getAssistantsUseCase().execute();
       if (result.isSuccess) {
+
         emit(AssistantLoaded(result.result));
       } else {
         String errorMessage = result.message;

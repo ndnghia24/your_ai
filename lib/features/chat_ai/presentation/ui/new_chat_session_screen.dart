@@ -15,8 +15,11 @@ import 'package:your_ai/features/app/presentation/ui/widgets/chat_input_widget.d
 import 'package:your_ai/features/app/presentation/ui/widgets/new_app_drawer.dart';
 
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
+import 'package:your_ai/features/chat_ai/presentation/ui/widgets/assistant_chat_widget.dart';
+import 'package:your_ai/features/chat_ai/presentation/ui/widgets/assistant_selector_widgte.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/new_chat_widget.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/old_chat_widget.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 
 final getIt = GetIt.instance;
 
@@ -62,9 +65,55 @@ class ChatSessionScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Column(
                           children: [
-                            Expanded(
-                              child:
-                                  isNewChat ? NewChatWidget() : OldChatWidget(),
+                            BlocBuilder<ModelBloc, ModelState>(
+                              bloc: GetIt.I<ModelBloc>(),
+                              builder: (context, modelState) {
+                                GenerativeAiModel selectedModel =
+                                    GenerativeAiModel.gpt4oMini;
+                                Assistant? selectedAssistant = Assistant(
+                                    id: '', name: '', description: '');
+                                if (modelState is ModelInitial) {
+                                  selectedModel = modelState.selectedModel;
+                                  selectedAssistant =
+                                      modelState.selectedAssistant;
+                                }
+
+                                if (selectedModel ==
+                                    GenerativeAiModel.customChatBot) {
+                                  final modelBloc = GetIt.I<ModelBloc>();
+
+                                  return Expanded(
+                                    child: Column(
+                                      children: [
+                                        AssistantSelector(
+                                          selectedAssistant:
+                                              modelBloc.selectedAssistant,
+                                          onAssistantChanged: (assistant) {
+                                            modelBloc.selectedAssistant =
+                                                assistant;
+                                            print('assistant: ${assistant.name}');
+                                            modelBloc.add(UpdateModel(
+                                                GenerativeAiModel.customChatBot,
+                                                selectedAssistant: assistant));
+                                          },
+                                        ),
+                                        Expanded(
+                                          child: selectedAssistant != null
+                                              ? AssistantChatWidget(
+                                                  assistant: selectedAssistant)
+                                              : CircularProgressIndicator(),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+
+                                return Expanded(
+                                  child: isNewChat
+                                      ? NewChatWidget()
+                                      : OldChatWidget(),
+                                );
+                              },
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(

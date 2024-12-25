@@ -7,6 +7,7 @@ enum GenerativeAiModel {
   gemini15Flash,
   claude3Haiku,
   claude3Sonnet,
+  customChatBot,
 }
 
 const String dify = 'dify';
@@ -60,6 +61,12 @@ final Map<GenerativeAiModel, GenerativeAiAssistant> generativeAiAssistants = {
     id: 'claude-3-sonnet-20240229',
     model: dify,
     name: 'Claude 3 Sonnet',
+    icon: SvgPicture.asset('assets/svgs/claude-3-sonnet-20240229.svg'),
+  ),
+  GenerativeAiModel.customChatBot: GenerativeAiAssistant(
+    id: 'custom-chatbot',
+    model: dify,
+    name: 'Custom Chatbot',
     icon: SvgPicture.asset('assets/svgs/claude-3-sonnet-20240229.svg'),
   ),
 };

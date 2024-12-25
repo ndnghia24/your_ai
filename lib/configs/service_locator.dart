@@ -40,8 +40,10 @@ import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.
 ///
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_chat_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_data_source.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_integration_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_knowledge_data_source.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_chat_service.dart';
+import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_integration_service.dart';
 import 'package:your_ai/features/knowledged_bot/data/data_sources/services/assistant_knowledge_service.dart';
 import 'package:your_ai/features/knowledged_bot/data/repositories/assistant_repository.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
@@ -127,6 +129,8 @@ void setupServiceLocator() {
       () => AssistantChatService());
   locator.registerLazySingleton<AssistantKnowledgeService>(
       () => AssistantKnowledgeService());
+  locator.registerLazySingleton<AssistantIntegrationService>(
+      () => AssistantIntegrationService());
   // Datasource
   locator.registerLazySingleton<AssistantRemoteDataSource>(
       () => AssistantRemoteDataSource(locator<AssistantService>()));
@@ -134,11 +138,14 @@ void setupServiceLocator() {
       () => AssistantChatRemoteDataSource(locator<AssistantChatService>()));
   locator.registerLazySingleton<AssistantKnowledgeRemoteDataSource>(() =>
       AssistantKnowledgeRemoteDataSource(locator<AssistantKnowledgeService>()));
+  locator.registerLazySingleton<AssistantIntegrationRemoteDataSource>(() =>
+      AssistantIntegrationRemoteDataSource(locator<AssistantIntegrationService>()));
   // Repository
   locator.registerLazySingleton<AssistantRepository>(() => AssistantRepository(
         locator<AssistantRemoteDataSource>(),
         locator<AssistantKnowledgeRemoteDataSource>(),
         locator<AssistantChatRemoteDataSource>(),
+        locator<AssistantIntegrationRemoteDataSource>(),
       ));
   // UseCaseFactory
   locator.registerLazySingleton<AssistantUseCaseFactory>(

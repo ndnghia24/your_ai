@@ -26,6 +26,7 @@ class AssistantLoaded extends AssistantState {
   final List<Assistant> assistants;
 
   AssistantLoaded(this.assistants);
+  
 
   @override
   List<Object?> get props => [assistants];
