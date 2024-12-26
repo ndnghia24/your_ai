@@ -6,7 +6,7 @@ abstract class ModelState extends Equatable {
   const ModelState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ModelInitial extends ModelState {
@@ -16,5 +16,6 @@ class ModelInitial extends ModelState {
   const ModelInitial(this.selectedModel, {this.selectedAssistant});
 
   @override
-  List<Object> get props => [selectedModel];
+  List<Object?> get props => [selectedModel, selectedAssistant];
 }
+

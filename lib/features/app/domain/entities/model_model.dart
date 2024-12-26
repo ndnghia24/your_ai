@@ -67,7 +67,7 @@ final Map<GenerativeAiModel, GenerativeAiAssistant> generativeAiAssistants = {
     id: 'custom-chatbot',
     model: dify,
     name: 'Custom Chatbot',
-    icon: SvgPicture.asset('assets/svgs/claude-3-sonnet-20240229.svg'),
+    icon: SvgPicture.asset('assets/svgs/custom-chatbot.svg', height: 15)
   ),
 };
 

@@ -7,9 +7,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
 import 'package:your_ai/features/app/presentation/ui/screens/banner_ads_widget.dart';
 import 'package:your_ai/features/auth/presentation/ui/widget_authentication.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
@@ -136,8 +139,8 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
         _buildNewChatTile(),
         _buildAllChatTile(),
         _buildChatBotsTile(),
-        _buildEmailResponseTile(),
         _buildKnowledgeBaseTile(),
+        _buildEmailResponseTile(),
       ],
     );
   }
@@ -162,6 +165,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
           icon: 'assets/images/op_newchat.png',
           title: 'NEW CHAT',
           onTap: () {
+            getIt<ModelBloc>().add(UpdateModel(GenerativeAiModel.gpt4oMini));
             if (state is ConversationLoaded) {
               getIt<ConversationBloc>().add(ResetConversation());
             }
@@ -328,6 +332,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                 onTap: isSelected
                     ? null
                     : () {
+                        getIt<ModelBloc>().add(UpdateModel(GenerativeAiModel.gpt4oMini));
                         getIt<ConversationBloc>()
                             .add(LoadConversation(conversation['id']));
                         Navigator.pop(context);

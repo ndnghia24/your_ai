@@ -53,4 +53,27 @@ class Assistant {
   toMapString() {
     return 'id: $id, name: $name, description: $description';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Assistant &&
+        other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.isFavorite == isFavorite &&
+        other.isPublished == isPublished &&
+        other.instructions == instructions;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        description.hashCode ^
+        isFavorite.hashCode ^
+        isPublished.hashCode ^
+        instructions.hashCode;
+  }
 }

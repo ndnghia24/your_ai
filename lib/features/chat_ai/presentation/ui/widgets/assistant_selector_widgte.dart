@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:your_ai/features/app/domain/entities/model_model.dart';
-import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
-import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_bloc.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_event.dart';
@@ -32,11 +29,13 @@ class AssistantSelector extends StatelessWidget {
           if (state.assistants.isEmpty) {
             return Center(child: Text('No assistants available'));
           }
+          print(selectedAssistant);
           if(!state.assistants.contains(selectedAssistant)){
             onAssistantChanged(state.assistants[0]);
             selectedAssistant = state.assistants[0];
           }
           return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -71,8 +70,9 @@ class AssistantSelector extends StatelessWidget {
                     child: Row(
                       children: [
                         CircleAvatar(
+                          radius: 12,
                           backgroundColor: Colors.blue,
-                          child: Icon(Icons.chat, color: Colors.white),
+                          child: Icon(Icons.chat, color: Colors.white, size: 16),
                         ),
                         const SizedBox(width: 12),
                         Expanded(

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/app/presentation/ui/widgets/chat_input_widget.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/content_model.dart';
@@ -11,16 +13,17 @@ import 'package:your_ai/features/knowledged_bot/domain/entities/thread_model.dar
 class AssistantChatWidget extends StatefulWidget {
   final Assistant assistant;
 
-  const AssistantChatWidget({Key? key, required this.assistant}) : super(key: key);
+  const AssistantChatWidget({Key? key, required this.assistant})
+      : super(key: key);
 
   @override
   _AssistantChatWidgetState createState() => _AssistantChatWidgetState();
 }
 
 class _AssistantChatWidgetState extends State<AssistantChatWidget> {
-  final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final AssistantUseCaseFactory _assistantUseCaseFactory = GetIt.I<AssistantUseCaseFactory>();
+  final AssistantUseCaseFactory _assistantUseCaseFactory =
+      GetIt.I<AssistantUseCaseFactory>();
 
   List<Message> _messages = [];
   Thread? _currentThread;
@@ -29,6 +32,16 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
   void initState() {
     super.initState();
     _loadInitialData();
+  }
+
+  @override
+  void didUpdateWidget(covariant AssistantChatWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Perform actions when the widget is rebuilt
+    if (oldWidget.assistant.id != widget.assistant.id) {
+      _messages.clear();
+      _loadInitialData();
+    }
   }
 
   Future<void> _loadInitialData() async {
@@ -70,14 +83,7 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
     }
   }
 
-  Future<void> _sendMessage() async {
-    if (_messageController.text.isEmpty || _currentThread == null) return;
-
-    // Unfocus the keyboard
-    FocusScope.of(context).unfocus();
-
-    final messageText = _messageController.text;
-    _messageController.clear();
+  Future<void> _sendMessage(String text) async {
 
     setState(() {
       _messages.add(Message(
@@ -85,7 +91,7 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
         content: [
           Content(
             type: 'text',
-            text: TextContent(value: messageText),
+            text: TextContent(value: text),
           ),
         ],
       ));
@@ -104,7 +110,7 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
 
     final result = await _assistantUseCaseFactory.continueChatUseCase().execute(
           assistantId: widget.assistant.id,
-          message: messageText,
+          message: text,
           openAiThreadId: _currentThread!.openAiThreadId,
         );
 
@@ -137,7 +143,8 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
     });
   }
 
-  Widget _buildMessage(BuildContext context, Message message, bool isLastMessage) {
+  Widget _buildMessage(
+      BuildContext context, Message message, bool isLastMessage) {
     bool isFromUser = message.role == 'user';
     String content = message.content.first.text?.value ?? '';
 
@@ -153,7 +160,7 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isFromUser
-                  ? Theme.of(context).colorScheme.surface
+                  ? Theme.of(context).colorScheme.surfaceContainer
                   : Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(12),
             ),
@@ -166,14 +173,17 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.person, color: Colors.white),
+                        Icon(Icons.person, color: Colors.black),
                         SizedBox(width: 8),
-                        Text(
-                          'Assistant',
+                        Flexible(
+                          child: Text(
+                          widget.assistant.name,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -183,9 +193,7 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
                   data: content,
                   styleSheet: MarkdownStyleSheet(
                     p: TextStyle(
-                      color: isFromUser
-                          ? Colors.black
-                          : Colors.white,
+                      color: Colors.black,
                       fontSize: 16,
                     ),
                   ),
@@ -201,27 +209,17 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
               mainAxisAlignment:
                   isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.copy,
-                    color: Colors.white,
-                    size: 20,
+                CupertinoButton(
+                  child: Icon(
+                    CupertinoIcons.square_on_square,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    size: 20, // Reduced icon size
                   ),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: content));
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Message copied to clipboard')),
                     );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    _sendMessage();
                   },
                 ),
               ],
@@ -259,54 +257,57 @@ class _AssistantChatWidgetState extends State<AssistantChatWidget> {
                       itemBuilder: (context, index) {
                         final message = _messages[index];
                         final isLastMessage = index == _messages.length - 1;
-                        return Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: _buildMessage(context, message, isLastMessage),
-                        );
+                        return _buildMessage(context, message, isLastMessage);
                       },
                     ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    focusNode: FocusNode(),
-                    decoration: const InputDecoration(
-                      hintText: 'Type a message...',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    ),
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (value) {
-                      if (value.trim().isNotEmpty) {
-                        _sendMessage();
-                      }
-                    },
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (_messageController.text.trim().isNotEmpty) {
-                      _sendMessage();
-                    }
-                  },
-                  icon: const Icon(Icons.send, color: Colors.blue),
-                  splashRadius: 20,
-                ),
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+          child: ChatInputWidget(
+            onSubmitted: (text) {
+              if (text.trim().isNotEmpty) {
+                _sendMessage(text);
+              }
+            },
           ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Colors.grey[100],
+          //     borderRadius: BorderRadius.circular(30),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: TextField(
+          //           controller: _messageController,
+          //           focusNode: FocusNode(),
+          //           decoration: const InputDecoration(
+          //             hintText: 'Type a message...',
+          //             hintStyle: TextStyle(color: Colors.grey),
+          //             border: InputBorder.none,
+          //             contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+          //           ),
+          //           textInputAction: TextInputAction.send,
+          //           onSubmitted: (value) {
+          //             if (value.trim().isNotEmpty) {
+          //               _sendMessage();
+          //             }
+          //           },
+          //         ),
+          //       ),
+          //       IconButton(
+          //         onPressed: () {
+          //           if (_messageController.text.trim().isNotEmpty) {
+          //             _sendMessage();
+          //           }
+          //         },
+          //         icon: const Icon(Icons.send, color: Colors.blue),
+          //         splashRadius: 20,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }

@@ -47,6 +47,7 @@ class ModelSelector extends StatelessWidget {
             return DropdownMenuItem<GenerativeAiModel>(
               value: model,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     padding: EdgeInsets.all(4),

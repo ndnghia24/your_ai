@@ -70,14 +70,16 @@ class ChatSessionScreen extends StatelessWidget {
                               builder: (context, modelState) {
                                 GenerativeAiModel selectedModel =
                                     GenerativeAiModel.gpt4oMini;
-                                Assistant? selectedAssistant = Assistant(
+                                Assistant selectedAssistant = Assistant(
                                     id: '', name: '', description: '');
                                 if (modelState is ModelInitial) {
                                   selectedModel = modelState.selectedModel;
-                                  selectedAssistant =
-                                      modelState.selectedAssistant;
+                                  
+                                  if(modelState.selectedAssistant != null){
+                                    selectedAssistant = modelState.selectedAssistant!;
+                                  }
                                 }
-
+                                print('Selected assistant: ${selectedAssistant}');
                                 if (selectedModel ==
                                     GenerativeAiModel.customChatBot) {
                                   final modelBloc = GetIt.I<ModelBloc>();
@@ -87,7 +89,7 @@ class ChatSessionScreen extends StatelessWidget {
                                       children: [
                                         AssistantSelector(
                                           selectedAssistant:
-                                              modelBloc.selectedAssistant,
+                                              selectedAssistant,
                                           onAssistantChanged: (assistant) {
                                             modelBloc.selectedAssistant =
                                                 assistant;
@@ -98,7 +100,7 @@ class ChatSessionScreen extends StatelessWidget {
                                           },
                                         ),
                                         Expanded(
-                                          child: selectedAssistant != null
+                                          child: selectedAssistant.id.isNotEmpty
                                               ? AssistantChatWidget(
                                                   assistant: selectedAssistant)
                                               : CircularProgressIndicator(),
@@ -130,7 +132,7 @@ class ChatSessionScreen extends StatelessWidget {
                                   final assistant =
                                       generativeAiAssistants[selectedModel]!;
 
-                                  return BlocBuilder<ConversationBloc,
+                                  return selectedModel == GenerativeAiModel.customChatBot? Container() :BlocBuilder<ConversationBloc,
                                       ConversationState>(
                                     bloc: GetIt.I<ConversationBloc>(),
                                     builder: (context, state) {
