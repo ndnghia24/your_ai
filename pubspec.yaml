@@ -40,6 +40,7 @@ dependencies:
   injectable: any
   url_launcher: any
   webview_flutter: any
+  google_mobile_ads: any
   # google_mobile_ads: any
 
   equatable: any
