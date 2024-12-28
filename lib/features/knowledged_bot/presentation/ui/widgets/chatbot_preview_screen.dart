@@ -146,14 +146,7 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
     });
   }
 
-  void showKnowledgeBaseDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AssistantSettingPopup(assistantId: widget.assistant.id, description: widget.assistant.description, assistantName: widget.assistant.name, instructions: instructions, onUpdateInstructions: onUpdateInstructions);
-      },
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +161,12 @@ class _ChatBotPreviewScreenState extends State<ChatBotPreviewScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              showKnowledgeBaseDialog(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssistantSettingScreen(assistantId: widget.assistant.id, description: widget.assistant.description, assistantName: widget.assistant.name, instructions: instructions, onUpdateInstructions: onUpdateInstructions),
+                ),
+              );
             },
             icon: const Icon(Icons.edit, color: Colors.black),
           ),

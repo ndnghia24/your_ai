@@ -95,7 +95,7 @@ class AssistantIntegrationRemoteDataSource {
       final response = await _assistantIntegrationService.publishTelegramBot(
           assistantId, botToken);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,
           data: response.data,

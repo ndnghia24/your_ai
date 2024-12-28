@@ -251,7 +251,7 @@ class AssistantIntegrationRepository {
 
   AssistantIntegrationRepository(this._dataSource);
 
-  Future<Map<String, dynamic>> getConfigurations(String assistantId) async {
+  Future<List<dynamic>> getConfigurations(String assistantId) async {
     final res = await _dataSource.getConfigurations(assistantId);
 
     if (res.isSuccess) {
@@ -277,12 +277,14 @@ class AssistantIntegrationRepository {
     }
   }
 
-  Future<void> publishTelegramBot(String assistantId, String botToken) async {
+  Future<dynamic> publishTelegramBot(String assistantId, String botToken) async {
     final res = await _dataSource.publishTelegramBot(assistantId, botToken);
 
     if (!res.isSuccess) {
       throw Exception(res.message);
     }
+    return res.data;
+  
   }
 
   Future<void> verifySlackConfig(String botToken, String clientId,

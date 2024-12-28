@@ -6,22 +6,22 @@ class GetIntegrationConfigurationsUseCase {
 
   GetIntegrationConfigurationsUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<Map<String, dynamic>>> execute({
+  Future<UsecaseResultTemplate<List<dynamic>>> execute({
     required String assistantId,
   }) async {
     try {
       final configurations =
           await _repository.integration.getConfigurations(assistantId);
 
-      return UsecaseResultTemplate<Map<String, dynamic>>(
+      return UsecaseResultTemplate<List<dynamic>>(
         isSuccess: true,
         result: configurations,
         message: 'Success',
       );
     } catch (e) {
-      return UsecaseResultTemplate<Map<String, dynamic>>(
+      return UsecaseResultTemplate<List<String>>(
         isSuccess: false,
-        result: {},
+        result: [],
         message: e.toString(),
       );
     }
@@ -85,22 +85,22 @@ class PublishTelegramBotUseCase {
 
   PublishTelegramBotUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<void>> execute({
+  Future<UsecaseResultTemplate<String>> execute({
     required String assistantId,
     required String botToken,
   }) async {
     try {
-      await _repository.integration.publishTelegramBot(assistantId, botToken);
+      var result = await _repository.integration.publishTelegramBot(assistantId, botToken);
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: true,
-        result: null,
+        result: result['redirect'],
         message: 'Telegram bot published successfully',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: false,
-        result: null,
+        result: '',
         message: e.toString(),
       );
     }

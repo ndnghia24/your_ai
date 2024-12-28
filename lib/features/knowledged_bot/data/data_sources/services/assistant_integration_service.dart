@@ -11,7 +11,7 @@ class AssistantIntegrationService {
   Future<Response> getConfigurations(String assistantId) async {
     try {
       final response = await dio.get(
-        '/kb-core/v1/bot-integration/$assistantId/configurations',
+        '/bot-integration/$assistantId/configurations',
       );
       return response;
     } catch (e) {
@@ -24,7 +24,7 @@ class AssistantIntegrationService {
       String assistantId, String type) async {
     try {
       final response = await dio.delete(
-        '/kb-core/v1/bot-integration/$assistantId/$type',
+        '/bot-integration/$assistantId/$type',
       );
       return response;
     } catch (e) {
@@ -36,7 +36,7 @@ class AssistantIntegrationService {
   Future<Response> verifyTelegramConfig(String botToken) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/telegram/validation',
+        '/bot-integration/telegram/validation',
         data: {
           'botToken': botToken,
         },
@@ -55,7 +55,7 @@ class AssistantIntegrationService {
       String assistantId, String botToken) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/telegram/publish/$assistantId',
+        '/bot-integration/telegram/publish/$assistantId',
         data: {
           'botToken': botToken,
         },
@@ -74,7 +74,7 @@ class AssistantIntegrationService {
       String clientSecret, String signingSecret) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/slack/validation',
+        '/bot-integration/slack/validation',
         data: {
           'botToken': botToken,
           'clientId': clientId,
@@ -96,7 +96,7 @@ class AssistantIntegrationService {
       String clientId, String clientSecret, String signingSecret) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/slack/publish/$assistantId',
+        '/bot-integration/slack/publish/$assistantId',
         data: {
           'botToken': botToken,
           'clientId': clientId,
@@ -118,7 +118,7 @@ class AssistantIntegrationService {
       String botToken, String pageId, String appSecret) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/messenger/validation',
+        '/bot-integration/messenger/validation',
         data: {
           'botToken': botToken,
           'pageId': pageId,
@@ -139,7 +139,7 @@ class AssistantIntegrationService {
       String pageId, String appSecret) async {
     try {
       final response = await dio.post(
-        '/kb-core/v1/bot-integration/messenger/publish/$assistantId',
+        '/bot-integration/messenger/publish/$assistantId',
         data: {
           'botToken': botToken,
           'pageId': pageId,

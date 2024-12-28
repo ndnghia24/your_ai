@@ -1,7 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/messenger_config_popup.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/publish_config_bot_screent.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/telegram_config_popup.dart';
 
+final getIt = GetIt.instance;
 class PublishScreen extends StatefulWidget {
   final String assistantId; // Add assistantId parameter
 
@@ -12,10 +20,57 @@ class PublishScreen extends StatefulWidget {
 }
 
 class _PublishScreenState extends State<PublishScreen> {
-  // State variables to manage the checkbox states
   bool isSlackChecked = false;
   bool isTelegramChecked = false;
-  bool isMessengerChecked = true;
+  bool isMessengerChecked = false;
+  bool isSlackVerified = false;
+  bool isTelegramVerified = false;
+  bool isMessengerVerified = false;
+  bool isLoading = false;
+  String telegramToken = '';
+  final AssistantUseCaseFactory assistantUseCaseFactory = GetIt.I<AssistantUseCaseFactory>();
+
+  @override
+  void initState() {
+    super.initState();
+    isLoading = true;
+    _fetchConfigurations();
+  }
+
+  void _fetchConfigurations() {
+    assistantUseCaseFactory.getIntegrationConfigurationsUseCase()
+        .execute(assistantId: widget.assistantId)
+        .then((result) {
+      if (result.isSuccess) {
+        final configurations = result.result;
+        print('Configurations: $configurations');
+
+        // Parse configurations
+        _parseConfigurations(configurations);
+
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        print('Error: ${result.message}');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
+  }
+
+  void _parseConfigurations(List<dynamic> configurations) {
+    for (var config in configurations) {
+      if (config['type'] == 'slack') {
+        isSlackVerified = true;
+      } else if (config['type'] == 'telegram') {
+        isTelegramVerified = true;
+      } else if (config['type'] == 'messenger') {
+        isMessengerVerified = true;
+      } 
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +79,7 @@ class _PublishScreenState extends State<PublishScreen> {
         title: const Text('Publish AI Bot'),
         actions: [
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: isLoading ? null : ()=>_publishBot(context),
             icon: const Icon(Icons.cloud_upload, color: Colors.white),
             label: const Text(
               'Publish',
@@ -39,87 +94,118 @@ class _PublishScreenState extends State<PublishScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Publish to *',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'By publishing your bot on the following platforms, you fully understand and agree to abide by Terms of service for each publishing channel.',
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildPlatformTile(
-                    context,
-                    platformName: 'Slack',
-                    status: 'Not Configured',
-                    configureAction: () =>
-                        _showConfigurePopup(context, widget.assistantId),
-                    isChecked: isSlackChecked,
-                    isEnabled: true,
-                    onChanged: (value) {
-                      setState(() {
-                        isSlackChecked = value!;
-                      });
-                    },
-                    icon: CupertinoIcons.chat_bubble,
+                  const Text(
+                    'Publish to *',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  _buildPlatformTile(
-                    context,
-                    platformName: 'Telegram',
-                    status: 'Not Configured',
-                    configureAction: () =>
-                        _showConfigurePopup(context, widget.assistantId),
-                    isChecked: isTelegramChecked,
-                    isEnabled: true,
-                    onChanged: (value) {
-                      setState(() {
-                        isTelegramChecked = value!;
-                      });
-                    },
-                    icon: CupertinoIcons.paperplane,
+                  const SizedBox(height: 8),
+                  const Text(
+                    'By publishing your bot on the following platforms, you fully understand and agree to abide by Terms of service for each publishing channel.',
+                    style: TextStyle(fontSize: 14),
                   ),
-                  _buildPlatformTile(
-                    context,
-                    platformName: 'Messenger',
-                    status: 'Verified',
-                    configureAction: () =>
-                        _showConfigurePopup(context, widget.assistantId),
-                    isChecked: isMessengerChecked,
-                    isEnabled: true,
-                    onChanged: (value) {
-                      setState(() {
-                        isMessengerChecked = value!;
-                      });
-                    },
-                    icon: CupertinoIcons.chat_bubble_2,
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        _buildPlatformTile(
+                          context,
+                          platformName: 'Slack',
+                          status: isSlackVerified ,
+                          configureAction: () =>
+                              _showMessagerConfigurePopup(context, widget.assistantId),
+                          isChecked: isSlackChecked,
+                          onChanged: (value) {
+                            setState(() {
+                              isSlackChecked = value!;
+                            });
+                          },
+                          icon: CupertinoIcons.chat_bubble,
+                        ),
+                        _buildPlatformTile(
+                          context,
+                          platformName: 'Telegram',
+                          status: isTelegramVerified
+                              ,
+                          configureAction: () =>
+                              _showTelegramConfigurePopup(context, widget.assistantId),
+                          isChecked: isTelegramChecked,
+                          onChanged: (value) {
+                            setState(() {
+                              isTelegramChecked = value!;
+                            });
+                          },
+                          icon: CupertinoIcons.paperplane,
+                        ),
+                        _buildPlatformTile(
+                          context,
+                          platformName: 'Messenger',
+                          status: isMessengerVerified
+                             ,
+                          configureAction: () =>
+                              _showMessagerConfigurePopup(context, widget.assistantId),
+                          isChecked: isMessengerChecked,
+                          onChanged: (value) {
+                            setState(() {
+                              isMessengerChecked = value!;
+                            });
+                          },
+                          icon: CupertinoIcons.chat_bubble_2,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
+  void _publishBot(BuildContext context) async {
+    // Implement the publish bot logic
+    String redirectTelegram = '';
+    String redirectMessenger = '';
+    String redirectSlack = '';
+    if(isTelegramChecked){
+      final result = await assistantUseCaseFactory.publishTelegramBotUseCase().execute(assistantId: widget.assistantId, botToken: telegramToken);
+      if(result.isSuccess){
+        redirectTelegram = result.result;
+      }
+      else{
+        print('Error: ${result.message}');
+        redirectTelegram = '';
+      }
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PublishingPlatformWidget(
+        isMessenger: isMessengerChecked,
+        isSlack: isSlackChecked,
+        isTelegram: isTelegramChecked,
+        redirectTelegram: redirectTelegram,
+        redirectMessenger: redirectMessenger,
+        redirectSlack: redirectSlack,
+      ),)
+    );
+
+
+  }
+
+
   Widget _buildPlatformTile(BuildContext context,
       {required String platformName,
-      required String status,
+      required bool status,
       required VoidCallback configureAction,
       required bool isChecked,
-      required bool isEnabled,
       required ValueChanged<bool?> onChanged,
       required IconData icon}) {
     // Added icon parameter
@@ -127,7 +213,7 @@ class _PublishScreenState extends State<PublishScreen> {
       contentPadding: EdgeInsets.zero, // Remove default padding
       leading: Checkbox(
         value: isChecked,
-        onChanged: isEnabled ? onChanged : null,
+        onChanged: status ? onChanged : null,
       ),
       title: Row(
         children: [
@@ -136,7 +222,9 @@ class _PublishScreenState extends State<PublishScreen> {
           Text(platformName),
         ],
       ),
-      subtitle: Text(status),
+      subtitle: Text(status ? 'Verified' : 'Not Configured',
+          style: TextStyle(
+              color: status ? Colors.green : Colors.red)), // Added color to status text
       trailing: TextButton(
         onPressed: configureAction,
         child: const Text(
@@ -148,7 +236,7 @@ class _PublishScreenState extends State<PublishScreen> {
     );
   }
 
-  void _showConfigurePopup(BuildContext context, String assistantId) {
+  void _showMessagerConfigurePopup(BuildContext context, String assistantId) {
     showDialog(
       context: context,
       builder: (context) {
@@ -157,120 +245,44 @@ class _PublishScreenState extends State<PublishScreen> {
       },
     );
   }
-}
 
-class MessengerConfigurePopup extends StatelessWidget {
-  final String assistantId; // Add assistantId parameter
+  void handelConnectTelegram(String token) {
+    setState(() {
+      isLoading = true;
+      telegramToken = token;
+    });
 
-  const MessengerConfigurePopup({Key? key, required this.assistantId})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Configure Messenger Bot',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Connect to Messenger Bots and chat with this bot in Messenger App',
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                '1. Messenger Copylink',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                  'Copy the following content to your Messenger app configuration page.'),
-              const SizedBox(height: 8),
-              _buildCopyField('Callback URL',
-                  'https://knowledge-api.jarvis.cx/kb-core/v1/hook/messenger/$assistantId'), // Use assistantId
-              const SizedBox(height: 8),
-              _buildCopyField('Verify Token', 'knowledge'),
-              const SizedBox(height: 16),
-              const Text(
-                '2. Messenger Information',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Messenger Bot Token',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Messenger Bot Page ID',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Messenger Bot App Secret',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: const Text('Disconnect'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    assistantUseCaseFactory.verifyTelegramConfigUseCase()
+        .execute(botToken: token)
+        .then((result) {
+      if (result.isSuccess) {
+        print('Telegram connected successfully');
+        setState(() {
+          isTelegramVerified = true;
+          isLoading = false;
+        });
+      } else {
+        print('Error: ${result.message}');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
   }
 
-  Widget _buildCopyField(String label, String value) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        label,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(value),
-      trailing: IconButton(
-        icon: const Icon(Icons.copy),
-        onPressed: () {
-          Clipboard.setData(ClipboardData(text: value));
-        },
-      ),
+  void _showTelegramConfigurePopup(BuildContext context, String assistantId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TelegramConfigurePopup(
+            assistantId: assistantId,
+            onConnect: handelConnectTelegram,); // Pass assistantId
+      },
     );
   }
 }
+
+
+
+  
+
