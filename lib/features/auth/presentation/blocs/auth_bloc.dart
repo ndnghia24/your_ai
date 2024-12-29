@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/utils/ga4_service.dart';
 import '../../domain/auth_usecases_factory.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -23,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await authUseCaseFactory.getUserInfoUseCase.execute();
 
       if (result['isSuccess']) {
+        GetIt.I.get<GA4Service>().userId = result['data']['email'];
         emit(AuthAuthenticated(result['data']));
       } else {
         emit(AuthUnauthenticated('User not logged in'));
@@ -69,6 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           .execute(event.googleToken);
       if (result['isSuccess']) {
         final userInfo = await authUseCaseFactory.getUserInfoUseCase.execute();
+        GetIt.I.get<GA4Service>().userId = userInfo['data']['email'];
         emit(AuthAuthenticated(userInfo['data']));
       } else {
         emit(AuthUnauthenticated("Google login failed"));

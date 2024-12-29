@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/utils/ga4_service.dart';
 import 'package:your_ai/features/chat_ai/presentation/ui/widgets/prompt_popup.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/prompt_library_popup.dart';
@@ -13,6 +15,7 @@ class ChatInputWidget extends StatelessWidget {
   void _onSendPressed(BuildContext context, TextEditingController controller) {
     final text = controller.text;
     if (text.isNotEmpty) {
+      GetIt.I<GA4Service>().sendGA4Event(GA4EventNames.sendChatMessage, {});
       onSubmitted(text);
       controller.clear();
     }

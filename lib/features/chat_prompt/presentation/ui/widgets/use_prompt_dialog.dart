@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/utils/ga4_service.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
@@ -164,6 +165,7 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
+                                getIt<GA4Service>().sendGA4Event(GA4EventNames.usePrompt, {});
                                 GenerativeAiModel selectedModel =
                                     GenerativeAiModel.gpt4oMini;
                                 if (modelState is ModelInitial) {
