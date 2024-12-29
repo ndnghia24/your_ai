@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/core/utils/ga4_service.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
@@ -173,6 +174,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
             if (state is ConversationLoaded) {
               getIt<ConversationBloc>().add(ResetConversation());
             }
+            getIt<GA4Service>().sendGA4Event(GA4EventNames.newChat, {});
             Get.offAllNamed(Routes.home);
           },
         );
@@ -336,6 +338,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                 onTap: isSelected
                     ? null
                     : () {
+                        getIt<GA4Service>().sendGA4Event(GA4EventNames.reloadConversation, {});
                         getIt<ModelBloc>()
                             .add(UpdateModel(GenerativeAiModel.gpt4oMini));
                         getIt<ConversationBloc>()

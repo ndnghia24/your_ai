@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 import 'package:your_ai/core/network/dio_clients/kb_dio_client.dart';
+import 'package:your_ai/core/utils/ga4_service.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
@@ -153,4 +154,6 @@ void setupServiceLocator() {
   // Bloc
   locator.registerLazySingleton<AssistantBloc>(
       () => AssistantBloc(locator<AssistantUseCaseFactory>()));
+  //Ga4 service
+  locator.registerLazySingleton<GA4Service>(() => GA4Service());
 }
