@@ -146,7 +146,7 @@ class PublishSlackBotUseCase {
 
   PublishSlackBotUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<void>> execute({
+  Future<UsecaseResultTemplate<String>> execute({
     required String assistantId,
     required String botToken,
     required String clientId,
@@ -154,7 +154,7 @@ class PublishSlackBotUseCase {
     required String signingSecret,
   }) async {
     try {
-      await _repository.integration.publishSlackBot(
+     final result = await _repository.integration.publishSlackBot(
         assistantId,
         botToken,
         clientId,
@@ -162,15 +162,15 @@ class PublishSlackBotUseCase {
         signingSecret,
       );
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: true,
-        result: null,
+        result: result['redirect'],
         message: 'Slack bot published successfully',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: false,
-        result: null,
+        result: '',
         message: e.toString(),
       );
     }
@@ -214,29 +214,29 @@ class PublishMessengerBotUseCase {
 
   PublishMessengerBotUseCase(this._repository);
 
-  Future<UsecaseResultTemplate<void>> execute({
+  Future<UsecaseResultTemplate<String>> execute({
     required String assistantId,
     required String botToken,
     required String pageId,
     required String appSecret,
   }) async {
     try {
-      await _repository.integration.publishMessengerBot(
+      final result = await _repository.integration.publishMessengerBot(
         assistantId,
         botToken,
         pageId,
         appSecret,
       );
 
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: true,
-        result: null,
+        result: result['redirect'],
         message: 'Messenger bot published successfully',
       );
     } catch (e) {
-      return UsecaseResultTemplate<void>(
+      return UsecaseResultTemplate<String>(
         isSuccess: false,
-        result: null,
+        result: '',
         message: e.toString(),
       );
     }

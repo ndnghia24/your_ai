@@ -190,7 +190,7 @@ class _PublishScreenState extends State<PublishScreen> {
     String redirectTelegram = '';
     String redirectMessenger = '';
     String redirectSlack = '';
-    if (isTelegramChecked) {
+    if (isTelegramChecked && isSlackVerified) {
       final result = await assistantUseCaseFactory
           .publishTelegramBotUseCase()
           .execute(assistantId: widget.assistantId, botToken: telegramToken);
@@ -202,8 +202,30 @@ class _PublishScreenState extends State<PublishScreen> {
       }
     }
 
-    if(isSlackChecked){
-      
+    if(isSlackChecked && isSlackVerified){
+      final result = await assistantUseCaseFactory
+          .publishSlackBotUseCase()
+          .execute(assistantId: widget.assistantId, botToken: slackToken,
+          clientId: slackClientId, clientSecret: slackClientSecret, signingSecret: slackSigningSecret);
+      if (result.isSuccess) {
+        redirectSlack = result.result;
+      } else {
+        print('Error: ${result.message}');
+        redirectSlack = '';
+      }
+    }
+
+    if(isMessengerChecked && isMessengerVerified){
+      final result = await assistantUseCaseFactory
+          .publishMessengerBotUseCase()
+          .execute(assistantId: widget.assistantId, botToken: messengerToken,
+          pageId: messengerPageId, appSecret: messengerAppSecret);
+      if (result.isSuccess) {
+        redirectMessenger = result.result;
+      } else {
+        print('Error: ${result.message}');
+        redirectMessenger = '';
+      }
     }
 
     Navigator.of(context).push(MaterialPageRoute(

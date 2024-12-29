@@ -4,10 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_event.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_state.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_state.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_event.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_state.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_event.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_state.dart';
 
 class UnitBloc extends Bloc<UnitEvent, UnitState> {
   final KnowledgeUseCaseFactory KBUseCaseFactory;

@@ -42,9 +42,10 @@ class ChatBotScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (getIt<AssistantBloc>().state is AssistantInitial) {
+    if (getIt<AssistantBloc>().state is AssistantInitial || getIt<AssistantBloc>().state is AssistantError) {
       getIt<AssistantBloc>().add(GetAllAssistantEvent());
     }
+
     return BlocBuilder<AssistantBloc, AssistantState>(
         bloc: getIt<AssistantBloc>(),
         builder: (context, state) {

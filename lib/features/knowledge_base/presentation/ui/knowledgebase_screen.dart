@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_bloc.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_event.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_state.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_bloc.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_event.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_state.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/item_knowledgebase.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/knowledgebase_detail_screen.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/popup_new_knowledgebase.dart';
@@ -34,6 +34,7 @@ class KnowledgeBaseScreen extends StatelessWidget {
           
         }
         if(KBState is KBError) {
+          //getIt<KBBloc>().add(GetAllKBEvent());
           return Scaffold(
             appBar: AppBar(
               title: Text('Knowledge'),
