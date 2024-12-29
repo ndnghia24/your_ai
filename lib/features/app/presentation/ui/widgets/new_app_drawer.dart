@@ -13,6 +13,7 @@ import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart'
 import 'package:your_ai/features/app/presentation/blocs/conversation_state.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
+import 'package:your_ai/features/app/presentation/ui/screens/admob_banner_ads_widget.dart';
 import 'package:your_ai/features/app/presentation/ui/screens/banner_ads_widget.dart';
 import 'package:your_ai/features/auth/presentation/ui/widget_authentication.dart';
 import 'package:your_ai/features/chat_ai/domain/chat_usecase_factory.dart';
@@ -102,7 +103,10 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                   if (!_showAllChats)
                     Column(
                       children: [
-                        if (!kIsWeb) BannerAdWidget(),
+                        if (!kIsWeb)
+                          AdmobBannerAdWidget(
+                              adUnitId:
+                                  'ca-app-pub-3940256099942544/6300978111'),
                         AuthenticationWidget(),
                       ],
                     )
@@ -332,7 +336,8 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                 onTap: isSelected
                     ? null
                     : () {
-                        getIt<ModelBloc>().add(UpdateModel(GenerativeAiModel.gpt4oMini));
+                        getIt<ModelBloc>()
+                            .add(UpdateModel(GenerativeAiModel.gpt4oMini));
                         getIt<ConversationBloc>()
                             .add(LoadConversation(conversation['id']));
                         Navigator.pop(context);

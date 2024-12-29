@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
 import 'package:your_ai/core/theme/app_theme.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
@@ -13,6 +14,7 @@ import 'features/auth/presentation/blocs/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await dotenv.load(fileName: ".env");
 
   // Setup service locator
