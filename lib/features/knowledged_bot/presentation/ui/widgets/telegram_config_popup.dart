@@ -3,9 +3,12 @@ import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/copy_fie
 
 class TelegramConfigurePopup extends StatefulWidget {
   final String assistantId; // Add assistantId parameter
+  final String token;
+  final isVerified;
   final void Function(String token) onConnect;
 
-  const TelegramConfigurePopup({Key? key, required this.assistantId, required this.onConnect})
+  const TelegramConfigurePopup({Key? key, required this.assistantId, required this.onConnect, required this.token,
+  required this.isVerified})
       : super(key: key);
 
   @override
@@ -14,6 +17,12 @@ class TelegramConfigurePopup extends StatefulWidget {
 
 class _TelegramConfigurePopupState extends State<TelegramConfigurePopup> {
   final TextEditingController _tokenController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _tokenController.text = widget.token;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +80,9 @@ class _TelegramConfigurePopupState extends State<TelegramConfigurePopup> {
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor:widget.isVerified ? Colors.red : Colors.blue,
                     ),
-                    child: const Text('OK'),
+                    child:  Text(widget.isVerified ? 'Disconnect' : 'OK'),
                   ),
                 ],
               ),

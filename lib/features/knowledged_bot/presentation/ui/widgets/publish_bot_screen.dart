@@ -7,9 +7,11 @@ import 'package:get_it/get_it.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/messenger_config_popup.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/publish_config_bot_screent.dart';
+import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/slack_config_popup.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/telegram_config_popup.dart';
 
 final getIt = GetIt.instance;
+
 class PublishScreen extends StatefulWidget {
   final String assistantId; // Add assistantId parameter
 
@@ -28,7 +30,16 @@ class _PublishScreenState extends State<PublishScreen> {
   bool isMessengerVerified = false;
   bool isLoading = false;
   String telegramToken = '';
-  final AssistantUseCaseFactory assistantUseCaseFactory = GetIt.I<AssistantUseCaseFactory>();
+  String messengerToken = '';
+  String messengerPageId = '';
+  String messengerAppSecret = '';
+  String slackToken = '';
+  String slackSigningSecret = '';
+  String slackClientId = '';
+  String slackClientSecret = '';
+
+  final AssistantUseCaseFactory assistantUseCaseFactory =
+      GetIt.I<AssistantUseCaseFactory>();
 
   @override
   void initState() {
@@ -38,7 +49,8 @@ class _PublishScreenState extends State<PublishScreen> {
   }
 
   void _fetchConfigurations() {
-    assistantUseCaseFactory.getIntegrationConfigurationsUseCase()
+    assistantUseCaseFactory
+        .getIntegrationConfigurationsUseCase()
         .execute(assistantId: widget.assistantId)
         .then((result) {
       if (result.isSuccess) {
@@ -64,11 +76,16 @@ class _PublishScreenState extends State<PublishScreen> {
     for (var config in configurations) {
       if (config['type'] == 'slack') {
         isSlackVerified = true;
+        slackToken = config['metadata']['botToken'];
+        slackSigningSecret = config['metadata']['signingSecret'];
+        slackClientId = config['metadata']['clientId'];
+        slackClientSecret = config['metadata']['clientSecret'];
       } else if (config['type'] == 'telegram') {
         isTelegramVerified = true;
+        telegramToken = config['metadata']['botToken'];
       } else if (config['type'] == 'messenger') {
         isMessengerVerified = true;
-      } 
+      }
     }
   }
 
@@ -79,7 +96,7 @@ class _PublishScreenState extends State<PublishScreen> {
         title: const Text('Publish AI Bot'),
         actions: [
           ElevatedButton.icon(
-            onPressed: isLoading ? null : ()=>_publishBot(context),
+            onPressed: isLoading ? null : () => _publishBot(context),
             icon: const Icon(Icons.cloud_upload, color: Colors.white),
             label: const Text(
               'Publish',
@@ -120,9 +137,9 @@ class _PublishScreenState extends State<PublishScreen> {
                         _buildPlatformTile(
                           context,
                           platformName: 'Slack',
-                          status: isSlackVerified ,
-                          configureAction: () =>
-                              _showMessagerConfigurePopup(context, widget.assistantId),
+                          status: isSlackVerified,
+                          configureAction: () => _showSlackConfigurePopup(
+                              context, widget.assistantId),
                           isChecked: isSlackChecked,
                           onChanged: (value) {
                             setState(() {
@@ -134,10 +151,9 @@ class _PublishScreenState extends State<PublishScreen> {
                         _buildPlatformTile(
                           context,
                           platformName: 'Telegram',
-                          status: isTelegramVerified
-                              ,
-                          configureAction: () =>
-                              _showTelegramConfigurePopup(context, widget.assistantId),
+                          status: isTelegramVerified,
+                          configureAction: () => _showTelegramConfigurePopup(
+                              context, widget.assistantId),
                           isChecked: isTelegramChecked,
                           onChanged: (value) {
                             setState(() {
@@ -149,10 +165,9 @@ class _PublishScreenState extends State<PublishScreen> {
                         _buildPlatformTile(
                           context,
                           platformName: 'Messenger',
-                          status: isMessengerVerified
-                             ,
-                          configureAction: () =>
-                              _showMessagerConfigurePopup(context, widget.assistantId),
+                          status: isMessengerVerified,
+                          configureAction: () => _showMessagerConfigurePopup(
+                              context, widget.assistantId),
                           isChecked: isMessengerChecked,
                           onChanged: (value) {
                             setState(() {
@@ -175,31 +190,33 @@ class _PublishScreenState extends State<PublishScreen> {
     String redirectTelegram = '';
     String redirectMessenger = '';
     String redirectSlack = '';
-    if(isTelegramChecked){
-      final result = await assistantUseCaseFactory.publishTelegramBotUseCase().execute(assistantId: widget.assistantId, botToken: telegramToken);
-      if(result.isSuccess){
+    if (isTelegramChecked) {
+      final result = await assistantUseCaseFactory
+          .publishTelegramBotUseCase()
+          .execute(assistantId: widget.assistantId, botToken: telegramToken);
+      if (result.isSuccess) {
         redirectTelegram = result.result;
-      }
-      else{
+      } else {
         print('Error: ${result.message}');
         redirectTelegram = '';
       }
     }
 
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PublishingPlatformWidget(
+    if(isSlackChecked){
+      
+    }
+
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PublishingPlatformWidget(
         isMessenger: isMessengerChecked,
         isSlack: isSlackChecked,
         isTelegram: isTelegramChecked,
         redirectTelegram: redirectTelegram,
         redirectMessenger: redirectMessenger,
         redirectSlack: redirectSlack,
-      ),)
-    );
-
-
+      ),
+    ));
   }
-
 
   Widget _buildPlatformTile(BuildContext context,
       {required String platformName,
@@ -224,7 +241,9 @@ class _PublishScreenState extends State<PublishScreen> {
       ),
       subtitle: Text(status ? 'Verified' : 'Not Configured',
           style: TextStyle(
-              color: status ? Colors.green : Colors.red)), // Added color to status text
+              color: status
+                  ? Colors.green
+                  : Colors.red)), // Added color to status text
       trailing: TextButton(
         onPressed: configureAction,
         child: const Text(
@@ -236,38 +255,98 @@ class _PublishScreenState extends State<PublishScreen> {
     );
   }
 
+  void handelConnectMessager(String token, String pageId, String appSecret) {
+    if (isMessengerVerified) {
+      setState(() {
+        messengerToken = '';
+        messengerPageId = '';
+        messengerAppSecret = '';
+        isMessengerVerified = false;
+      });
+
+      assistantUseCaseFactory.disconnectIntegrationUseCase().execute(
+            assistantId: widget.assistantId,
+            type: 'messenger',
+          );
+    } else {
+      setState(() {
+        isLoading = true;
+        messengerToken = token;
+        messengerPageId = pageId;
+        messengerAppSecret = appSecret;
+      });
+
+      assistantUseCaseFactory
+          .verifyMessengerConfigUseCase()
+          .execute(botToken: token, pageId: pageId, appSecret: appSecret)
+          .then((result) {
+        if (result.isSuccess) {
+          print('Messager connected successfully');
+          setState(() {
+            isMessengerVerified = true;
+            isLoading = false;
+          });
+        } else {
+          print('Error: ${result.message}');
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
+  }
+
   void _showMessagerConfigurePopup(BuildContext context, String assistantId) {
     showDialog(
       context: context,
       builder: (context) {
         return MessengerConfigurePopup(
-            assistantId: assistantId); // Pass assistantId
+            assistantId: assistantId,
+            token: messengerToken,
+            pageId: messengerPageId,
+            appSecret: messengerAppSecret,
+            isVerified: isMessengerVerified,
+            onConnect: handelConnectMessager
+            ); // Pass assistantId
       },
     );
   }
 
   void handelConnectTelegram(String token) {
-    setState(() {
-      isLoading = true;
-      telegramToken = token;
-    });
+    if (isTelegramVerified) {
+      setState(() {
+        telegramToken = '';
+        isTelegramVerified = false;
+      });
 
-    assistantUseCaseFactory.verifyTelegramConfigUseCase()
-        .execute(botToken: token)
-        .then((result) {
-      if (result.isSuccess) {
-        print('Telegram connected successfully');
-        setState(() {
-          isTelegramVerified = true;
-          isLoading = false;
-        });
-      } else {
-        print('Error: ${result.message}');
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+      assistantUseCaseFactory.disconnectIntegrationUseCase().execute(
+            assistantId: widget.assistantId,
+            type: 'telegram',
+          );
+    } else {
+      setState(() {
+        isLoading = true;
+        telegramToken = token;
+      });
+
+      assistantUseCaseFactory
+          .verifyTelegramConfigUseCase()
+          .execute(botToken: token)
+          .then((result) {
+        if (result.isSuccess) {
+          print('Telegram connected successfully');
+          setState(() {
+            isTelegramVerified = true;
+            isLoading = false;
+          });
+        } else {
+          print('Error: ${result.message}');
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
   }
 
   void _showTelegramConfigurePopup(BuildContext context, String assistantId) {
@@ -275,14 +354,78 @@ class _PublishScreenState extends State<PublishScreen> {
       context: context,
       builder: (context) {
         return TelegramConfigurePopup(
-            assistantId: assistantId,
-            onConnect: handelConnectTelegram,); // Pass assistantId
+          assistantId: assistantId,
+          token: telegramToken,
+          isVerified: isTelegramVerified,
+          onConnect: handelConnectTelegram,
+        ); // Pass assistantId
+      },
+    );
+  }
+
+  void handelConnectSlack(String token, String clientId, String clientSecret,
+      String signingSecret) {
+    if (isSlackVerified) {
+      setState(() {
+        slackToken = '';
+        slackClientId = '';
+        slackClientSecret = '';
+        slackSigningSecret = '';
+        isSlackVerified = false;
+      });
+
+      assistantUseCaseFactory.disconnectIntegrationUseCase().execute(
+            assistantId: widget.assistantId,
+            type: 'slack',
+          );
+    } else {
+      setState(() {
+        isLoading = true;
+        slackToken = token;
+        slackClientId = clientId;
+        slackClientSecret = clientSecret;
+        slackSigningSecret = signingSecret;
+      });
+
+      assistantUseCaseFactory
+          .verifySlackConfigUseCase()
+          .execute(
+              botToken: token,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              signingSecret: signingSecret)
+          .then((result) {
+        if (result.isSuccess) {
+          print('Slack connected successfully');
+          setState(() {
+            isSlackVerified = true;
+            isLoading = false;
+          });
+        } else {
+          print('Error: ${result.message}');
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
+  }
+
+  void _showSlackConfigurePopup(BuildContext context, String assistantId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SlackConfigurePopup(
+          assistantId: assistantId,
+          clientId: slackClientId,
+          clientSecret: slackClientSecret,
+          signingSecret: slackSigningSecret,
+          token: slackToken,
+          isVerified: isSlackVerified,
+          onConnect: handelConnectSlack,
+        ); // Pass assistantId
+        // Pass assistantId
       },
     );
   }
 }
-
-
-
-  
-
