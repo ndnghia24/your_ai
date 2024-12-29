@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_event.dart';
@@ -39,7 +40,7 @@ class ChatSessionScreen extends StatelessWidget {
       ],
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: AppColors.background,
         drawer: FractionallySizedBox(
           widthFactor: 0.75,
           child: AppDrawerWidget(),
@@ -56,121 +57,117 @@ class ChatSessionScreen extends StatelessWidget {
                   child: CustomAppBar(),
                 ),
                 Expanded(
-                  child: Builder(
-                    builder: (context) => GestureDetector(
-                      onHorizontalDragEnd: (details) {
-                        Scaffold.of(context).openDrawer();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          children: [
-                            BlocBuilder<ModelBloc, ModelState>(
-                              bloc: GetIt.I<ModelBloc>(),
-                              builder: (context, modelState) {
-                                GenerativeAiModel selectedModel =
-                                    GenerativeAiModel.gpt4oMini;
-                                Assistant selectedAssistant = Assistant(
-                                    id: '', name: '', description: '');
-                                if (modelState is ModelInitial) {
-                                  selectedModel = modelState.selectedModel;
-                                  
-                                  if(modelState.selectedAssistant != null){
-                                    selectedAssistant = modelState.selectedAssistant!;
-                                  }
-                                }
-                                print('Selected assistant: ${selectedAssistant}');
-                                if (selectedModel ==
-                                    GenerativeAiModel.customChatBot) {
-                                  final modelBloc = GetIt.I<ModelBloc>();
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      children: [
+                        BlocBuilder<ModelBloc, ModelState>(
+                          bloc: GetIt.I<ModelBloc>(),
+                          builder: (context, modelState) {
+                            GenerativeAiModel selectedModel =
+                                GenerativeAiModel.gpt4oMini;
+                            Assistant selectedAssistant =
+                                Assistant(id: '', name: '', description: '');
+                            if (modelState is ModelInitial) {
+                              selectedModel = modelState.selectedModel;
 
-                                  return Expanded(
-                                    child: Column(
-                                      children: [
-                                        AssistantSelector(
-                                          selectedAssistant:
-                                              selectedAssistant,
-                                          onAssistantChanged: (assistant) {
-                                            modelBloc.selectedAssistant =
-                                                assistant;
-                                            print('assistant: ${assistant.name}');
-                                            modelBloc.add(UpdateModel(
-                                                GenerativeAiModel.customChatBot,
-                                                selectedAssistant: assistant));
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: selectedAssistant.id.isNotEmpty
-                                              ? AssistantChatWidget(
-                                                  assistant: selectedAssistant)
-                                              : CircularProgressIndicator(),
-                                        ),
-                                      ],
+                              if (modelState.selectedAssistant != null) {
+                                selectedAssistant =
+                                    modelState.selectedAssistant!;
+                              }
+                            }
+                            print('Selected assistant: ${selectedAssistant}');
+                            if (selectedModel ==
+                                GenerativeAiModel.customChatBot) {
+                              final modelBloc = GetIt.I<ModelBloc>();
+
+                              return Expanded(
+                                child: Column(
+                                  children: [
+                                    AssistantSelector(
+                                      selectedAssistant: selectedAssistant,
+                                      onAssistantChanged: (assistant) {
+                                        modelBloc.selectedAssistant = assistant;
+                                        print('assistant: ${assistant.name}');
+                                        modelBloc.add(UpdateModel(
+                                            GenerativeAiModel.customChatBot,
+                                            selectedAssistant: assistant));
+                                      },
                                     ),
-                                  );
-                                }
+                                    Expanded(
+                                      child: selectedAssistant.id.isNotEmpty
+                                          ? AssistantChatWidget(
+                                              assistant: selectedAssistant)
+                                          : CircularProgressIndicator(),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
 
-                                return Expanded(
-                                  child: isNewChat
-                                      ? NewChatWidget()
-                                      : OldChatWidget(),
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: BlocBuilder<ModelBloc, ModelState>(
-                                bloc: GetIt.I<ModelBloc>(),
-                                builder: (context, modelState) {
-                                  GenerativeAiModel selectedModel =
-                                      GenerativeAiModel.gpt4oMini;
-                                  if (modelState is ModelInitial) {
-                                    selectedModel = modelState.selectedModel;
-                                  }
-
-                                  final assistant =
-                                      generativeAiAssistants[selectedModel]!;
-
-                                  return selectedModel == GenerativeAiModel.customChatBot? Container() :BlocBuilder<ConversationBloc,
-                                      ConversationState>(
-                                    bloc: GetIt.I<ConversationBloc>(),
-                                    builder: (context, state) {
-                                      return ChatInputWidget(
-                                        onSubmitted: (text) {
-                                          if (state is ConversationLoaded) {
-                                            GetIt.I<ConversationBloc>().add(
-                                              ContinueConversation(
-                                                content: text,
-                                                assistant: {
-                                                  'id': assistant.id,
-                                                  'model': assistant.model,
-                                                },
-                                                conversation:
-                                                    state.conversation.toMap(),
-                                              ),
-                                            );
-                                          } else if (state
-                                              is ConversationInitial) {
-                                            GetIt.I<ConversationBloc>().add(
-                                              CreateNewConversation(
-                                                content: text,
-                                                assistantId: assistant.id,
-                                                assistantModel: assistant.model,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                          ],
+                            return Expanded(
+                              child:
+                                  isNewChat ? NewChatWidget() : OldChatWidget(),
+                            );
+                          },
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: BlocBuilder<ModelBloc, ModelState>(
+                            bloc: GetIt.I<ModelBloc>(),
+                            builder: (context, modelState) {
+                              GenerativeAiModel selectedModel =
+                                  GenerativeAiModel.gpt4oMini;
+                              if (modelState is ModelInitial) {
+                                selectedModel = modelState.selectedModel;
+                              }
+
+                              final assistant =
+                                  generativeAiAssistants[selectedModel]!;
+
+                              return selectedModel ==
+                                      GenerativeAiModel.customChatBot
+                                  ? Container()
+                                  : BlocBuilder<ConversationBloc,
+                                      ConversationState>(
+                                      bloc: GetIt.I<ConversationBloc>(),
+                                      builder: (context, state) {
+                                        return ChatInputWidget(
+                                          onSubmitted: (text) {
+                                            if (state is ConversationLoaded) {
+                                              GetIt.I<ConversationBloc>().add(
+                                                ContinueConversation(
+                                                  content: text,
+                                                  assistant: {
+                                                    'id': assistant.id,
+                                                    'model': assistant.model,
+                                                  },
+                                                  conversation: state
+                                                      .conversation
+                                                      .toMap(),
+                                                ),
+                                              );
+                                            } else if (state
+                                                is ConversationInitial) {
+                                              GetIt.I<ConversationBloc>().add(
+                                                CreateNewConversation(
+                                                  content: text,
+                                                  assistantId: assistant.id,
+                                                  assistantModel:
+                                                      assistant.model,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                      ],
                     ),
                   ),
                 ),

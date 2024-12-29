@@ -44,6 +44,8 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
       ),
     );
 
@@ -55,24 +57,6 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeConfig.darkMode,
       getPages: AppPages.routes,
       initialRoute: Routes.splash,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            child ?? SizedBox.shrink(),
-            Positioned(
-              bottom: 200.0,
-              right: 18.0,
-              child: FloatingActionButton(
-                onPressed: () {
-                  Get.toNamed(Routes.test);
-                },
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(Icons.bug_report_rounded),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }

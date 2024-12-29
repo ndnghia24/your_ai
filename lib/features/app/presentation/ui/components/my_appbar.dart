@@ -2,7 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+<<<<<<< Updated upstream
 import 'package:your_ai/core/utils/ga4_service.dart';
+=======
+<<<<<<< HEAD
+import 'package:your_ai/core/theme/app_colors.dart';
+=======
+import 'package:your_ai/core/utils/ga4_service.dart';
+>>>>>>> 5f851063cb1618cba94c12a71e02d9775df973d8
+>>>>>>> Stashed changes
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
@@ -28,9 +36,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
-    var screenColorScheme = Theme.of(context).colorScheme;
-
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -40,7 +47,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             },
             child: Image.asset('assets/images/ic_menu.png', height: 24),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
             child: BlocBuilder<ModelBloc, ModelState>(
               bloc: GetIt.I<ModelBloc>(),
@@ -89,7 +96,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     }
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
+                    // backgroundColor: Colors.grey.shade100,
+                    backgroundColor: AppColors.surface,
                   ),
                   icon: ShaderMask(
                     shaderCallback: (Rect bounds) {
@@ -108,7 +116,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   label: Text(
                     '${state.remainingQuery == -1 ? '∞' : state.remainingQuery}',
                     style: TextStyle(
-                      color: screenColorScheme.onSecondary,
+                      color: AppColors.onSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -117,7 +125,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 return TextButton.icon(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
+                    backgroundColor: AppColors.onPrimary,
                   ),
                   icon: ShaderMask(
                     shaderCallback: (Rect bounds) {
@@ -134,9 +142,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                   ),
                   label: Text(
-                    'N/A',
+                    '∞',
                     style: TextStyle(
-                      color: screenColorScheme.onSecondary,
+                      color: AppColors.onSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -144,7 +152,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
               }
             },
           ),
-          const SizedBox(width: 10),
         ],
       ),
     );

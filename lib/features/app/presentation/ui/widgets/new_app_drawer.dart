@@ -49,7 +49,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   void _initializeAnimations() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 5000),
     );
 
     _drawerSlideAnimation = Tween<Offset>(
