@@ -297,7 +297,7 @@ class AssistantIntegrationRepository {
     }
   }
 
-  Future<void> publishSlackBot(String assistantId, String botToken,
+  Future<dynamic> publishSlackBot(String assistantId, String botToken,
       String clientId, String clientSecret, String signingSecret) async {
     final res = await _dataSource.publishSlackBot(
         assistantId, botToken, clientId, clientSecret, signingSecret);
@@ -305,6 +305,7 @@ class AssistantIntegrationRepository {
     if (!res.isSuccess) {
       throw Exception(res.message);
     }
+    return res.data;
   }
 
   Future<void> verifyMessengerConfig(
@@ -317,7 +318,7 @@ class AssistantIntegrationRepository {
     }
   }
 
-  Future<void> publishMessengerBot(String assistantId, String botToken,
+  Future<dynamic> publishMessengerBot(String assistantId, String botToken,
       String pageId, String appSecret) async {
     final res = await _dataSource.publishMessengerBot(
         assistantId, botToken, pageId, appSecret);
@@ -325,5 +326,7 @@ class AssistantIntegrationRepository {
     if (!res.isSuccess) {
       throw Exception(res.message);
     }
+
+    return res.data;
   }
 }

@@ -35,8 +35,8 @@ import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowl
 import 'package:your_ai/features/knowledge_base/data/data_sources/services/knowledge_unit_service.dart';
 import 'package:your_ai/features/knowledge_base/data/repositories/knowledge_repository.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/kb_bloc.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_bloc.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
 
 ///
 import 'package:your_ai/features/knowledged_bot/data/data_sources/assistant_chat_data_source.dart';

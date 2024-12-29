@@ -7,9 +7,9 @@ import 'package:get_it/get_it.dart';
 import 'package:your_ai/configs/service_locator.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_bloc.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_event.dart';
-import 'package:your_ai/features/knowledge_base/presentation/ui/blocs/unit_state.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_event.dart';
+import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_state.dart';
 
 final getIt = GetIt.instance;
 

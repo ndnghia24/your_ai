@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/redirect_webview.dart';
 
 class PublishingPlatformWidget extends StatelessWidget {
@@ -15,9 +16,9 @@ class PublishingPlatformWidget extends StatelessWidget {
     required this.isMessenger,
     required this.isSlack,
     required this.isTelegram,
-     this.redirectMessenger = "",
-     this.redirectSlack = "",
-     this.redirectTelegram = "",
+    this.redirectMessenger = "",
+    this.redirectSlack = "",
+    this.redirectTelegram = "",
   }) : super(key: key);
 
   @override
@@ -27,61 +28,63 @@ class PublishingPlatformWidget extends StatelessWidget {
         title: const Text("Publishing Platforms"),
         backgroundColor: Colors.blue,
       ),
-      body:
-          SingleChildScrollView(
-              child: Card(
-                elevation: 2,
-                margin: const EdgeInsets.all(16.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Publishing Platforms",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Divider(),
-                      _buildPlatformRow(
-                        context,
-                        icon: Icons.telegram,
-                        platformName: "Telegram",
-                        status: isTelegram ? "Success" : "Not Configured",
-                        actionLabel: isTelegram ? "Open" : "Authorize",
-                        redirect: redirectTelegram,
-                        statusColor: isTelegram ? Colors.green : Colors.grey,
-                      ),
-                      const Divider(),
-                      _buildPlatformRow(
-                        context,
-                        icon: Icons.message,
-                        platformName: "Messenger",
-                        status: isMessenger ? "Success" : "Not Configured",
-                        actionLabel: isMessenger ? "Open" : "Authorize",
-                        redirect: redirectMessenger,
-                        statusColor: isMessenger ? Colors.green : Colors.grey,
-                      ),
-                      const Divider(),
-                      _buildPlatformRow(
-                        context,
-                        icon: CupertinoIcons.chat_bubble,
-                        platformName: "Slack",
-                        status: isSlack ? "Success" : "Not Configured",
-                        actionLabel: isSlack ? "Open" : "Authorize",
-                        redirect: redirectSlack,
-                        statusColor: isSlack ? Colors.green : Colors.grey,
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Card(
+          elevation: 2,
+          margin: const EdgeInsets.all(16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Publishing Platforms",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+                const Divider(),
+                if (isTelegram)
+                  _buildPlatformRow(
+                    context,
+                    icon: Icons.telegram,
+                    platformName: "Telegram",
+                    status: "Success",
+                    actionLabel: "Open",
+                    redirect: redirectTelegram,
+                    statusColor: Colors.green,
+                  ),
+                if (isTelegram) const Divider(),
+                if (isMessenger)
+                  _buildPlatformRow(
+                    context,
+                    icon: Icons.message,
+                    platformName: "Messenger",
+                    status: "Success",
+                    actionLabel: "Open",
+                    redirect: redirectMessenger,
+                    statusColor: Colors.green,
+                  ),
+                if (isMessenger) const Divider(),
+                if (isSlack)
+                  _buildPlatformRow(
+                    context,
+                    icon: CupertinoIcons.chat_bubble,
+                    platformName: "Slack",
+                    status: "Success",
+                    actionLabel: "Open",
+                    redirect: redirectSlack,
+                    statusColor: Colors.green,
+                  ),
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -123,23 +126,17 @@ class PublishingPlatformWidget extends StatelessWidget {
             const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-                if (redirect.isNotEmpty) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RedirectWebView(
-                      title: platformName,
-                      url: redirect),
-                  ));
-                } else {
-                  print("Authorizing platform: $platformName");
-                }
+              if (redirect.isNotEmpty) {
+                launchUrl(Uri.parse(redirect));
+              }
               },
               child: Text(
-                actionLabel,
-                style: const TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+              actionLabel,
+              style: const TextStyle(
+                color: Colors.blue,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
               ),
             ),
           ],
