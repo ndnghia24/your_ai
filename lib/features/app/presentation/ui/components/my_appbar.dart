@@ -2,15 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-<<<<<<< Updated upstream
 import 'package:your_ai/core/utils/ga4_service.dart';
-=======
-<<<<<<< HEAD
 import 'package:your_ai/core/theme/app_colors.dart';
-=======
 import 'package:your_ai/core/utils/ga4_service.dart';
->>>>>>> 5f851063cb1618cba94c12a71e02d9775df973d8
->>>>>>> Stashed changes
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/model_event.dart';
@@ -56,7 +50,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   return ModelSelector(
                     selectedModel: state.selectedModel,
                     onModelChanged: (model) {
-                      GetIt.I<GA4Service>().sendGA4Event(GA4EventNames.changeModel, {});
+                      GetIt.I<GA4Service>()
+                          .sendGA4Event(GA4EventNames.changeModel, {});
                       GetIt.I<ModelBloc>().add(UpdateModel(model));
                     },
                   );
@@ -64,7 +59,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   return ModelSelector(
                     selectedModel: GenerativeAiModel.gpt4oMini,
                     onModelChanged: (model) {
-                      GetIt.I<GA4Service>().sendGA4Event(GA4EventNames.changeModel, {});
+                      GetIt.I<GA4Service>()
+                          .sendGA4Event(GA4EventNames.changeModel, {});
                       GetIt.I<ModelBloc>().add(UpdateModel(model));
                     },
                   );
@@ -78,7 +74,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
               if (state is TokenLoaded) {
                 return TextButton.icon(
                   onPressed: () {
-                    GetIt.I<GA4Service>().sendGA4Event(GA4EventNames.viewSubcription, {});
+                    GetIt.I<GA4Service>()
+                        .sendGA4Event(GA4EventNames.viewSubcription, {});
                     // subscription active
                     if (!kIsWeb) {
                       Navigator.of(context).push(MaterialPageRoute(
