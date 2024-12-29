@@ -155,7 +155,7 @@ class AssistantIntegrationRemoteDataSource {
       final response = await _assistantIntegrationService.publishSlackBot(
           assistantId, botToken, clientId, clientSecret, signingSecret);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,
           data: response.data,
@@ -211,7 +211,7 @@ class AssistantIntegrationRemoteDataSource {
       final response = await _assistantIntegrationService.publishMessengerBot(
           assistantId, botToken, pageId, appSecret);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return DataSourcesResultTemplate(
           isSuccess: true,
           data: response.data,

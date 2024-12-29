@@ -75,10 +75,10 @@ class PublishingPlatformWidget extends StatelessWidget {
                     context,
                     icon: CupertinoIcons.chat_bubble,
                     platformName: "Slack",
-                    status: "Success",
-                    actionLabel: "Open",
+                    status: "",
+                    actionLabel: "Authorize",
                     redirect: redirectSlack,
-                    statusColor: Colors.green,
+                    statusColor: Colors.transparent,
                   ),
               ],
             ),
@@ -112,6 +112,8 @@ class PublishingPlatformWidget extends StatelessWidget {
         ),
         Row(
           children: [
+            if(status.isNotEmpty)
+                
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
