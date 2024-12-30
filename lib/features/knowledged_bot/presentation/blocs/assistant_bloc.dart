@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
+import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_event.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_state.dart';
 
@@ -56,17 +57,22 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
       UpdateAssistantEvent event, Emitter<AssistantState> emit) async {
     emit(AssistantLoading(assistants: [], message: ''));
     try {
-      final useCaseResult =
-          await assistantUseCaseFactory.updateAssistantUseCase().execute(
+       assistantUseCaseFactory.updateAssistantUseCase().execute(
         assistantId: event.assistantId,
         assistantName: event.assistantName,
+        description: event.description,
+      );
+
+      final updatedAssistant = Assistant(
+        id: event.assistantId,
+        name: event.assistantName,
         description: event.description,
       );
 
         final assistants = event.assistants;
         final index = assistants
             .indexWhere((element) => element.id == event.assistantId);
-        assistants[index] = useCaseResult.result;
+        assistants[index] = updatedAssistant; 
 
         emit(AssistantLoaded(assistants));
 
@@ -79,17 +85,15 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
       DeleteAssistantEvent event, Emitter<AssistantState> emit) async {
     emit(AssistantLoading(assistants: [], message: ''));
     try {
-      final useCaseResult = await assistantUseCaseFactory
+      assistantUseCaseFactory
           .deleteAssistantUseCase()
           .execute(assistantId: event.assistantId);
 
-      if (useCaseResult.isSuccess) {
+      
         final assistants = event.assistants;
         assistants.removeWhere((element) => element.id == event.assistantId);
         emit(AssistantLoaded(assistants));
-      } else {
-        emit(AssistantError(useCaseResult.message));
-      }
+      
     } catch (e) {
       emit(AssistantError(e.toString()));
     }

@@ -45,7 +45,9 @@ class _AssistantSettingScreenState extends State<AssistantSettingScreen> {
 
   @override
   void dispose() {
-    _controller.dispose(); // Dispose controller
+    _updateInstructions();
+    _controller.dispose(); 
+    // Dispose controller
     super.dispose();
   }
    void _updateInstructions() async {

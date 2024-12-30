@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_event.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_state.dart';
@@ -8,9 +9,19 @@ import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/item_kno
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/knowledgebase_detail_screen.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/popup_new_knowledgebase.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/widgets/widget_pagination.dart';
+
 final getIt = GetIt.instance;
-class KnowledgeBaseScreen extends StatelessWidget {
+
+class KnowledgeBaseScreen extends StatefulWidget {
   const KnowledgeBaseScreen({super.key});
+
+  @override
+  State<KnowledgeBaseScreen> createState() => _KnowledgeBaseScreenState();
+}
+
+class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  List<KnowledgeBase> knowledgeBases = [];
 
   void showNewKnowledgeDialog(BuildContext context) {
     // Show popup when click on "New" button
@@ -22,19 +33,30 @@ class KnowledgeBaseScreen extends StatelessWidget {
     );
   }
 
-  
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<KBBloc, KBState>(
       bloc: getIt<KBBloc>(),
       builder: (context, KBState) {
+        if (KBState is KBLoaded) {
+          //filter knowledge base
+          knowledgeBases = KBState.knowledgeBases
+              .where((element) => element.knowledgeName
+                  .toLowerCase()
+                  .contains(_searchController.text.toLowerCase()))
+              .toList();
+         
+        }
         if (KBState is KBInitial) {
           getIt<KBBloc>().add(GetAllKBEvent());
-          
         }
-        if(KBState is KBError) {
-          //getIt<KBBloc>().add(GetAllKBEvent());
+        if (KBState is KBError) {
           return Scaffold(
             appBar: AppBar(
               title: Text('Knowledge'),
@@ -59,7 +81,6 @@ class KnowledgeBaseScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -68,6 +89,7 @@ class KnowledgeBaseScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Search',
                       prefixIcon: Icon(Icons.search),
@@ -75,9 +97,9 @@ class KnowledgeBaseScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                   onChanged: (value) =>  setState(() {}),
                   ),
                 ),
-            
                 if (KBState is KBLoading)
                   Expanded(
                     child: Center(
@@ -87,7 +109,7 @@ class KnowledgeBaseScreen extends StatelessWidget {
                 if (KBState is KBLoaded)
                   Expanded(
                     child: ListView.builder(
-                      itemCount: KBState.knowledgeBases.length,
+                      itemCount: knowledgeBases.length,
                       itemBuilder: (context, index) {
                         return KnowledgeBaseItem(
                           onTapItem: (knowledgeBase) {
@@ -99,7 +121,7 @@ class KnowledgeBaseScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          knowledgeBase: KBState.knowledgeBases[index],
+                          knowledgeBase: knowledgeBases[index],
                           onDelete: (knowledgeBase) {
                             // Handle delete action
                             getIt<KBBloc>().add(DeleteKBEvent(knowledgeBase.id, KBState.knowledgeBases));
@@ -108,23 +130,23 @@ class KnowledgeBaseScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  Spacer(),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          // Action to create new bot
-                          showNewKnowledgeDialog(context);
-                        },
-                        backgroundColor: Colors.orange.shade300,
-                        child: Icon(Icons.add),
-                      ),
-                    ),
+                Spacer(),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      // Action to create new bot
+                      showNewKnowledgeDialog(context);
+                    },
+                    backgroundColor: Colors.orange.shade300,
+                    child: Icon(Icons.add),
+                  ),
+                ),
               ],
             ),
           ),
         );
-      }
+      },
     );
   }
 }

@@ -41,12 +41,12 @@ class KBBloc extends Bloc<KBEvent, KBState> {
       AttachKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: event.knowledgeBases));
     try {
-      final result = await assistantUseCaseFactory.attachKnowledgeUseCase().execute(
+       assistantUseCaseFactory.attachKnowledgeUseCase().execute(
         assistantId: event.assistantId,
         knowledgeId: event.knowledgeId,
       );
 
-      if (result.isSuccess) {
+
         final index = event.knowledgeBases
             .indexWhere((element) => element.id == event.knowledgeId);
         event.knowledgeBases[index] = Knowledge(
@@ -56,9 +56,7 @@ class KBBloc extends Bloc<KBEvent, KBState> {
           isImported: true,
         );
         emit(KBLoaded(event.knowledgeBases));
-      } else {
-        emit(KBError(result.message));
-      }
+ 
     } catch (e) {
       emit(KBError(e.toString()));
     }
@@ -68,12 +66,12 @@ class KBBloc extends Bloc<KBEvent, KBState> {
       DetachKBEvent event, Emitter<KBState> emit) async {
     emit(KBLoading(knowledgeBases: event.knowledgeBases));
     try {
-      final result = await assistantUseCaseFactory.detachKnowledgeUseCase().execute(
+       assistantUseCaseFactory.detachKnowledgeUseCase().execute(
         assistantId: event.assistantId,
         knowledgeId: event.knowledgeId,
       );
 
-      if (result.isSuccess) {
+
         final index = event.knowledgeBases
             .indexWhere((element) => element.id == event.knowledgeId);
         event.knowledgeBases[index] = Knowledge(
@@ -83,9 +81,7 @@ class KBBloc extends Bloc<KBEvent, KBState> {
           isImported: false,
         );
         emit(KBLoaded(event.knowledgeBases));
-      } else {
-        emit(KBError(result.message));
-      }
+
     } catch (e) {
       emit(KBError(e.toString()));
     }
