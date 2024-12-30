@@ -62,7 +62,9 @@ class _PromptLibraryPopupWidgetState extends State<PromptLibraryPopupWidget>
                     'Prompt Library',
                     style: TextStyle(
                         fontSize: CustomTextStyles.headlineMedium.fontSize,
-                        fontWeight: FontWeight.bold), // Increased font size
+                        fontWeight: FontWeight.bold,
+                        
+                    ), // Increased font size
                   ),
                   IconButton(
                     icon: const Icon(Icons.add_circle,
