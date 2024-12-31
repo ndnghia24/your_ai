@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 /// A class to hold the constant colors used in the UI design
 class AppColors {
   // Primary Colors
-  static const Color primary = Color(0xFF64b334); // Màu chính
-  static const Color primaryVariant = Color(0xFF236823);
+  static const Color primary = Color(0xba64b334); // Màu chính
+  static const Color primaryVariant = Color(0xFF339733);
 
   // Secondary Colors
   static const Color secondary = Color(0xFF1f6fa4); // Màu phụ

@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:your_ai/core/utils/CustomTextStyles.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
+import 'package:flutter/cupertino.dart';
 
 class PublicPromptItem extends StatelessWidget {
   const PublicPromptItem({
@@ -23,11 +24,11 @@ class PublicPromptItem extends StatelessWidget {
         onUsePrompt(prompt);
       },
       child: ListTile(
-        title: Text(prompt.title,
-            style: TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+        title: Text(prompt.title, style: TextStyle(fontSize: 16)),
         subtitle: Text(
           prompt.description,
-          style: TextStyle(fontSize: CustomTextStyles.bodyLarge.fontSize),
+          style: TextStyle(fontSize: 13),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
@@ -37,12 +38,16 @@ class PublicPromptItem extends StatelessWidget {
           children: [
             IconButton(
               icon: Icon(
-                prompt.isFavorite ? Icons.star : Icons.star_border,
+                prompt.isFavorite
+                    ? CupertinoIcons.star_circle_fill
+                    : CupertinoIcons.star_circle,
                 size: 25,
                 color: prompt.isFavorite ? Colors.red : Colors.blue,
               ),
               onPressed: () {
-                prompt.isFavorite ? onRemoveFavorite(prompt) : onAddFavorite(prompt);
+                prompt.isFavorite
+                    ? onRemoveFavorite(prompt)
+                    : onAddFavorite(prompt);
               },
             ),
           ],

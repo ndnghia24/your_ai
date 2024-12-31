@@ -104,10 +104,6 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                   if (!_showAllChats)
                     Column(
                       children: [
-                        if (!kIsWeb)
-                          AdmobBannerAdWidget(
-                              adUnitId:
-                                  'ca-app-pub-3940256099942544/6300978111'),
                         AuthenticationWidget(),
                       ],
                     )
@@ -146,6 +142,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
         _buildChatBotsTile(),
         _buildKnowledgeBaseTile(),
         _buildEmailResponseTile(),
+        _buildAdsTile(),
       ],
     );
   }
@@ -276,7 +273,9 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
 
   Widget _buildLoadingIndicator() {
     return Center(
-      child: CircularProgressIndicator(color: Colors.grey.shade900),
+      child: CupertinoActivityIndicator(
+        color: Colors.grey.shade900,
+      ),
     );
   }
 
@@ -292,7 +291,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
           ),
           const SizedBox(height: 16),
           Text(
-            'No Conversations Found',
+            'No Conversations',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -302,6 +301,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
           const SizedBox(height: 8),
           Text(
             'Start a new chat to begin conversing',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade600,
@@ -338,7 +338,8 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
                 onTap: isSelected
                     ? null
                     : () {
-                        getIt<GA4Service>().sendGA4Event(GA4EventNames.reloadConversation, {});
+                        getIt<GA4Service>()
+                            .sendGA4Event(GA4EventNames.reloadConversation, {});
                         getIt<ModelBloc>()
                             .add(UpdateModel(GenerativeAiModel.gpt4oMini));
                         getIt<ConversationBloc>()
@@ -349,6 +350,28 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
             );
           },
         );
+      },
+    );
+  }
+
+  _buildAdsTile() {
+    return _buildDrawerTile(
+      icon: 'assets/images/op_ads.png',
+      title: 'ADS',
+      onTap: () {
+        if (Platform.isAndroid) {
+          Get.dialog(
+            const AdmobBannerAdWidget(
+                adUnitId: 'ca-app-pub-3940256099942544/6300978111'),
+            barrierDismissible: true,
+          );
+        } else {
+          Get.snackbar(
+            'Ads',
+            'Ads are only available on Android devices',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       },
     );
   }

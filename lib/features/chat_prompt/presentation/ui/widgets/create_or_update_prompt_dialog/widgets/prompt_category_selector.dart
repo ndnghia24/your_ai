@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/enum_prompt.dart';
 
 class PromptCategorySelector extends StatelessWidget {
   //remove ALL from the list
-  final List<Map<String, dynamic>> promptCatgories = PROMPT_CATEGORY_ITEMS.sublist(1);
+  final List<Map<String, dynamic>> promptCatgories =
+      PROMPT_CATEGORY_ITEMS.sublist(1);
   final PromptCategory selectedCategory;
   final ValueChanged<PromptCategory?> onChanged;
 
-   PromptCategorySelector({
+  PromptCategorySelector({
     required this.selectedCategory,
     required this.onChanged,
   });
@@ -27,7 +29,7 @@ class PromptCategorySelector extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: screenColorScheme.surfaceContainer,
+            color: AppColors.surface,
           ),
           child: DropdownButtonFormField<PromptCategory>(
             decoration: const InputDecoration(
@@ -38,7 +40,11 @@ class PromptCategorySelector extends StatelessWidget {
             items: promptCatgories.map((value) {
               return DropdownMenuItem<PromptCategory>(
                 value: value['value'],
-                child: Text(value['label']),
+                child: Text(
+                  value['label'],
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(height: 1),
+                ),
               );
             }).toList(),
             onChanged: onChanged,

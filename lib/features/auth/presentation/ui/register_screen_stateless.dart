@@ -62,9 +62,9 @@ class RegisterScreen extends StatelessWidget {
                     horizontal: 20, vertical: verticalPadding),
                 child: Row(
                   children: [
-                    GestureDetector(
-                        onTap: () => Get.back(),
-                        child: Icon(CupertinoIcons.back, size: 30))
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 ),
               ),
