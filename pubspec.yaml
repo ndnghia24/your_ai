@@ -122,7 +122,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-fonts:
-  - family: SanFrancisco
-    fonts:
-      - asset: lib/assets/fonts/SanFrancisco-Regular.ttf
+  fonts:
+    - family: SanFrancisco
+      fonts:
+        - asset: assets/fonts/SanFrancisco-Regular.ttf

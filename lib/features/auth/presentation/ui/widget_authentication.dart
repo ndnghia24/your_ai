@@ -27,22 +27,21 @@ class AuthenticationWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.account_circle,
-                        size: 40, color: AppColors.primary),
+                    Icon(Icons.account_circle, size: 40, color: Colors.grey),
                     SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userInfo['username'] ?? 'N/A',
+                            userInfo['username'] ?? '...',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
                             ),
                           ),
                           Text(
-                            userInfo['email'] ?? 'N/A',
+                            userInfo['email'] ?? '...',
                             style: TextStyle(color: Colors.grey, fontSize: 12),
                           ),
                         ],
@@ -59,12 +58,12 @@ class AuthenticationWidget extends StatelessWidget {
                       builder: (context, state) {
                         if (state is TokenLoaded) {
                           return Text(state.remainingQuery == -1
-                              ? '∞'
+                              ? ''
                               : '${state.remainingQuery}/${state.totalQuery}');
                         } else if (state is TokenLoading) {
                           return CircularProgressIndicator();
                         } else {
-                          return Text('N/A');
+                          return Text('');
                         }
                       },
                     ),

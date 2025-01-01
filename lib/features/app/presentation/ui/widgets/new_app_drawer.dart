@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/core/utils/ga4_service.dart';
 import 'package:your_ai/features/app/domain/entities/model_model.dart';
 import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
@@ -89,36 +90,42 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
     return SlideTransition(
       position: _drawerSlideAnimation,
       child: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Column(
-          children: [
-            _buildHeader(),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: _showAllChats
-                        ? _buildAllChatsList()
-                        : _buildDefaultContent(),
-                  ),
-                  if (!_showAllChats)
-                    Column(
-                      children: [
-                        AuthenticationWidget(),
-                      ],
-                    )
-                ],
+        backgroundColor: AppColors.surface,
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: _showAllChats
+                          ? _buildAllChatsList()
+                          : _buildDefaultContent(),
+                    ),
+                    if (!_showAllChats)
+                      Column(
+                        children: [
+                          const Divider(
+                            thickness: 2,
+                          ),
+                          AuthenticationWidget(),
+                        ],
+                      )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    return DrawerHeader(
-      child: Center(
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 40),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -139,8 +146,8 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
       children: [
         _buildNewChatTile(),
         _buildAllChatTile(),
-        _buildChatBotsTile(),
         _buildKnowledgeBaseTile(),
+        _buildChatBotsTile(),
         _buildEmailResponseTile(),
         _buildAdsTile(),
       ],
@@ -150,7 +157,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   Widget _buildEmailResponseTile() {
     return _buildDrawerTile(
         icon: 'assets/images/op_emailresponse.png',
-        title: 'EMAIL RESPONSE',
+        title: 'AI Emailed',
         onTap: () {
           Navigator.push(
             context,
@@ -165,7 +172,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
       builder: (context, state) {
         return _buildDrawerTile(
           icon: 'assets/images/op_newchat.png',
-          title: 'NEW CHAT',
+          title: 'Start Chat',
           onTap: () {
             getIt<ModelBloc>().add(UpdateModel(GenerativeAiModel.gpt4oMini));
             if (state is ConversationLoaded) {
@@ -182,7 +189,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   Widget _buildAllChatTile() {
     return _buildDrawerTile(
       icon: 'assets/images/op_allchat.png',
-      title: 'ALL CHAT',
+      title: 'Conversations',
       showNext: true,
       onTap: () => setState(() => _showAllChats = true),
     );
@@ -191,7 +198,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   Widget _buildChatBotsTile() {
     return _buildDrawerTile(
       icon: 'assets/images/op_chatbot.png',
-      title: 'CHAT BOTS',
+      title: 'AI Agents',
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ChatBotScreen()),
@@ -202,7 +209,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   Widget _buildKnowledgeBaseTile() {
     return _buildDrawerTile(
       icon: 'assets/images/op_knowledgebase.png',
-      title: 'KNOWLEDGE BASE',
+      title: 'Knowledge Base',
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const KnowledgeBaseScreen()),
@@ -216,9 +223,14 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
     required VoidCallback onTap,
     bool showNext = false,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10),
+    return Container(
+      padding: const EdgeInsets.only(bottom: 0),
+      margin: const EdgeInsets.only(left: 0),
       child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.grey.shade300),
+        ),
         leading: Image.asset(icon, height: icon.contains('allchat') ? 25 : 20),
         title: Row(
           children: [
