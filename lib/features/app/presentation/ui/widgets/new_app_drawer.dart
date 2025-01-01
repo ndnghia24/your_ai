@@ -129,7 +129,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/yourai_logo.png', height: 40),
+            Image.asset('assets/images/loading_capoo.gif', height: 50),
             const SizedBox(width: 8),
             Text(
               'Your AI',

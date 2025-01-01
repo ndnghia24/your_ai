@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_bloc.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_event.dart';
@@ -23,26 +24,26 @@ class ChatBotScreen extends StatelessWidget {
   }
 
   void showUpdateChatBotDialog(BuildContext context, Assistant assistant) {
-   showDialog(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return CreateAssistantDialog(assistant: assistant);
       },
     );
-
-  
   }
 
   void _onDeleteAssistant(Assistant assistant) {
     final state = getIt<AssistantBloc>().state;
     if (state is AssistantLoaded) {
-      getIt<AssistantBloc>().add(DeleteAssistantEvent(assistant.id , state.assistants));
+      getIt<AssistantBloc>()
+          .add(DeleteAssistantEvent(assistant.id, state.assistants));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (getIt<AssistantBloc>().state is AssistantInitial || getIt<AssistantBloc>().state is AssistantError) {
+    if (getIt<AssistantBloc>().state is AssistantInitial ||
+        getIt<AssistantBloc>().state is AssistantError) {
       getIt<AssistantBloc>().add(GetAllAssistantEvent());
     }
 
@@ -73,6 +74,7 @@ class ChatBotScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final assistant = state.assistants[index];
                           return Card(
+                            color: AppColors.surface,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -87,16 +89,16 @@ class ChatBotScreen extends StatelessWidget {
                                 spacing: 12,
                                 children: <Widget>[
                                   IconButton(
-                                    
                                     icon: Icon(Icons.edit),
                                     onPressed: () {
-                                      showUpdateChatBotDialog(context, assistant);
+                                      showUpdateChatBotDialog(
+                                          context, assistant);
                                     },
                                   ),
                                   IconButton(
                                     style: ButtonStyle(
-                                      foregroundColor: MaterialStateProperty.all(
-                                          Colors.red),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(Colors.red),
                                     ),
                                     icon: Icon(Icons.delete_outline),
                                     onPressed: () {
@@ -111,7 +113,9 @@ class ChatBotScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChatBotPreviewScreen(assistant: assistant,)),
+                                          ChatBotPreviewScreen(
+                                            assistant: assistant,
+                                          )),
                                 );
                               },
                             ),

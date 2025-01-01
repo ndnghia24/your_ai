@@ -76,7 +76,7 @@ class AuthenticationWidget extends StatelessWidget {
                       return LinearProgressIndicator(
                         value: state.remainingQuery / state.totalQuery,
                         backgroundColor: Colors.white,
-                        color: Colors.blueAccent,
+                        color: AppColors.primary,
                         minHeight: 6.0,
                         borderRadius: BorderRadius.circular(8.0),
                       );

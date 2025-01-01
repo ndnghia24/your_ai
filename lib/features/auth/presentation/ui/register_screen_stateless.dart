@@ -160,9 +160,8 @@ class RegisterScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )
-                                : const CircularProgressIndicator(
+                                : const CupertinoActivityIndicator(
                                     color: Colors.white,
-                                    strokeWidth: 2,
                                   ),
                           ),
                         ),

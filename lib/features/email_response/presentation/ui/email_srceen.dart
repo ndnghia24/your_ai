@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'dart:async'; // Thêm thư viện Timer
 import 'package:your_ai/features/email_response/presentation/ui/widgets/email_response_dialog.dart';
 import '../../../../configs/service_locator.dart';
@@ -163,7 +164,7 @@ class _EmailResponseScreenState extends State<EmailResponseScreen> {
           child: Column(
         children: [
           CupertinoActivityIndicator(
-            color: Colors.grey[50],
+            color: Colors.grey[900],
           ),
           SizedBox(height: 12),
           Text('Getting Ideas...'),
@@ -193,9 +194,8 @@ class _EmailResponseScreenState extends State<EmailResponseScreen> {
                 child: Text(idea),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: isActive ? Colors.white : Colors.grey[600],
-                  backgroundColor: isActive
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey[200],
+                  backgroundColor:
+                      isActive ? AppColors.primaryVariant : Colors.grey[200],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -292,9 +292,8 @@ class _EmailResponseScreenState extends State<EmailResponseScreen> {
                   child: Text(option.data),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: isActive ? Colors.white : Colors.grey[600],
-                    backgroundColor: isActive
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey[200],
+                    backgroundColor:
+                        isActive ? AppColors.primaryVariant : Colors.grey[200],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

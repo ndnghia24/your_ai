@@ -8,7 +8,8 @@ class SlackConfigurePopup extends StatefulWidget {
   final String clientSecret;
   final String signingSecret;
   final bool isVerified;
-  final void Function(String token, String clientId, String clientSecret, String signingSecret) onConnect;
+  final void Function(String token, String clientId, String clientSecret,
+      String signingSecret) onConnect;
 
   const SlackConfigurePopup({
     Key? key,
@@ -64,9 +65,12 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Configure Messenger Bot',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: const Text(
+                      'Configure Slack Bot',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -162,9 +166,10 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:widget.isVerified ? Colors.red:  Colors.blue,
+                      backgroundColor:
+                          widget.isVerified ? Colors.red : Colors.blue,
                     ),
-                    child:  Text(widget.isVerified ? 'Disconnect' : 'OK'),
+                    child: Text(widget.isVerified ? 'Disconnect' : 'OK'),
                   ),
                 ],
               ),
