@@ -140,8 +140,8 @@ class NewChatWidget extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isFromUser
-                  ? Theme.of(context).colorScheme.surfaceContainer
-                  : Theme.of(context).colorScheme.primary,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
