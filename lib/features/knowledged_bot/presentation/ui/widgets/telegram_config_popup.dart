@@ -72,7 +72,10 @@ class _TelegramConfigurePopupState extends State<TelegramConfigurePopup> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                    child:  Text('Cancel', style: TextStyle(color: Colors.black)),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.grey.shade200
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -82,7 +85,7 @@ class _TelegramConfigurePopupState extends State<TelegramConfigurePopup> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:widget.isVerified ? Colors.red : Colors.blue,
                     ),
-                    child:  Text(widget.isVerified ? 'Disconnect' : 'OK'),
+                    child:  Text(widget.isVerified ? 'Disconnect' : 'OK', style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
