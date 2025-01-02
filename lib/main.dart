@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
 import 'package:your_ai/core/theme/app_theme.dart';
-import 'package:your_ai/testMain.dart';
+import 'package:your_ai/features/app/presentation/blocs/conversation_bloc.dart';
+import 'package:your_ai/features/app/presentation/blocs/model_bloc.dart';
 
 import 'configs/service_locator.dart';
 import 'core/routes/route.dart';
+import 'features/auth/presentation/blocs/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await dotenv.load(fileName: ".env");
 
   // Setup service locator
@@ -19,14 +23,29 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    locator<AuthBloc>().close();
+    locator<ConversationBloc>().close();
+    locator<ModelBloc>().close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
       ),
     );
 
@@ -35,37 +54,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Your AI',
       theme: ThemeConfig.lightMode,
-      darkTheme: ThemeConfig.darkMode,
-      initialRoute: Routes.home,
+      darkTheme: ThemeConfig.lightMode,
       getPages: AppPages.routes,
-
-      //home: AllTestScreen(),
-
-      builder: (context, child) {
-        return Scaffold(
-          body: child,
-          floatingActionButton: Builder(
-            builder: (context) {
-              return Stack(
-                children: [
-                  Positioned(
-                    bottom: 200.0,
-                    right: 18.0,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.test);
-                      },
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      child:
-                          Icon(Icons.bug_report_rounded), // Customize FAB icon
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+      initialRoute: Routes.splash,
     );
   }
 }

@@ -1,4 +1,4 @@
-import '../../data/repositories/auth_repository.dart';
+import 'package:your_ai/features/auth/data/repositories/auth_repository.dart';
 
 class LoginUseCase {
   final AuthRepository authRepository;
@@ -18,7 +18,10 @@ class LoginUseCase {
         'data': data,
       };
     } catch (e) {
-      throw Exception("USECASE Error: ${e.toString()}");
+      return {
+        'isSuccess': false,
+        'data': e.toString(),
+      };
     }
   }
 }

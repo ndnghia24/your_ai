@@ -12,14 +12,16 @@ class SignUpUseCase {
           email: email, password: password, username: username);
 
       final isSuccess = result['isSuccess'];
-      final data = result['data'];
 
       return {
         'isSuccess': isSuccess,
-        'data': data,
+        'data': result['data'],
       };
     } catch (e) {
-      throw Exception("USECASE Error: ${e.toString()}");
+      return {
+        'isSuccess': false,
+        'data': e.toString(),
+      };
     }
   }
 }

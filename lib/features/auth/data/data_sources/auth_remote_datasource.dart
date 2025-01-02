@@ -23,6 +23,12 @@ class AuthRemoteDataSource {
           'isSuccess': true,
           'message': 'Register successful',
         };
+      } else if (response.statusCode == 400 || response.statusCode == 422) {
+        return {
+          'data': response.data['details'][0]['issue'],
+          'isSuccess': false,
+          'message': 'Email already exists',
+        };
       } else {
         return {
           'data': {'details': response.data['details']},
@@ -34,7 +40,7 @@ class AuthRemoteDataSource {
       return {
         'data': e.toString(),
         'isSuccess': false,
-        'message': 'Error occurred during login: ${e.toString()}',
+        'message': '${e.toString()}',
       };
     }
   }
@@ -72,19 +78,44 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<Map<String, dynamic>> getUserInfo() async {
+  Future<Map<String, dynamic>> signInWithGoogleToken(String googleToken) async {
     try {
-      final response = await _authService.getUserInfo();
+      final response = await _authService.loginWithGoogleToken(googleToken);
 
       if (response.statusCode == 200) {
         return {
-          'data': response.data,
+          'data': response.data['token'],
+          'isSuccess': true,
+          'message': 'Login successful',
+        };
+      } else {
+        return {
+          'data': {'details': response.data['details']},
+          'isSuccess': false,
+          'message': 'Invalid credentials',
+        };
+      }
+    } catch (e) {
+      return {
+        'isSuccess': false,
+        'message': '${e.toString()}',
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserInfo() async {
+    try {
+      final userInfo = await _authService.getUserInfo();
+
+      if (userInfo.statusCode == 200) {
+        return {
+          'data': userInfo.data,
           'isSuccess': true,
           'message': 'User info fetched successfully',
         };
       } else {
         return {
-          'data': response.data,
+          'data': userInfo.data,
           'isSuccess': false,
           'message': 'Error occurred during fetching user info',
         };
@@ -94,6 +125,32 @@ class AuthRemoteDataSource {
         'data': e.toString(),
         'isSuccess': false,
         'message': 'Error occurred during fetching user info: ${e.toString()}',
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserUsage() async {
+    try {
+      final userUsage = await _authService.getTokenUsage();
+
+      if (userUsage.statusCode == 200) {
+        return {
+          'data': userUsage.data,
+          'isSuccess': true,
+          'message': 'User usage fetched successfully',
+        };
+      } else {
+        return {
+          'data': userUsage.data,
+          'isSuccess': false,
+          'message': 'Error occurred during fetching user usage',
+        };
+      }
+    } catch (e) {
+      return {
+        'data': e.toString(),
+        'isSuccess': false,
+        'message': 'Error occurred during fetching user usage: ${e.toString()}',
       };
     }
   }

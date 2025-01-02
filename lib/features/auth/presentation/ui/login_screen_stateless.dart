@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/features/auth/data/data_sources/services/google_auth_service.dart';
 
-import '../../../app/home_screen.dart';
 import '../blocs/auth_bloc.dart';
 import '../blocs/auth_event.dart';
 import '../blocs/auth_state.dart';
@@ -23,17 +26,7 @@ class LoginScreen extends StatelessWidget {
   Future<void> signUserIn(BuildContext context) async {
     final email = usernameController.text;
     final password = passwordController.text;
-    context.read<AuthBloc>().add(LoginEvent(email, password));
-
-    // Check if user is already logged in
-    /*String? accessToken =
-        await context.read<AuthBloc>().authRepository.getAccessToken();
-
-    if (accessToken != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    }*/
+    locator<AuthBloc>().add(LoginEvent(email, password));
   }
 
   @override
@@ -55,10 +48,9 @@ class LoginScreen extends StatelessWidget {
                     horizontal: 20, vertical: verticalPadding),
                 child: Row(
                   children: [
-                    GestureDetector(
-                        // pop the screen
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Icon(CupertinoIcons.back, size: 30))
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 ),
               ),
@@ -88,10 +80,10 @@ class LoginScreen extends StatelessWidget {
 
               /// /// Input password
               _buildPasswordTextFormField(
-                  formKey: passwordFormKey,
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true),
+                formKey: passwordFormKey,
+                controller: passwordController,
+                hintText: 'Password',
+              ),
               SizedBox(height: 10),
 
               /// /// Forgot password
@@ -107,25 +99,67 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 25),
 
               /// /// Login button
-              BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  bool isButtonEnabled = true;
-
-                  if (state is AuthLoading) {
-                    isButtonEnabled = false;
-                  } else if (state is AuthError) {
-                    // Optionally, show error message or handle state
+              BlocListener<AuthBloc, AuthState>(
+                bloc: locator<AuthBloc>(),
+                listener: (context, state) {
+                  if (state is AuthAuthenticated) {
+                    Get.offAllNamed(Routes.home);
+                  } else if (state is AuthUnauthenticated) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                      ),
+                    );
                   }
-
-                  return Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
-                    child: isButtonEnabled
-                        ? _buildSignInButton(onTap: onTap, text: 'Login')
-                        : CircularProgressIndicator(),
-                  );
                 },
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  bloc: locator<AuthBloc>(),
+                  builder: (context, state) {
+                    bool isButtonEnabled = true;
+
+                    if (state is AuthLoading) {
+                      isButtonEnabled = false;
+                    }
+
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: GestureDetector(
+                        onTap: isButtonEnabled
+                            ? () {
+                                if (usernameFormKey.currentState!.validate() &&
+                                    passwordFormKey.currentState!.validate()) {
+                                  signUserIn(context);
+                                }
+                              }
+                            : null,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: isButtonEnabled ? Colors.black : Colors.grey,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: isButtonEnabled
+                                ? Text(
+                                    'Login',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : const CupertinoActivityIndicator(
+                                    color: Colors.white,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
+              SizedBox(height: 25),
 
               /// /// Divider (Or continue with ... )
               Padding(
@@ -158,9 +192,25 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildMySquareTile(
-                      onTap: () {}, imgPath: 'assets/images/google_logo.png'),
-                  //const SizedBox(width: 10),
-                  //MySquareTile(imgPath: 'assets/images/google_logo.png'),
+                    onTap: () async {
+                      try {
+                        final googleSignIn = GoogleSignInService();
+                        final googleToken =
+                            await googleSignIn.signInWithGoogle();
+                        if (googleToken != null) {
+                          // Dispatch GoogleSignInEvent to AuthBloc
+                          locator<AuthBloc>()
+                              .add(GoogleLoginEvent(googleToken));
+                        }
+                      } catch (error) {
+                        print("Google Sign-In Error: $error");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Google Sign-In failed")),
+                        );
+                      }
+                    },
+                    imgPath: 'assets/images/google_logo.png',
+                  ),
                 ],
               ),
               SizedBox(height: 25),
@@ -208,7 +258,6 @@ Widget _buildSignInButton({required Function()? onTap, required String text}) {
     onTap: onTap,
     child: Container(
         padding: const EdgeInsets.all(20),
-        //margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
             color: Colors.black, borderRadius: BorderRadius.circular(8)),
         child: Center(
@@ -228,7 +277,7 @@ Widget _buildEmailTextFormField(
     required bool obscureText}) {
   return Form(
     key: formKey,
-    autovalidateMode: AutovalidateMode.onUnfocus,
+    autovalidateMode: AutovalidateMode.disabled,
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
@@ -236,7 +285,7 @@ Widget _buildEmailTextFormField(
         obscureText: obscureText,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'This field cannot be empty';
+            return 'Email cannot be empty';
           }
           final emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
@@ -260,37 +309,56 @@ Widget _buildEmailTextFormField(
   );
 }
 
-Widget _buildPasswordTextFormField(
-    {required GlobalKey<FormState> formKey,
-    required TextEditingController controller,
-    required String hintText,
-    required bool obscureText}) {
+Widget _buildPasswordTextFormField({
+  required GlobalKey<FormState> formKey,
+  required TextEditingController controller,
+  required String hintText,
+}) {
+  final ValueNotifier<bool> isPasswordVisible = ValueNotifier(false);
+
   return Form(
     key: formKey,
-    autovalidateMode: AutovalidateMode.onUnfocus,
+    autovalidateMode: AutovalidateMode.disabled,
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'This field cannot be empty';
-          }
-          if (value.length < 8) {
-            return 'Password must be at least 8 characters';
-          }
-          return null;
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: ValueListenableBuilder<bool>(
+        valueListenable: isPasswordVisible,
+        builder: (context, value, child) {
+          return TextFormField(
+            controller: controller,
+            obscureText: !value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please input your password';
+              }
+              if (value.length < 8) {
+                return 'Password must be at least 8 characters';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: TextStyle(color: Colors.grey.shade400),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  isPasswordVisible.value = !isPasswordVisible.value;
+                },
+                child: Icon(
+                  value ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          );
         },
-        decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.grey.shade400),
-            enabledBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade400)),
-            fillColor: Colors.white,
-            filled: true),
       ),
     ),
   );

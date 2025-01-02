@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/popup_prompt_library.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
+import 'package:your_ai/features/chat_prompt/presentation/ui/prompt_library_popup.dart';
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/widget_use_prompt.dart';
 
 class ChatIntroWidget extends StatelessWidget {
@@ -7,8 +8,6 @@ class ChatIntroWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenColorScheme = Theme.of(context).colorScheme;
-
     final List<String> quickPrompts = [
       'Grammar corrector',
       'Essay Improver',
@@ -23,14 +22,14 @@ class ChatIntroWidget extends StatelessWidget {
         children: [
           Text('👋',
               style: TextStyle(
-                color: screenColorScheme.onSecondary,
+                color: AppColors.onSecondary,
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
               )),
           SizedBox(height: 8),
           Text('Hi, good afternoon!',
               style: TextStyle(
-                color: screenColorScheme.onSecondary,
+                color: AppColors.onSecondary,
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
               )),
@@ -38,7 +37,7 @@ class ChatIntroWidget extends StatelessWidget {
           Text(
             "I'm YourAI, your personal assistant.",
             style: TextStyle(
-              color: screenColorScheme.onSecondary,
+              color: AppColors.onSecondary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -50,7 +49,7 @@ class ChatIntroWidget extends StatelessWidget {
               Text(
                 "Don't know what to say?",
                 style: TextStyle(
-                    color: screenColorScheme.onSecondary,
+                    color: AppColors.onSecondary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               ),
@@ -67,7 +66,7 @@ class ChatIntroWidget extends StatelessWidget {
                             BorderRadius.vertical(top: Radius.circular(16)),
                       ),
                       builder: (context) => FractionallySizedBox(
-                        heightFactor: 0.5,
+                        heightFactor: 0.8,
                         child: Padding(
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -80,7 +79,7 @@ class ChatIntroWidget extends StatelessWidget {
                   child: Text(
                     "Use a prompt!",
                     style: TextStyle(
-                      color: screenColorScheme.secondary,
+                      color: AppColors.primary,
                       fontSize: 16,
                     ),
                   ),
@@ -89,15 +88,19 @@ class ChatIntroWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          ...quickPrompts.map(
-              (feature) => _quickPrompt(context, screenColorScheme, feature)),
+          //...quickPrompts.map(
+          //    (feature) => _quickPrompt(context, screenColorScheme, feature)),
+
+          _quickPrompt(context, quickPrompts[0]),
+          _quickPrompt(context, quickPrompts[1]),
+          _quickPrompt(context, quickPrompts[2]),
+          _quickPrompt(context, quickPrompts[3]),
         ],
       ),
     );
   }
 
-  Widget _quickPrompt(
-      BuildContext context, ColorScheme screenColorScheme, String text) {
+  Widget _quickPrompt(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
@@ -111,7 +114,7 @@ class ChatIntroWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
           decoration: BoxDecoration(
-            color: screenColorScheme.surfaceContainer,
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
@@ -121,7 +124,7 @@ class ChatIntroWidget extends StatelessWidget {
                 child: Text(
                   text,
                   style: TextStyle(
-                    color: screenColorScheme.onSecondary,
+                    color: AppColors.onSecondary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

@@ -12,7 +12,15 @@ class LoginEvent extends AuthEvent {
   LoginEvent(this.email, this.password);
 }
 
+class GoogleLoginEvent extends AuthEvent {
+  final String googleToken;
+
+  GoogleLoginEvent(this.googleToken);
+}
+
 class LogoutEvent extends AuthEvent {}
+
+class CheckAuthStatusEvent extends AuthEvent {}
 
 class SignUpEvent extends AuthEvent {
   final String email;

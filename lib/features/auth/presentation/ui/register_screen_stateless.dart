@@ -1,18 +1,47 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/routes/route.dart';
+
+import '../blocs/auth_bloc.dart';
+import '../blocs/auth_event.dart';
+import '../blocs/auth_state.dart';
 
 class RegisterScreen extends StatelessWidget {
   final Function()? onTap;
   RegisterScreen({super.key, required this.onTap});
 
-  /// Text Editing controllers
+  // Text Editing controllers
   final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordControllder = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  /// Action methods
-  void signUserUp() {}
+  // Form Keys
+  final usernameFormKey = GlobalKey<FormState>();
+  final emailFormKey = GlobalKey<FormState>();
+  final passwordFormKey = GlobalKey<FormState>();
+  final confirmPasswordFormKey = GlobalKey<FormState>();
+
+  // Action method
+  Future<void> signUserUp(BuildContext context) async {
+    final username = usernameController.text;
+    final email = emailController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+
+    if (password == confirmPassword) {
+      // Trigger SignUpEvent
+      locator<AuthBloc>().add(SignUpEvent(email, password, username));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Passwords do not match")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +56,19 @@ class RegisterScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Custom Appbar
+              // Custom Appbar
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 20, vertical: verticalPadding),
                 child: Row(
                   children: [
-                    GestureDetector(
-                        // pop the screen
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Icon(CupertinoIcons.back, size: 30))
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 ),
               ),
-
-              /// Content
-              /// /// Welcome Message
+              // Welcome Message
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: Column(
@@ -50,79 +76,113 @@ class RegisterScreen extends StatelessWidget {
                   children: [
                     Text('Welcome to Your AI',
                         style: GoogleFonts.bebasNeue(fontSize: 30)),
-                    Text('Exploring Your AI with new account')
+                    Text('Create a new account')
                   ],
                 ),
               ),
               const SizedBox(height: 25),
 
-              /// /// Input username
-              _buildMyTextField(
+              // Input fields (username, email, password, confirm password)
+              _buildTextFormField(
+                  formKey: usernameFormKey,
                   controller: usernameController,
-                  hintText: 'Username',
+                  hintText: 'Name',
                   obscureText: false),
               SizedBox(height: 10),
-
-              /// /// Input password
-              _buildMyTextField(
+              _buildTextFormField(
+                  formKey: emailFormKey,
+                  controller: emailController,
+                  hintText: 'Email Address',
+                  obscureText: false),
+              SizedBox(height: 10),
+              _buildTextFormField(
+                  formKey: passwordFormKey,
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true),
               SizedBox(height: 10),
-
-              /// /// Forgot password
-              /// /// Input password
-              _buildMyTextField(
-                  controller: confirmPasswordControllder,
+              _buildTextFormField(
+                  formKey: confirmPasswordFormKey,
+                  controller: confirmPasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true),
               SizedBox(height: 25),
 
-              /// /// Login button
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                child:
-                    _buildMyBigTextButton(onTap: signUserUp, text: 'Sign Up'),
-              ),
-              SizedBox(height: 25),
+              // Sign Up button with Bloc
+              BlocListener<AuthBloc, AuthState>(
+                bloc: locator<AuthBloc>(),
+                listener: (context, state) {
+                  if (state is AuthUnauthenticated &&
+                      state.message == 'Sign up success') {
+                    Get.offAllNamed(Routes.auth);
+                  } else if (state is AuthUnauthenticated) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message)),
+                    );
+                  }
+                },
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  bloc: locator<AuthBloc>(),
+                  builder: (context, state) {
+                    bool isButtonEnabled = true;
 
-              /// /// Divider (Or continue with ... )
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 3,
-                        color: Colors.grey.shade400,
+                    if (state is AuthLoading) {
+                      isButtonEnabled = false;
+                    }
+
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: GestureDetector(
+                        onTap: isButtonEnabled
+                            ? () {
+                                if (usernameFormKey.currentState!.validate() &&
+                                    passwordFormKey.currentState!.validate() &&
+                                    confirmPasswordFormKey.currentState!
+                                        .validate()) {
+                                  signUserUp(context);
+                                }
+                              }
+                            : null,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: isButtonEnabled ? Colors.black : Colors.grey,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: isButtonEnabled
+                                ? Text(
+                                    'Sign Up',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : const CupertinoActivityIndicator(
+                                    color: Colors.white,
+                                  ),
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text('Or continue with',
-                            style: TextStyle(color: Colors.grey.shade700))),
-                    Expanded(
-                      child: Divider(
-                        thickness: 3,
-                        color: Colors.grey.shade400,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 25),
 
-              /// /// Google Sign-in Button
+              // Google Sign-in Button
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildMySquareTile(
-                      onTap: () {}, imgPath: 'assets/icons/google.png'),
+                      onTap: () {}, imgPath: 'assets/images/google_logo.png'),
                 ],
               ),
               SizedBox(height: 25),
 
-              /// /// Routing to Register Page
+              // Routing to Login Page
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -160,43 +220,39 @@ Widget _buildMySquareTile(
   );
 }
 
-Widget _buildMyBigTextButton(
-    {required Function()? onTap, required String text}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-        padding: const EdgeInsets.all(20),
-        //margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-            color: Colors.black, borderRadius: BorderRadius.circular(8)),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        )),
-  );
-}
-
-Widget _buildMyTextField(
-    {required TextEditingController controller,
-    required String hintText,
-    required bool obscureText}) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 25),
-    child: TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
+// Helper methods for TextFormFields
+Widget _buildTextFormField({
+  required GlobalKey<FormState> formKey,
+  required TextEditingController controller,
+  required String hintText,
+  required bool obscureText,
+}) {
+  return Form(
+    key: formKey,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 25),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey.shade400),
-          enabledBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400)),
+            borderSide: BorderSide(color: Colors.grey.shade400),
+          ),
           fillColor: Colors.white,
-          filled: true),
+          filled: true,
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter $hintText';
+          }
+          return null;
+        },
+      ),
     ),
   );
 }

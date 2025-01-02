@@ -44,9 +44,12 @@ class _TestAuthScreenState extends State<TestAuthScreen> {
 
             ElevatedButton(
               onPressed: () async {
+                String username = 'ndnghia241@gmail.com';
+                String password = 'Ndnghia24';
+
                 final res = await authUseCaseFactory.loginUseCase
-                    .execute('lqk21112003@gmail.com', 'Lqk21112003');
-                _updateCurrentUser('lqk21112003@gmail.com');
+                    .execute(username, password);
+                _updateCurrentUser(username);
                 _updateStatusMessage(res.toString());
 
                 Fluttertoast.showToast(

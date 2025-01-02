@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:your_ai/features/chat_ai/presentation/ui/chat_session_screen.dart';
 
 class TestUsePromptPopUp extends StatelessWidget {
   const TestUsePromptPopUp({super.key});
@@ -128,10 +127,6 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ChatScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -139,7 +134,8 @@ class _UsePromptWidgetState extends State<UsePromptWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Send'),
+                  child: const Text('Send',
+                      style: TextStyle(color: Colors.white, fontSize: 12)),
                 ),
               ),
             ],

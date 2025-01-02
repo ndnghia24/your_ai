@@ -3,28 +3,53 @@ import 'spref_key.dart';
 
 class SPref {
   static final SPref instance = SPref._internal();
-
   SPref._internal();
 
-  Future<String?> getAccessToken() async {
+  /// Jarvis Auth
+
+  Future<String?> getJarvisAccessToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(SPrefKey.keyAccessToken);
+    return prefs.getString(SPrefKey.keyJarvisAccessToken);
   }
 
-  Future setAccessToken(String token) async {
+  Future setJarvisAccessToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(SPrefKey.keyAccessToken, token);
+    await prefs.setString(SPrefKey.keyJarvisAccessToken, token);
   }
 
-  Future<String?> getRefreshToken() async {
+  Future<String?> getJarvisRefreshToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(SPrefKey.keyRefreshToken);
+    return prefs.getString(SPrefKey.keyJarvisRefreshToken);
   }
 
-  Future saveRefreshToken(String token) async {
+  Future setJarvisRefreshToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(SPrefKey.keyRefreshToken, token);
+    await prefs.setString(SPrefKey.keyJarvisRefreshToken, token);
   }
+
+  /// Jarvis Auth
+
+  Future<String?> getKBAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(SPrefKey.keyKBAccessToken);
+  }
+
+  Future setKBAccessToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SPrefKey.keyKBAccessToken, token);
+  }
+
+  Future<String?> getKBRefreshToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(SPrefKey.keyKBRefreshToken);
+  }
+
+  Future setKBRefreshToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SPrefKey.keyKBRefreshToken, token);
+  }
+
+  // Others
 
   Future setLocale(String locale) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -63,5 +88,29 @@ class SPref {
     if (strLocale != null) {
       await prefs.setString('locale', strLocale);
     }
+  }
+
+  Future saveUserInfo(Map<String, dynamic> map) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SPrefKey.keyUserName, map['username']);
+    await prefs.setString(SPrefKey.keyEmail, map['email']);
+  }
+
+  Future<Map<String, dynamic>> getLocalUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString(SPrefKey.keyUserName);
+    final email = prefs.getString(SPrefKey.keyEmail);
+
+    if (username == null || email == null) {
+      return {
+        'username': 'N/A',
+        'email': 'N/A',
+      };
+    }
+
+    return {
+      'username': username,
+      'email': email,
+    };
   }
 }

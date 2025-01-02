@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:your_ai/core/network/dio_client.dart';
+import 'package:your_ai/core/network/dio_clients/jarvis_dio_client.dart';
 import 'package:your_ai/core/storage/spref/spref.dart';
 import 'package:your_ai/features/auth/presentation/ui/login_or_register_screen.dart';
 
@@ -9,7 +9,7 @@ final String? baseUrl = dotenv.env['API_URL'];
 class AuthService {
   String? accessToken;
   String? refreshToken;
-  final Dio _dio = getIt<DioClient>().dio;
+  final Dio _dio = getIt<JarvisDioClient>().dio;
 
   AuthService._privateConstructor() {
     _initializeTokens();
@@ -22,14 +22,28 @@ class AuthService {
   }
 
   Future<void> _initializeTokens() async {
-    accessToken = await SPref.instance.getAccessToken();
-    refreshToken = await SPref.instance.getRefreshToken();
+    accessToken = await SPref.instance.getJarvisAccessToken();
+    refreshToken = await SPref.instance.getJarvisRefreshToken();
   }
 
   Future<Response> login(Map<String, dynamic> credentials) async {
     final res = await _dio.post(
       '$baseUrl/auth/sign-in',
       data: credentials,
+    );
+
+    if (res.statusCode == 200) {
+      accessToken = res.data['token']['accessToken'];
+      refreshToken = res.data['token']['refreshToken'];
+    }
+
+    return res;
+  }
+
+  Future<Response> loginWithGoogleToken(String googleToken) async {
+    final res = await _dio.post(
+      '$baseUrl/auth/google-sign-in',
+      data: {'token': googleToken},
     );
 
     if (res.statusCode == 200) {
@@ -54,6 +68,11 @@ class AuthService {
     );
   }
 
+  Future<Response> getTokenUsage() async {
+    return await _dio.get('$baseUrl/tokens/usage',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
+  }
+
   // logout
   Future<Response> logout() async {
     final res = await _dio.get('$baseUrl/auth/sign-out',
@@ -62,8 +81,8 @@ class AuthService {
     if (res.statusCode == 200) {
       accessToken = '';
       refreshToken = '';
-      await SPref.instance.setAccessToken('');
-      await SPref.instance.saveRefreshToken('');
+      await SPref.instance.setJarvisAccessToken('');
+      await SPref.instance.setJarvisRefreshToken('');
     }
 
     return res;

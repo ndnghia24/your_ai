@@ -15,38 +15,53 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     on<UpdateConversation>(_onUpdateConversation);
     on<CreateNewConversation>(_onCreateNewConversation);
     on<ContinueConversation>(_onContinueConversation);
+    on<ResetConversation>(_onResetConversation);
   }
 
-  Future<void> _onLoadConversation(LoadConversation event, Emitter<ConversationState> emit) async {
-    if (currentConversation.id == event.conversationId) {
-      return; // Avoid reloading the same conversation
-    }
+  Future<void> _onResetConversation(
+      ResetConversation event, Emitter<ConversationState> emit) async {
+    currentConversation = Conversation(id: '', messages: []);
+    emit(ConversationInitial());
+  }
 
+  Future<void> _onLoadConversation(
+      LoadConversation event, Emitter<ConversationState> emit) async {
+    if (currentConversation.id == event.conversationId) return;
     emit(ConversationLoading(conversation: currentConversation));
     try {
-      final result = await chatAIUseCaseFactory.getConversationDetailUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.getConversationDetailUseCase.execute(
         conversationId: event.conversationId,
-        params: {},
+        params: {
+          'assistantId': 'gpt-4o-mini',
+          'assistantModel': 'dify',
+        },
       );
-      if (result.isSuccess) {
-        emit(ConversationLoaded(result.result));
-      } else {
-        emit(ConversationError(result.message));
+      
+      result.isSuccess
+          ? emit(ConversationLoaded(result.result))
+          : emit(ConversationError(result.message));
+      if(result.isSuccess) {
+        currentConversation = result.result;
       }
     } catch (e) {
       emit(ConversationError(e.toString()));
     }
   }
 
-  void _onUpdateConversation(UpdateConversation event, Emitter<ConversationState> emit) {
+  void _onUpdateConversation(
+      UpdateConversation event, Emitter<ConversationState> emit) {
     currentConversation = event.conversation;
     emit(ConversationLoaded(event.conversation));
   }
 
-  Future<void> _onCreateNewConversation(CreateNewConversation event, Emitter<ConversationState> emit) async {
-    emit(ConversationLoading(conversation: currentConversation, message: event.content));
+  Future<void> _onCreateNewConversation(
+      CreateNewConversation event, Emitter<ConversationState> emit) async {
+    emit(ConversationLoading(
+        conversation: currentConversation, message: event.content));
     try {
-      final result = await chatAIUseCaseFactory.createNewConversationUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.createNewConversationUseCase.execute(
         content: event.content,
         assistantId: event.assistantId,
         assistantModel: event.assistantModel,
@@ -55,17 +70,22 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         currentConversation = result.result;
         emit(ConversationLoaded(result.result));
       } else {
-        emit(ConversationError(result.message));
-      };
+        _addErrorMessage(event);
+        emit(ConversationLoaded(currentConversation));
+      }
     } catch (e) {
-      emit(ConversationError(e.toString()));
+      _addErrorMessage(event);
+      emit(ConversationLoaded(currentConversation));
     }
   }
 
-  Future<void> _onContinueConversation(ContinueConversation event, Emitter<ConversationState> emit) async {
-    emit(ConversationLoading(conversation: currentConversation, message: event.content));
+  Future<void> _onContinueConversation(
+      ContinueConversation event, Emitter<ConversationState> emit) async {
+    emit(ConversationLoading(
+        conversation: Conversation.fromMap(event.conversation), message: event.content));
     try {
-      final result = await chatAIUseCaseFactory.continueConversationUseCase.execute(
+      final result =
+          await chatAIUseCaseFactory.continueConversationUseCase.execute(
         content: event.content,
         assistant: event.assistant,
         conversation: event.conversation,
@@ -74,10 +94,36 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         currentConversation = result.result;
         emit(ConversationLoaded(result.result));
       } else {
-        emit(ConversationError(result.message));
+        _addErrorMessage(event);
+        emit(ConversationLoaded(currentConversation));
       }
     } catch (e) {
-      emit(ConversationError(e.toString()));
+      _addErrorMessage(event);
+      emit(ConversationLoaded(currentConversation));
     }
+  }
+
+  void _addErrorMessage(dynamic event) {
+    currentConversation.messages.add(Message(
+      content: event.content,
+      isFromUser: true,
+      assistantId: event is CreateNewConversation
+          ? event.assistantId
+          : event.assistant['id'],
+      assistantModel: event is CreateNewConversation
+          ? event.assistantModel
+          : event.assistant['model'],
+    ));
+    currentConversation.messages.add(Message(
+      content:
+          "Sorry, We are unable to process your request at the moment. Please login or check your internet connection and try again.",
+      isFromUser: false,
+      assistantId: event is CreateNewConversation
+          ? event.assistantId
+          : event.assistant['id'],
+      assistantModel: event is CreateNewConversation
+          ? event.assistantModel
+          : event.assistant['model'],
+    ));
   }
 }

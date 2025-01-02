@@ -16,7 +16,7 @@ class GetConversationDetailUseCase {
         conversationId: conversationId,
         params: params,
       );
-
+      
       return UsecaseResultTemplate<Conversation>(
         isSuccess: true,
         result: result,
