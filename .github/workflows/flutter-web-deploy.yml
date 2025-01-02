@@ -1,0 +1,37 @@
+name: Auto Deploy Flutter Web
+
+on:
+  schedule:
+    # Lên lịch chạy workflow vào 4AM hàng ngày (giờ UTC, tương đương 11AM giờ Việt Nam)
+    - cron: '0 4 * * *'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Create .env file
+        run: |
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "API_URL_KB=${{ secrets.API_URL_KB }}" >> .env
+          echo "GOOGLE_OAUTH_CLIENT_ID=${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}" >> .env
+
+      - name: Build Flutter Web
+        run: flutter build web --web-renderer canvaskit --base-href="/your_ai/"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
