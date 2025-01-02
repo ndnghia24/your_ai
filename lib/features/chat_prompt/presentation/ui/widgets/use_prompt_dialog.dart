@@ -122,23 +122,25 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                               widget.prompt.category +
                                   ' · ' +
                                   widget.prompt.userName,
-                              style: TextStyle(color: Colors.grey)),
+                              style: TextStyle(color: Colors.grey, fontSize: 14)),
                           const SizedBox(height: 8),
                           Text(
                             widget.prompt.description,
+                            style: const TextStyle(fontSize: 14),
                           ),
                           const SizedBox(height: 8),
                           TextButton(
                             onPressed: _togglePromptVisibility,
                             child: Text(
                               _isPromptVisible ? 'Hide Prompt' : 'View Prompt',
-                              style: const TextStyle(color: Colors.blue),
+                              style: const TextStyle(color: Colors.blue, fontSize: 14),
                             ),
                           ),
                           if (_isPromptVisible) ...[
                             const SizedBox(height: 8),
                             Text(
                               widget.prompt.content,
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ],
                           const SizedBox(height: 16),
@@ -158,6 +160,7 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                               onChanged: (value) {
                                 paramValues[param] = value;
                               },
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ],
                           const SizedBox(height: 16),
@@ -205,7 +208,7 @@ class _UsePromptPopupState extends State<UsePromptPopup> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              child: const Text('Send'),
+                              child: const Text('Send', style: TextStyle(color: Colors.white, fontSize: 14)),
                             ),
                           ),
                         ],
