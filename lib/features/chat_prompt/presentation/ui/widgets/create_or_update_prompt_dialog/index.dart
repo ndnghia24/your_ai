@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/enum_prompt.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_bloc.dart';
@@ -393,15 +394,17 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     var title = isEditMode ? 'Save' : 'Create';
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
           onPressed: onCancel,
           child: const Text('Cancel'),
+          style: TextButton.styleFrom(backgroundColor: Colors.grey),
         ),
+        const SizedBox(width: 16),
         ElevatedButton(
           onPressed: onCreate,
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
           child: Text(title),
         ),
       ],
