@@ -85,6 +85,9 @@ class _PublishScreenState extends State<PublishScreen> {
         telegramToken = config['metadata']['botToken'];
       } else if (config['type'] == 'messenger') {
         isMessengerVerified = true;
+        messengerToken = config['metadata']['botToken'];
+        messengerPageId = config['metadata']['pageId'];
+        messengerAppSecret = config['metadata']['appSecret'];
       }
     }
   }
