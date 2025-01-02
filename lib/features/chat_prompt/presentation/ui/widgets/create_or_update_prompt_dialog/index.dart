@@ -12,12 +12,11 @@ import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/create_or_u
 class CreateOrUpdatePromptPopup extends StatefulWidget {
   final Prompt? prompt;
 
-  const CreateOrUpdatePromptPopup(
-      {Key? key, this.prompt})
-      : super(key: key);
+  const CreateOrUpdatePromptPopup({Key? key, this.prompt}) : super(key: key);
 
   @override
-  _CreateOrUpdatePromptPopupState createState() => _CreateOrUpdatePromptPopupState();
+  _CreateOrUpdatePromptPopupState createState() =>
+      _CreateOrUpdatePromptPopupState();
 }
 
 class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
@@ -137,7 +136,6 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                       title: isEditMode ? 'Edit Prompt' : 'New Prompt',
                       onClose: () => Navigator.pop(context),
                     ),
-                    const SizedBox(height: 16),
                     _PrivacyOption(
                       isPrivatePrompt: isPrivatePrompt,
                       onChanged: (value) {
@@ -148,13 +146,12 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                     ),
                     const SizedBox(height: 8),
                     if (!isPrivatePrompt)
-                      SizedBox(
-                      width: double.infinity,
-                      height: 80,
-                      child: LanguageSelector(
-                        selectedLanguage: _selectedLanguage,
-                        onChanged: _onLanguageSelected,
-                      ),
+                      Container(
+                        width: double.infinity,
+                        child: LanguageSelector(
+                          selectedLanguage: _selectedLanguage,
+                          onChanged: _onLanguageSelected,
+                        ),
                       ),
                     _FormInputField(
                       label: 'Name',
@@ -169,10 +166,10 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                     ),
                     const SizedBox(height: 8),
                     if (!isPrivatePrompt)
-                    PromptCategorySelector(
-                      selectedCategory: _selectedCategory,
-                      onChanged: _onCategorySelected,
-                    ),
+                      PromptCategorySelector(
+                        selectedCategory: _selectedCategory,
+                        onChanged: _onCategorySelected,
+                      ),
                     _FormInputField(
                       label: 'Description',
                       controller: _descriptionController,
@@ -213,8 +210,8 @@ class _CreateOrUpdatePromptPopupState extends State<CreateOrUpdatePromptPopup> {
                                 content: _promptController.text,
                                 category: _selectedCategory.name,
                                 isPublic: !isPrivatePrompt,
-                                  userName: 'user',
-                                  isFavorite: false,
+                                userName: 'user',
+                                isFavorite: false,
                               );
 
                               _updatePrivatePrompt(updatedPrompt);
@@ -294,21 +291,25 @@ class _PrivacyOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _buildOption(
-          title: 'Private Prompt',
-          value: true,
-          groupValue: isPrivatePrompt,
-          onChanged: onChanged,
-        ),
-        _buildOption(
-          title: 'Public Prompt',
-          value: false,
-          groupValue: isPrivatePrompt,
-          onChanged: onChanged,
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildOption(
+            title: 'Private',
+            value: true,
+            groupValue: isPrivatePrompt,
+            onChanged: onChanged,
+          ),
+          SizedBox(width: 16),
+          _buildOption(
+            title: 'Public',
+            value: false,
+            groupValue: isPrivatePrompt,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
     );
   }
 
@@ -364,6 +365,7 @@ class _FormInputField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12, vertical: 10), // Padding nội dung
@@ -382,7 +384,10 @@ class _ActionButtons extends StatelessWidget {
   final VoidCallback onCreate;
   final bool isEditMode;
 
-  const _ActionButtons({required this.onCancel, required this.onCreate, this.isEditMode = false});
+  const _ActionButtons(
+      {required this.onCancel,
+      required this.onCreate,
+      this.isEditMode = false});
 
   @override
   Widget build(BuildContext context) {
@@ -397,7 +402,7 @@ class _ActionButtons extends StatelessWidget {
         ElevatedButton(
           onPressed: onCreate,
           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-          child:  Text(title),
+          child: Text(title),
         ),
       ],
     );

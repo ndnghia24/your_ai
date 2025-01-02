@@ -74,7 +74,6 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
         });
   }
 
-
   void closeModalBottom() {
     Navigator.pop(context);
   }
@@ -128,14 +127,17 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: TextField(
+                  style: TextStyle(fontSize: 14),
                   focusNode: _focusNode,
                   decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 15.0),
                     hintText: 'Search',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   onChanged: (value) {

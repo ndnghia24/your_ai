@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/core/routes/route.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_bloc.dart';
 import 'package:your_ai/features/app/presentation/blocs/token_state.dart';
 import 'package:your_ai/features/auth/presentation/blocs/auth_bloc.dart';
@@ -26,22 +27,21 @@ class AuthenticationWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.account_circle,
-                        size: 40, color: Colors.grey.shade700),
+                    Icon(Icons.account_circle, size: 40, color: Colors.grey),
                     SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userInfo['username'] ?? 'N/A',
+                            userInfo['username'] ?? '...',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
                             ),
                           ),
                           Text(
-                            userInfo['email'] ?? 'N/A',
+                            userInfo['email'] ?? '...',
                             style: TextStyle(color: Colors.grey, fontSize: 12),
                           ),
                         ],
@@ -53,16 +53,17 @@ class AuthenticationWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Token Usage 🔥'),
+                    Text('Token Usage'),
                     BlocBuilder<TokenBloc, TokenState>(
                       builder: (context, state) {
                         if (state is TokenLoaded) {
-                          return Text( state.remainingQuery == -1 ? '∞' :
-                              '${state.remainingQuery}/${state.totalQuery}');
+                          return Text(state.remainingQuery == -1
+                              ? ''
+                              : '${state.remainingQuery}/${state.totalQuery}');
                         } else if (state is TokenLoading) {
                           return CircularProgressIndicator();
                         } else {
-                          return Text('N/A');
+                          return Text('');
                         }
                       },
                     ),
@@ -74,8 +75,10 @@ class AuthenticationWidget extends StatelessWidget {
                     if (state is TokenLoaded) {
                       return LinearProgressIndicator(
                         value: state.remainingQuery / state.totalQuery,
-                        backgroundColor: Colors.grey[300],
-                        color: Colors.grey.shade700,
+                        backgroundColor: Colors.white,
+                        color: AppColors.primary,
+                        minHeight: 6.0,
+                        borderRadius: BorderRadius.circular(8.0),
                       );
                     } else {
                       return LinearProgressIndicator(
@@ -91,7 +94,7 @@ class AuthenticationWidget extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade700,
+                      backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -101,7 +104,7 @@ class AuthenticationWidget extends StatelessWidget {
                       Get.offAllNamed(Routes.auth);
                     },
                     child:
-                        Text('Log out', style: TextStyle(color: Colors.white)),
+                        Text('Logout', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

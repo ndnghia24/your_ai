@@ -51,7 +51,6 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                   .toLowerCase()
                   .contains(_searchController.text.toLowerCase()))
               .toList();
-         
         }
         if (KBState is KBInitial) {
           getIt<KBBloc>().add(GetAllKBEvent());
@@ -97,7 +96,7 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                   onChanged: (value) =>  setState(() {}),
+                    onChanged: (value) => setState(() {}),
                   ),
                 ),
                 if (KBState is KBLoading)
@@ -117,14 +116,16 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => KnowledgeDetailScreen(knowledgeBase: knowledgeBase),
+                                builder: (context) => KnowledgeDetailScreen(
+                                    knowledgeBase: knowledgeBase),
                               ),
                             );
                           },
                           knowledgeBase: knowledgeBases[index],
                           onDelete: (knowledgeBase) {
                             // Handle delete action
-                            getIt<KBBloc>().add(DeleteKBEvent(knowledgeBase.id, KBState.knowledgeBases));
+                            getIt<KBBloc>().add(DeleteKBEvent(
+                                knowledgeBase.id, KBState.knowledgeBases));
                           },
                         );
                       },

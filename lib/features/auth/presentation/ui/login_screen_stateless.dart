@@ -48,12 +48,9 @@ class LoginScreen extends StatelessWidget {
                     horizontal: 20, vertical: verticalPadding),
                 child: Row(
                   children: [
-                    GestureDetector(
-                        // pop the screen
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Icon(CupertinoIcons.back, size: 30))
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 ),
               ),
@@ -152,9 +149,8 @@ class LoginScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )
-                                : const CircularProgressIndicator(
+                                : const CupertinoActivityIndicator(
                                     color: Colors.white,
-                                    strokeWidth: 2,
                                   ),
                           ),
                         ),

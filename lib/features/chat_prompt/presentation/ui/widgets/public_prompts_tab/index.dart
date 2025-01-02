@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/enum_prompt.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 import 'package:your_ai/features/chat_prompt/presentation/blocs/prompt_bloc.dart';
@@ -12,7 +14,6 @@ import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/use_prompt_
 import 'package:your_ai/features/chat_prompt/presentation/ui/widgets/widget_use_prompt.dart';
 
 class PublicPromptTab extends StatefulWidget {
-
   const PublicPromptTab({super.key});
 
   @override
@@ -56,7 +57,10 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) {
-        return UsePromptPopup(prompt: prompt, closeDialog: closeModalBottom,);
+        return UsePromptPopup(
+          prompt: prompt,
+          closeDialog: closeModalBottom,
+        );
       },
     );
 
@@ -64,7 +68,6 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
       Navigator.pop(context, true);
     }
   }
-
 
   void onClickFavorite() {
     setState(() {
@@ -125,17 +128,20 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         focusNode: _focusNode,
+                        style: TextStyle(fontSize: 14),
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 15.0),
                           hintText: 'Search',
                           prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         onChanged: (value) {
@@ -145,7 +151,9 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                     ),
                     IconButton(
                       icon: Icon(
-                        isFavorite ? Icons.star : Icons.star_border,
+                        isFavorite
+                            ? CupertinoIcons.star_circle_fill
+                            : CupertinoIcons.star_circle,
                         color: isFavorite ? Colors.red : Colors.blue,
                         size: 30,
                       ),
@@ -154,6 +162,7 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                   ],
                 ),
               ),
+              SizedBox(height: 12),
               SizedBox(
                 height: 50,
                 width: double.infinity, // Chiều rộng tối đa
@@ -163,7 +172,7 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   itemCount: categoryFilteredPrompts.length,
                   itemBuilder: (context, index) {
                     return PublicPromptItem(
@@ -173,6 +182,7 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                       onRemoveFavorite: onRemoveFavorite,
                     );
                   },
+                  separatorBuilder: (context, index) => Divider(),
                 ),
               ),
             ],

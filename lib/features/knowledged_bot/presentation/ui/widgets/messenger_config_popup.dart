@@ -20,7 +20,8 @@ class MessengerConfigurePopup extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<MessengerConfigurePopup> createState() => _MessengerConfigurePopupState();
+  State<MessengerConfigurePopup> createState() =>
+      _MessengerConfigurePopupState();
 }
 
 class _MessengerConfigurePopupState extends State<MessengerConfigurePopup> {
@@ -59,9 +60,12 @@ class _MessengerConfigurePopupState extends State<MessengerConfigurePopup> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Configure Messenger Bot',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: const Text(
+                      'Configure Messenger Bot',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
