@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/unit_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
@@ -118,7 +119,7 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                   children: [
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade600,
+                        backgroundColor: AppColors.primary,
                       ),
                       onPressed: () {
                         // Handle Add unit

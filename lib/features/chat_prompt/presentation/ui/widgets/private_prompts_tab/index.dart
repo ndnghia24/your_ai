@@ -50,7 +50,7 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
                     onPressed: () {
                       Navigator.of(dialogContext).pop(false);
                     },
-                    child: Text('Cancel'),
+                    child: Text('Cancel', style: TextStyle(color: Colors.black),),
                   ),
                   TextButton(
                     style: TextButton.styleFrom(

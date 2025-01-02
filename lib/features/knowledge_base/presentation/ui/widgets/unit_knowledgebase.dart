@@ -36,7 +36,7 @@ class KnowledgeUnitItem extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 // Handle delete action
                 onDelete(unit);

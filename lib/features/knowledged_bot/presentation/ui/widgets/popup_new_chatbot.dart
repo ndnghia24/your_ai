@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledged_bot/domain/entities/assistant_model.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_bloc.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/assistant_event.dart';
@@ -135,7 +136,7 @@ class _CreateAssistantDialogState extends State<CreateAssistantDialog> {
                     SizedBox(width: 16),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade700,
+                        backgroundColor: AppColors.primary,
                       ),
                       onPressed: () {
                         if (widget.assistant != null) {
@@ -146,7 +147,7 @@ class _CreateAssistantDialogState extends State<CreateAssistantDialog> {
                         // OK action, do something with form data
                         Navigator.of(context).pop();
                       },
-                      child: Text(widget.assistant != null ? 'Update' : 'Create'),
+                      child: Text(widget.assistant != null ? 'Update' : 'Create', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_event.dart';
@@ -131,7 +132,7 @@ class _CreateKnowledgeBaseDialogState extends State<CreateKnowledgeBaseDialog> {
                         builder: (context, isEnabled, child) {
                           return ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: isEnabled ? Colors.grey.shade700 : Colors.grey.shade400,
+                              backgroundColor: isEnabled ? AppColors.primary : Colors.grey.shade400,
                               foregroundColor: Colors.white,
                             ),
                             onPressed: isEnabled
@@ -144,7 +145,7 @@ class _CreateKnowledgeBaseDialogState extends State<CreateKnowledgeBaseDialog> {
                                     Navigator.of(context).pop(knowledgeNameController.text);
                                   }
                                 : null,
-                            child: const Text('Confirm'),
+                            child: const Text('Create', style: TextStyle(color: Colors.white)),
                           );
                         },
                       ),
