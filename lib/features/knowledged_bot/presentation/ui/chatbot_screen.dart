@@ -130,7 +130,7 @@ class ChatBotScreen extends StatelessWidget {
                         // Action to create new bot
                         showNewChatBotDialog(context);
                       },
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary,
                       child: Icon(Icons.add),
                     ),
                   ),

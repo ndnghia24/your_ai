@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/entities/knowledge_model.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_bloc.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/kb_event.dart';
@@ -139,7 +140,7 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                       // Action to create new bot
                       showNewKnowledgeDialog(context);
                     },
-                    backgroundColor: Colors.orange.shade300,
+                    backgroundColor: AppColors.primary,
                     child: Icon(Icons.add),
                   ),
                 ),
