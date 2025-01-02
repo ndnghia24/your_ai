@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Your AI',
       theme: ThemeConfig.lightMode,
-      darkTheme: ThemeConfig.darkMode,
+      darkTheme: ThemeConfig.lightMode,
       getPages: AppPages.routes,
       initialRoute: Routes.splash,
     );
