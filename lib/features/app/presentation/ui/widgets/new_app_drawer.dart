@@ -24,8 +24,6 @@ import 'package:your_ai/features/email_response/presentation/ui/email_srceen.dar
 import 'package:your_ai/features/knowledge_base/presentation/ui/knowledgebase_screen.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/ui/chatbot_screen.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-
 final getIt = GetIt.instance;
 
 class AppDrawerWidget extends StatefulWidget {
@@ -50,7 +48,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget>
   void _initializeAnimations() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 5000),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _drawerSlideAnimation = Tween<Offset>(
