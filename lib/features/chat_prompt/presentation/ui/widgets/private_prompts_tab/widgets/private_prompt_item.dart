@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:your_ai/core/utils/CustomTextStyles.dart';
 import 'package:your_ai/features/chat_prompt/domain/entities/prompt.dart';
 
@@ -24,6 +25,8 @@ class PrivatePromptItem extends StatelessWidget {
         title: Text(prompt.title,
             style:
                 TextStyle(fontSize: CustomTextStyles.headlineSmall.fontSize)),
+        subtitle: Text(prompt.description,
+            style: TextStyle(fontSize: CustomTextStyles.bodySmall.fontSize)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
