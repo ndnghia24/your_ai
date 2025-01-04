@@ -35,6 +35,12 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getIt<KBBloc>().add(GetAllKBEvent());
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();

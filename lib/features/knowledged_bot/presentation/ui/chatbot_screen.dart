@@ -11,9 +11,14 @@ import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/popup_ne
 
 final getIt = GetIt.instance;
 
-class ChatBotScreen extends StatelessWidget {
+class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
 
+  @override
+  State<ChatBotScreen> createState() => _ChatBotScreenState();
+}
+
+class _ChatBotScreenState extends State<ChatBotScreen> {
   void showNewChatBotDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -38,6 +43,12 @@ class ChatBotScreen extends StatelessWidget {
       getIt<AssistantBloc>()
           .add(DeleteAssistantEvent(assistant.id, state.assistants));
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getIt<AssistantBloc>().add(GetAllAssistantEvent());
   }
 
   @override
