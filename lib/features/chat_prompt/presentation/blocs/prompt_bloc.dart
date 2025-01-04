@@ -126,8 +126,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
       UpdatePrivatePromptEvent event, Emitter<PromptState> emit) async {
     emit(PromptLoading(privatePrompts: [], publicPrompts: []));
     try {
-      final useCaseResult =
-          await promptUseCaseFactory.updatePrivatePromptUsecase.execute(
+      promptUseCaseFactory.updatePrivatePromptUsecase.execute(
         promptId: event.promptId,
         title: event?.title,
         description: event.description,
@@ -137,23 +136,37 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
         isPublic: event.isPublic,
       );
 
-      if (useCaseResult.isSuccess) {
+        
+
         final privatePrompts = event.privatePrompts;
         final index = privatePrompts
             .indexWhere((element) => element.id == event.promptId);
-        privatePrompts[index] = useCaseResult.result;
+        Prompt updatePrompt = new Prompt(
+          id: event.promptId,
+          title: event.title ?? privatePrompts[index].title,
+          description: event.description,
+          content: event.content?? privatePrompts[index].content,
+          category: event.category,
+          isFavorite: privatePrompts[index].isFavorite,
+          isPublic: event.isPublic,
+          userName: privatePrompts[index].userName,
+        );
+        privatePrompts[index] = updatePrompt;
 
         final publicPrompts = event.publicPrompts;
         final indexPublic =
             publicPrompts.indexWhere((element) => element.id == event.promptId);
-        publicPrompts[indexPublic] = useCaseResult.result;
+        
+        if(indexPublic != -1){
+          publicPrompts[indexPublic] = updatePrompt;
+        }
 
         emit(PromptLoaded(privatePrompts, publicPrompts));
-      } else {
-        emit(PromptError(useCaseResult.message));
-      }
+
+      
     } catch (e) {
       emit(PromptError(e.toString()));
+      print('error: $e.toString()');
     }
   }
 
