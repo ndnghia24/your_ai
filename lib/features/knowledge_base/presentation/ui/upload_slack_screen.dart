@@ -99,6 +99,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -109,6 +112,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _workspaceController,
                   decoration: InputDecoration(
                     labelText: 'Slack Workspace',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -119,6 +125,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _botTokenController,
                   decoration: InputDecoration(
                     labelText: 'Slack Bot Token',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
