@@ -35,7 +35,7 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
 
   Future<void> _onCreateAssistantEvent(
       CreateAssistantEvent event, Emitter<AssistantState> emit) async {
-    emit(AssistantLoading(assistants: [], message: ''));
+    emit(AssistantLoading(assistants: event.assistants, message: ''));
     try {
       final useCaseResult =
           await assistantUseCaseFactory.createAssistantUseCase().execute(
@@ -55,7 +55,7 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
  
   Future<void> _onUpdateAssistantEvent(
       UpdateAssistantEvent event, Emitter<AssistantState> emit) async {
-    emit(AssistantLoading(assistants: [], message: ''));
+    emit(AssistantLoading(assistants: event.assistants, message: ''));
     try {
        assistantUseCaseFactory.updateAssistantUseCase().execute(
         assistantId: event.assistantId,
@@ -83,7 +83,7 @@ class AssistantBloc extends Bloc<AssistantEvent, AssistantState> {
 
   Future<void> _onDeleteAssistantEvent(
       DeleteAssistantEvent event, Emitter<AssistantState> emit) async {
-    emit(AssistantLoading(assistants: [], message: ''));
+    emit(AssistantLoading(assistants: event.assistants, message: ''));
     try {
       assistantUseCaseFactory
           .deleteAssistantUseCase()

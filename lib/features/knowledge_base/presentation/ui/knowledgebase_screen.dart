@@ -88,70 +88,107 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
               },
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+          body: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onChanged: (value) => setState(() {}),
                       ),
                     ),
-                    onChanged: (value) => setState(() {}),
-                  ),
-                ),
-                if (KBState is KBLoading)
-                  Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                if (KBState is KBLoaded)
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: knowledgeBases.length,
-                      itemBuilder: (context, index) {
-                        return KnowledgeBaseItem(
-                          onTapItem: (knowledgeBase) {
-                            // Handle click on item
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => KnowledgeDetailScreen(
-                                    knowledgeBase: knowledgeBase),
-                              ),
+                    if (KBState is KBLoading)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: knowledgeBases.length,
+                          itemBuilder: (context, index) {
+                            return KnowledgeBaseItem(
+                              onTapItem: (knowledgeBase) {
+                                // Handle click on item
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => KnowledgeDetailScreen(
+                                        knowledgeBase: knowledgeBase),
+                                  ),
+                                );
+                              },
+                              knowledgeBase: knowledgeBases[index],
+                              onDelete: (knowledgeBase) {
+                                // Handle delete action
+                                getIt<KBBloc>().add(DeleteKBEvent(
+                                    knowledgeBase.id, KBState.knowledgeBases));
+                              },
                             );
                           },
-                          knowledgeBase: knowledgeBases[index],
-                          onDelete: (knowledgeBase) {
-                            // Handle delete action
-                            getIt<KBBloc>().add(DeleteKBEvent(
-                                knowledgeBase.id, KBState.knowledgeBases));
+                        ),
+                      ),
+                    if (KBState is KBLoaded)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: knowledgeBases.length,
+                          itemBuilder: (context, index) {
+                            return KnowledgeBaseItem(
+                              onTapItem: (knowledgeBase) {
+                                // Handle click on item
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => KnowledgeDetailScreen(
+                                        knowledgeBase: knowledgeBase),
+                                  ),
+                                );
+                              },
+                              knowledgeBase: knowledgeBases[index],
+                              onDelete: (knowledgeBase) {
+                                // Handle delete action
+                                getIt<KBBloc>().add(DeleteKBEvent(
+                                    knowledgeBase.id, KBState.knowledgeBases));
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                      ),
+                    Spacer(),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          // Action to create new bot
+                          showNewKnowledgeDialog(context);
+                        },
+                        backgroundColor: AppColors.primary,
+                        child: Icon(Icons.add),
+                      ),
                     ),
-                  ),
-                Spacer(),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      // Action to create new bot
-                      showNewKnowledgeDialog(context);
-                    },
-                    backgroundColor: AppColors.primary,
-                    child: Icon(Icons.add),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              if (KBState is KBLoading)
+                    ModalBarrier(
+                      color: Colors.white.withOpacity(0.5),
+                      dismissible: false,
+                    ),
+                  if (KBState is KBLoading)
+                    Center(
+                      child: Image.asset(
+                        'assets/images/loading_capoo.gif',
+                        width: 200.0,
+                        height: 200.0,
+                      ),
+                    ),
+            ],
           ),
         );
       },

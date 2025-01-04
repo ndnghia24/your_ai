@@ -40,7 +40,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onGetPrivatePromptEvent(
       GetPrivatePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: [], publicPrompts: event.publicPrompts));
     try {
       final usecaseResult =
           await promptUseCaseFactory.getPrivatePromptsUsecase.execute();
@@ -57,7 +57,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onGetPublicPromptEvent(
       GetPublicPromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: []));
     try {
       final useCaseResult =
           await promptUseCaseFactory.getPublicPromptsUsecase.execute();
@@ -74,7 +74,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onAddNewPublicPromptEvent(
       AddNewPublicPromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       final useCaseResult =
           await promptUseCaseFactory.createPublicPromptUsecase.execute(
@@ -101,7 +101,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onAddNewPrivatePromptEvent(
       AddNewPrivatePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       final useCaseResult =
           await promptUseCaseFactory.createPrivatePromptUsecase.execute(
@@ -124,7 +124,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onUpdatePrivatePromptEvent(
       UpdatePrivatePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       promptUseCaseFactory.updatePrivatePromptUsecase.execute(
         promptId: event.promptId,
@@ -172,7 +172,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onDeletePrivatePromptEvent(
       DeletePrivatePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       final useCaseResult = await promptUseCaseFactory
           .deletePrivatePromptUsecase
@@ -194,7 +194,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onAddFavoritePromptEvent(
       AddFavoritePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       promptUseCaseFactory.addFavouritePromptUsecase
           .execute(promptId: event.promptId);
@@ -226,7 +226,7 @@ class PromptBloc extends Bloc<PromptEvent, PromptState> {
 
   Future<void> _onRemoveFavoritePromptEvent(
       RemoveFavoritePromptEvent event, Emitter<PromptState> emit) async {
-    emit(PromptLoading(privatePrompts: [], publicPrompts: []));
+    emit(PromptLoading(privatePrompts: event.privatePrompts, publicPrompts: event.publicPrompts));
     try {
       promptUseCaseFactory
           .removeFavouritePromptUsecase

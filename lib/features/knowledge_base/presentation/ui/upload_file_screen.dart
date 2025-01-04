@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
@@ -217,7 +218,7 @@ class _UploadFileScreenState extends State<UploadFileScreen> {
                             onPressed: _isFileUploaded ? _connect : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _isFileUploaded
-                                  ? Colors.grey.shade700
+                                  ? AppColors.primary
                                   : Colors.grey.shade400,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),

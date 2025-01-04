@@ -35,7 +35,7 @@ class KBBloc extends Bloc<KBEvent, KBState> {
 
   Future<void> _onCreateKBEvent(
       CreateKBEvent event, Emitter<KBState> emit) async {
-    emit(KBLoading(knowledgeBases: []));
+    emit(KBLoading(knowledgeBases: event.knowledgeBases));
     try {
       final result = await KBUseCaseFactory.createKnowledgeUseCase.execute({
         'knowledgeName': event.knowledgeName,
@@ -61,7 +61,7 @@ class KBBloc extends Bloc<KBEvent, KBState> {
 
   Future<void> _onUpdateKBEvent(
       UpdateKBEvent event, Emitter<KBState> emit) async {
-    emit(KBLoading(knowledgeBases: []));
+    emit(KBLoading(knowledgeBases: event.knowledgeBases));
     try {
       final result =
           await KBUseCaseFactory.updateKnowledgeUseCase.execute(event.id, {
@@ -87,7 +87,7 @@ class KBBloc extends Bloc<KBEvent, KBState> {
 
   Future<void> _onDeleteKBEvent(
       DeleteKBEvent event, Emitter<KBState> emit) async {
-    emit(KBLoading(knowledgeBases: []));
+    emit(KBLoading(knowledgeBases: event.knowledgeBases));
     try {
       KBUseCaseFactory.deleteKnowledgeUseCase.execute(event.id);
       event.knowledgeBases.removeWhere((element) => element.id == event.id);
