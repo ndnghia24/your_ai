@@ -118,6 +118,9 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
                 controller: tokenController,
                 decoration: const InputDecoration(
                   labelText: 'Token',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -126,6 +129,9 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
                 controller: clientIdController,
                 decoration: const InputDecoration(
                   labelText: 'Client ID',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -134,6 +140,9 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
                 controller: clientSecretController,
                 decoration: const InputDecoration(
                   labelText: 'Client Secret',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -142,6 +151,9 @@ class _SlackConfigurePopupState extends State<SlackConfigurePopup> {
                 controller: signingSecretController,
                 decoration: const InputDecoration(
                   labelText: 'Signing Secret',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),

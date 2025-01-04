@@ -105,6 +105,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -115,6 +118,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _wikiPageUrlController,
                   decoration: InputDecoration(
                     labelText: 'Wiki Page URL',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -125,6 +131,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Confluence Username',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -135,6 +144,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _accessTokenController,
                   decoration: InputDecoration(
                     labelText: 'Confluence Access Token',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

@@ -79,14 +79,6 @@ class AddUnitPopup extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              leading: Icon(Icons.cloud),
-              title: Text('Google drive'),
-              subtitle: Text('Connect Google drive to get data'),
-              onTap: () {
-                // Handle action here
-              },
-            ),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -110,6 +110,9 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -120,6 +123,9 @@ class _UploadWebsiteScreenState extends State<UploadWebsiteScreen> {
                   controller: _webUrlController,
                   decoration: InputDecoration(
                     labelText: 'Web URL',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

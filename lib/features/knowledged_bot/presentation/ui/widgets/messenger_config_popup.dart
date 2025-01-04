@@ -103,6 +103,9 @@ class _MessengerConfigurePopupState extends State<MessengerConfigurePopup> {
                 controller: tokenController,
                 decoration: const InputDecoration(
                   labelText: 'Messenger Bot Token',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                  ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -111,6 +114,9 @@ class _MessengerConfigurePopupState extends State<MessengerConfigurePopup> {
                 controller: pageIdController,
                 decoration: const InputDecoration(
                   labelText: 'Messenger Bot Page ID',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -119,6 +125,9 @@ class _MessengerConfigurePopupState extends State<MessengerConfigurePopup> {
                 controller: appSecretController,
                 decoration: const InputDecoration(
                   labelText: 'Messenger Bot App Secret',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),
