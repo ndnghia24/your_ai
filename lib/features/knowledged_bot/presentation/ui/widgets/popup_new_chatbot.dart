@@ -86,7 +86,7 @@ class _CreateAssistantDialogState extends State<CreateAssistantDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create Assistant',
+                  widget.assistant != null ? 'Update assistant' : 'Create assistant',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
