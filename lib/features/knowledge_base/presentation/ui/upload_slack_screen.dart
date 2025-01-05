@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
@@ -99,6 +100,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -109,6 +113,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _workspaceController,
                   decoration: InputDecoration(
                     labelText: 'Slack Workspace',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -119,6 +126,9 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                   controller: _botTokenController,
                   decoration: InputDecoration(
                     labelText: 'Slack Bot Token',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -131,7 +141,7 @@ class _UploadSlackScreenState extends State<UploadSlackScreen> {
                     ElevatedButton(
                       onPressed: _connect,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade700,
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

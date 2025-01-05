@@ -63,6 +63,9 @@ class _TelegramConfigurePopupState extends State<TelegramConfigurePopup> {
                 controller: _tokenController,
                 decoration: const InputDecoration(
                   labelText: 'Token',
+                  labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                   border: OutlineInputBorder(),
                 ),
               ),

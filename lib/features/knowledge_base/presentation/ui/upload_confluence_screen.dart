@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_ai/configs/service_locator.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/domain/enums/upload_type.dart';
 import 'package:your_ai/features/knowledge_base/domain/knowledge_usecase_factory.dart';
 import 'package:your_ai/features/knowledge_base/presentation/blocs/unit_bloc.dart';
@@ -105,6 +106,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -115,6 +119,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _wikiPageUrlController,
                   decoration: InputDecoration(
                     labelText: 'Wiki Page URL',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -125,6 +132,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Confluence Username',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -135,6 +145,9 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                   controller: _accessTokenController,
                   decoration: InputDecoration(
                     labelText: 'Confluence Access Token',
+                    labelStyle: TextStyle(
+                      color: Colors.black, // Thay đổi màu của label ở đây
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -147,7 +160,7 @@ class _UploadConfluenceScreenState extends State<UploadConfluenceScreen> {
                     ElevatedButton(
                       onPressed: _connect,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade700,
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

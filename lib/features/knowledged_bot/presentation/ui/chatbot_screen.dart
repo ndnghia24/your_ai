@@ -11,9 +11,14 @@ import 'package:your_ai/features/knowledged_bot/presentation/ui/widgets/popup_ne
 
 final getIt = GetIt.instance;
 
-class ChatBotScreen extends StatelessWidget {
+class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
 
+  @override
+  State<ChatBotScreen> createState() => _ChatBotScreenState();
+}
+
+class _ChatBotScreenState extends State<ChatBotScreen> {
   void showNewChatBotDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -41,6 +46,12 @@ class ChatBotScreen extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getIt<AssistantBloc>().add(GetAllAssistantEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (getIt<AssistantBloc>().state is AssistantInitial ||
         getIt<AssistantBloc>().state is AssistantError) {
@@ -62,78 +73,151 @@ class ChatBotScreen extends StatelessWidget {
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (state is AssistantLoading)
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.assistants.length,
+                            itemBuilder: (context, index) {
+                              final assistant = state.assistants[index];
+                              return Card(
+                                color: AppColors.surface,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.blue,
+                                    child: Icon(Icons.chat),
+                                  ),
+                                  title: Text(assistant.name),
+                                  subtitle: Text(assistant.description),
+                                  trailing: Wrap(
+                                    spacing: 12,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          showUpdateChatBotDialog(
+                                              context, assistant);
+                                        },
+                                      ),
+                                      IconButton(
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.red),
+                                        ),
+                                        icon: Icon(Icons.delete_outline),
+                                        onPressed: () {
+                                          _onDeleteAssistant(assistant);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // Navigate to ChatBotPreviewScreen
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChatBotPreviewScreen(
+                                                assistant: assistant,
+                                              )),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      if (state is AssistantLoaded)
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.assistants.length,
+                            itemBuilder: (context, index) {
+                              final assistant = state.assistants[index];
+                              return Card(
+                                color: AppColors.surface,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.blue,
+                                    child: Icon(Icons.chat),
+                                  ),
+                                  title: Text(assistant.name),
+                                  subtitle: Text(assistant.description),
+                                  trailing: Wrap(
+                                    spacing: 12,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          showUpdateChatBotDialog(
+                                              context, assistant);
+                                        },
+                                      ),
+                                      IconButton(
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.red),
+                                        ),
+                                        icon: Icon(Icons.delete_outline),
+                                        onPressed: () {
+                                          _onDeleteAssistant(assistant);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // Navigate to ChatBotPreviewScreen
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChatBotPreviewScreen(
+                                                assistant: assistant,
+                                              )),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            // Action to create new bot
+                            showNewChatBotDialog(context);
+                          },
+                          backgroundColor: AppColors.primary,
+                          child: Icon(Icons.add),
+                        ),
+                      ),
+                    ],
+                  ),
                   if (state is AssistantLoading)
-                    Center(child: CircularProgressIndicator()),
-                  if (state is AssistantLoaded)
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: state.assistants.length,
-                        itemBuilder: (context, index) {
-                          final assistant = state.assistants[index];
-                          return Card(
-                            color: AppColors.surface,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                child: Icon(Icons.chat),
-                              ),
-                              title: Text(assistant.name),
-                              subtitle: Text(assistant.description),
-                              trailing: Wrap(
-                                spacing: 12,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () {
-                                      showUpdateChatBotDialog(
-                                          context, assistant);
-                                    },
-                                  ),
-                                  IconButton(
-                                    style: ButtonStyle(
-                                      foregroundColor:
-                                          MaterialStateProperty.all(Colors.red),
-                                    ),
-                                    icon: Icon(Icons.delete_outline),
-                                    onPressed: () {
-                                      _onDeleteAssistant(assistant);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                // Navigate to ChatBotPreviewScreen
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChatBotPreviewScreen(
-                                            assistant: assistant,
-                                          )),
-                                );
-                              },
-                            ),
-                          );
-                        },
+                    ModalBarrier(
+                      color: Colors.white.withOpacity(0.5),
+                      dismissible: false,
+                    ),
+                  if (state is AssistantLoading)
+                    Center(
+                      child: Image.asset(
+                        'assets/images/loading_capoo.gif',
+                        width: 200.0,
+                        height: 200.0,
                       ),
                     ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        // Action to create new bot
-                        showNewChatBotDialog(context);
-                      },
-                      backgroundColor: Colors.blue,
-                      child: Icon(Icons.add),
-                    ),
-                  ),
                 ],
               ),
             ),

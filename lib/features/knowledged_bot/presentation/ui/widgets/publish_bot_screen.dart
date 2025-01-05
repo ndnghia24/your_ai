@@ -117,74 +117,90 @@ class _PublishScreenState extends State<PublishScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Publish to *',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      body: 
+          Stack(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Publish to *',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'By publishing your bot on the following platforms, you fully understand and agree to abide by Terms of service for each publishing channel.',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            _buildPlatformTile(
+                              context,
+                              platformName: 'Slack',
+                              status: isSlackVerified,
+                              configureAction: () => _showSlackConfigurePopup(
+                                  context, widget.assistantId),
+                              isChecked: isSlackChecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSlackChecked = value!;
+                                });
+                              },
+                              icon: CupertinoIcons.chat_bubble,
+                            ),
+                            _buildPlatformTile(
+                              context,
+                              platformName: 'Telegram',
+                              status: isTelegramVerified,
+                              configureAction: () => _showTelegramConfigurePopup(
+                                  context, widget.assistantId),
+                              isChecked: isTelegramChecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  isTelegramChecked = value!;
+                                });
+                              },
+                              icon: CupertinoIcons.paperplane,
+                            ),
+                            _buildPlatformTile(
+                              context,
+                              platformName: 'Messenger',
+                              status: isMessengerVerified,
+                              configureAction: () => _showMessagerConfigurePopup(
+                                  context, widget.assistantId),
+                              isChecked: isMessengerChecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  isMessengerChecked = value!;
+                                });
+                              },
+                              icon: CupertinoIcons.chat_bubble_2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'By publishing your bot on the following platforms, you fully understand and agree to abide by Terms of service for each publishing channel.',
-                    style: TextStyle(fontSize: 14),
+                ),
+                if (isLoading)
+                  ModalBarrier(
+                    color: Colors.white.withOpacity(0.5),
+                    dismissible: false,
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        _buildPlatformTile(
-                          context,
-                          platformName: 'Slack',
-                          status: isSlackVerified,
-                          configureAction: () => _showSlackConfigurePopup(
-                              context, widget.assistantId),
-                          isChecked: isSlackChecked,
-                          onChanged: (value) {
-                            setState(() {
-                              isSlackChecked = value!;
-                            });
-                          },
-                          icon: CupertinoIcons.chat_bubble,
-                        ),
-                        _buildPlatformTile(
-                          context,
-                          platformName: 'Telegram',
-                          status: isTelegramVerified,
-                          configureAction: () => _showTelegramConfigurePopup(
-                              context, widget.assistantId),
-                          isChecked: isTelegramChecked,
-                          onChanged: (value) {
-                            setState(() {
-                              isTelegramChecked = value!;
-                            });
-                          },
-                          icon: CupertinoIcons.paperplane,
-                        ),
-                        _buildPlatformTile(
-                          context,
-                          platformName: 'Messenger',
-                          status: isMessengerVerified,
-                          configureAction: () => _showMessagerConfigurePopup(
-                              context, widget.assistantId),
-                          isChecked: isMessengerChecked,
-                          onChanged: (value) {
-                            setState(() {
-                              isMessengerChecked = value!;
-                            });
-                          },
-                          icon: CupertinoIcons.chat_bubble_2,
-                        ),
-                      ],
+                if (isLoading)
+                  Center(
+                    child: Image.asset(
+                      'assets/images/loading_capoo.gif',
+                      width: 200.0,
+                      height: 200.0,
                     ),
                   ),
-                ],
-              ),
-            ),
+            ],
+          ),
     );
   }
 
@@ -193,6 +209,9 @@ class _PublishScreenState extends State<PublishScreen> {
     String redirectTelegram = '';
     String redirectMessenger = '';
     String redirectSlack = '';
+    setState(() {
+      isLoading = true;
+    });
     if (isTelegramChecked && isSlackVerified) {
       final result = await assistantUseCaseFactory
           .publishTelegramBotUseCase()
@@ -230,6 +249,10 @@ class _PublishScreenState extends State<PublishScreen> {
         redirectMessenger = '';
       }
     }
+
+    setState(() {
+      isLoading = false;
+    });
 
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => PublishingPlatformWidget(

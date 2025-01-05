@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:your_ai/core/theme/app_colors.dart';
 import 'package:your_ai/features/knowledge_base/presentation/ui/knowledgebase_screen.dart';
 import 'package:your_ai/features/knowledged_bot/domain/assistant_usecase_factory.dart';
 import 'package:your_ai/features/knowledged_bot/presentation/blocs/kb_bloc.dart';
@@ -164,9 +165,9 @@ class _AssistantSettingScreenState extends State<AssistantSettingScreen> {
                       );
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Create Knowledge'),
+                    label: Text('Create Knowledge', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary, // Primary color
                     ),
                   ),
                   SizedBox(height: 10),

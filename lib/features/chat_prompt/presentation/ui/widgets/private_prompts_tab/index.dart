@@ -50,7 +50,10 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
                     onPressed: () {
                       Navigator.of(dialogContext).pop(false);
                     },
-                    child: Text('Cancel', style: TextStyle(color: Colors.black),),
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
@@ -113,7 +116,64 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
         }
 
         if (state is PromptLoading) {
-          return Center(child: CircularProgressIndicator());
+          final prompts = state.privatePrompts;
+          final filteredPrompts = prompts
+              .where((prompt) =>
+                  prompt.title.toLowerCase().contains(searchText.toLowerCase()))
+              .toList();
+          final displayPrompts =
+              _focusNode.hasFocus ? prompts : filteredPrompts;
+          return Stack(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: TextField(
+                      style: TextStyle(fontSize: 14),
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 15.0),
+                        hintText: 'Search',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        searchText = value;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: displayPrompts.length,
+                      itemBuilder: (context, index) {
+                        return PrivatePromptItem(
+                          prompt: displayPrompts[index],
+                          onUsePrompt: onUsePrompt,
+                          onEdit: onEditPrompt,
+                          onDelete: onDeletePrompt,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              ModalBarrier(
+                color: Colors.white.withOpacity(0.5),
+                dismissible: false,
+              ),
+              Center(
+                child: Image.asset(
+                  'assets/images/loading_capoo.gif',
+                  width: 200.0,
+                  height: 200.0,
+                ),
+              ),
+            ],
+          );
         }
 
         if (state is PromptLoaded) {
