@@ -107,7 +107,97 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
         }
 
         if (state is PromptLoading) {
-          return Center(child: CircularProgressIndicator());
+          final prompts = state.publicPrompts;
+          final filteredPrompts = prompts
+              .where((prompt) =>
+                  prompt.title.toLowerCase().contains(searchText.toLowerCase()))
+              .toList();
+          final displayPrompts = isFavorite
+              ? filteredPrompts.where((prompt) => prompt.isFavorite).toList()
+              : filteredPrompts;
+          final categoryFilteredPrompts = selectedCategory == PromptCategory.ALL
+              ? displayPrompts
+              : displayPrompts
+                  .where((prompt) => prompt.category == selectedCategory.name)
+                  .toList();
+
+          return Stack(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            focusNode: _focusNode,
+                            style: TextStyle(fontSize: 14),
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 15.0),
+                              hintText: 'Search',
+                              prefixIcon: Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              searchText = value;
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            isFavorite
+                                ? CupertinoIcons.star_circle_fill
+                                : CupertinoIcons.star_circle,
+                            color: isFavorite ? Colors.red : Colors.blue,
+                            size: 30,
+                          ),
+                          onPressed: onClickFavorite,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity, // Chiều rộng tối đa
+                    child: PromptCategoryFilter(
+                      category: selectedCategory,
+                      onCategorySelected: onCategorySelected,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: categoryFilteredPrompts.length,
+                      itemBuilder: (context, index) {
+                        return PublicPromptItem(
+                          prompt: categoryFilteredPrompts[index],
+                          onUsePrompt: onUsePrompt,
+                          onAddFavorite: onAddFavorite,
+                          onRemoveFavorite: onRemoveFavorite,
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(),
+                    ),
+                  ),
+                ],
+              ),
+               ModalBarrier(
+                color: Colors.white.withOpacity(0.5),
+                dismissible: false,
+              ),
+              Center(
+                child: Image.asset(
+                  'assets/images/loading_capoo.gif',
+                  width: 200.0,
+                  height: 200.0,
+                ),
+              ),
+            ],
+          );
         }
 
         if (state is PromptLoaded) {
