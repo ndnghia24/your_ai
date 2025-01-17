@@ -2,7 +2,6 @@ name: Auto Deploy Flutter Web
 
 on:
   schedule:
-    # Lên lịch chạy workflow vào 4AM hàng ngày (giờ UTC, tương đương 11AM giờ Việt Nam)
     - cron: '0 4 * * *'
 
 jobs:
@@ -18,19 +17,36 @@ jobs:
         with:
           flutter-version: "3.24.3"
 
+      - name: Random check for deployment (30% chance)
+        id: random-check
+        run: |
+          RANDOM_NUMBER=$((RANDOM % 100))
+          echo "Generated random number: $RANDOM_NUMBER"
+          if [ $RANDOM_NUMBER -lt 30 ]; then
+            echo "Deploying today (random number <$30)."
+            echo "deploy=true" >> $GITHUB_ENV
+          else
+            echo "No deployment today (random number >=30)."
+            echo "deploy=false" >> $GITHUB_ENV
+          fi
+
       - name: Install dependencies
+        if: env.deploy == 'true'
         run: flutter pub get
 
       - name: Create .env file
+        if: env.deploy == 'true'
         run: |
           echo "API_URL=${{ secrets.API_URL }}" >> .env
           echo "API_URL_KB=${{ secrets.API_URL_KB }}" >> .env
           echo "GOOGLE_OAUTH_CLIENT_ID=${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}" >> .env
 
       - name: Build Flutter Web
+        if: env.deploy == 'true'
         run: flutter build web --web-renderer canvaskit --base-href="/your_ai/"
 
       - name: Deploy to GitHub Pages
+        if: env.deploy == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
