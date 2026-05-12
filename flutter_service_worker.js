@@ -51,7 +51,7 @@ const RESOURCES = {"assets/assets/svgs/gemini-1.5-flash-latest.svg": "c80943dab7
 "canvaskit/canvaskit.js": "66177750aff65a66cb07bb44b8c6422b",
 "canvaskit/skwasm.js": "694fda5704053957c2594de355805228",
 "flutter.js": "f393d3c16b631f36852323de8e583132",
-"flutter_bootstrap.js": "ea5b78588d4b1c42f1f3a2d8cdd865b5",
+"flutter_bootstrap.js": "700000dbf7daedd3eff33d724121b1bb",
 "main.dart.js": "5fce08c52024b7e160e6574607c10a8a",
 "version.json": "fdbd2d2fe9a8a07dedd7c9ae868881e0",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
